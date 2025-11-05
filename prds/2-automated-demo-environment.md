@@ -217,6 +217,20 @@ setup-demo.sh → Kind cluster → Kubernetes Goat (Helm) → KubeHound backend 
 - **Implementation**: Created `setup-kubehound-test-cluster.sh` in experiment branch for evaluation
 - **Next Step**: Test KubeHound test cluster, validate query approach, then reassess Goat compatibility
 
+💡 **Alternative Hypothesis - External Endpoint Requirement** (2025-11-05): Consider GCP deployment with public exposure
+- **Observation**: Many attack path queries (RedTeam notebooks) look for exposed endpoints or external entry points
+- **Root Cause Theory**: Local Kind cluster has no external LoadBalancers, public IPs, or internet-facing services. KubeHound's most compelling attack paths may require external access as entry points (e.g., "Public Service → Container → Node Compromise")
+- **Alternative Solution**: Deploy Kubernetes Goat to GCP with actual external endpoints
+  - Use LoadBalancer services instead of NodePort
+  - Create public ingress points
+  - Leverage Spider Rainbow project learnings for GCP Kubernetes deployment
+  - This would test whether attack paths appear when cluster has real external exposure
+- **Trade-offs**:
+  - Pros: Could unlock endpoint-based attack paths, more realistic security scenario, validates KubeHound+Goat integration
+  - Cons: Adds GCP costs, increases setup complexity, deviates from "local demo" requirement, requires cloud access on demo day
+- **Decision Status**: Idea held in reserve. Will evaluate after testing KubeHound test cluster locally. If local test cluster shows attack paths, then issue isn't external endpoints. If local test cluster also fails, GCP with external endpoints becomes more attractive option.
+- **Implementation Consideration**: Could maintain both local (Kind) and cloud (GCP) setup options, letting user choose based on demo requirements
+
 ### Questions Resolved (2025-11-05)
 ✅ **What Kind cluster configuration is needed?**
 - Basic Kind cluster is sufficient
