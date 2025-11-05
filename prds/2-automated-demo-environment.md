@@ -204,6 +204,19 @@ setup-demo.sh → Kind cluster → Kubernetes Goat (Helm) → KubeHound backend 
 - **Implementation**: Clone Goat repo, run `platforms/kind-setup/setup-kind-cluster-and-goat.sh`, add our value-adds (pod waiting, KubeHound backend, health verification)
 - **Benefits**: Automatic scenario updates, community documentation applies, lower risk of missing configurations
 
+🔄 **Dual-Cluster Evaluation Approach** (2025-11-05): Compare Kubernetes Goat vs KubeHound test cluster for demo reliability
+- **Context**: setup-demo.sh successfully implemented with Kubernetes Goat. Cluster created, KubeHound ingestion completed (60 identities, 70 permission sets, 29 volumes ingested), data in graph database. However, graph visualization queries not showing attack paths.
+- **Uncertainty**: Unclear if issue is user error (incorrect query syntax/approach) or cluster incompatibility (Goat lacks specific vulnerability configurations KubeHound detects)
+- **Decision**: Create experimental setup with KubeHound's official test cluster (24 purpose-built attack scenarios) to isolate root cause
+- **Evaluation Criteria**:
+  1. If attack path queries work with KubeHound test cluster → User needs to learn correct query patterns
+  2. If queries still fail → Deeper issue with KubeHound setup or configuration
+  3. Once queries validated with test cluster → Apply knowledge back to Kubernetes Goat
+- **Preference**: Demoing KubeHound working with community-maintained Kubernetes Goat is more compelling than using its own test cluster (shows broader applicability)
+- **Fallback**: Willing to use KubeHound test cluster if it provides more reliable demo experience
+- **Implementation**: Created `setup-kubehound-test-cluster.sh` in experiment branch for evaluation
+- **Next Step**: Test KubeHound test cluster, validate query approach, then reassess Goat compatibility
+
 ### Questions Resolved (2025-11-05)
 ✅ **What Kind cluster configuration is needed?**
 - Basic Kind cluster is sufficient
@@ -232,14 +245,14 @@ setup-demo.sh → Kind cluster → Kubernetes Goat (Helm) → KubeHound backend 
 
 ## Risk Assessment
 
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| Prerequisites missing on demo day | High | Prep script validates and reports, README lists install commands |
-| Network issues during setup | Medium | Pre-pull images with prep script, use local Kind (no cloud) |
-| Kubernetes Goat pods fail to start | High | Robust waiting logic with timeout, clear error messages |
-| KubeHound backend unhealthy | High | Health check verification, troubleshooting guide in README |
-| Demo takes longer than 3-5 min | Medium | Test on clean environment, optimize wait times |
-| Attack paths not found by KubeHound | Medium | Research and document expected paths, have fallback examples |
+| Risk | Impact | Mitigation | Status |
+|------|--------|------------|--------|
+| Prerequisites missing on demo day | High | Prep script validates and reports, README lists install commands | Mitigated |
+| Network issues during setup | Medium | Pre-pull images with prep script, use local Kind (no cloud) | Mitigated |
+| Kubernetes Goat pods fail to start | High | Robust waiting logic with timeout, clear error messages | Mitigated |
+| KubeHound backend unhealthy | High | Health check verification, troubleshooting guide in README | Mitigated |
+| Demo takes longer than 3-5 min | Medium | Test on clean environment, optimize wait times | Mitigated (2m 46s) |
+| **Kubernetes Goat incompatible with KubeHound attack detection** | **High** | **Evaluation in progress**: Test KubeHound's official cluster to validate queries, then either supplement Goat with additional attack manifests or switch to test cluster for demo reliability | **🔴 Active** |
 
 ## Success Metrics
 
@@ -409,3 +422,60 @@ setup-demo.sh → Kind cluster → Kubernetes Goat (Helm) → KubeHound backend 
 - Add robust pod readiness waiting (they don't have this)
 - Integrate KubeHound backend startup
 - Test complete workflow
+
+### 2025-11-05: Implementation Complete, Graph Visualization Blocker Discovered
+**Status**: Partially Complete - Technical Evaluation Required
+
+**Activities**:
+- Implemented setup-demo.sh (400+ lines) as orchestration wrapper around Kubernetes Goat
+- Successfully tested complete workflow: cluster creation → Goat deployment → pod readiness → KubeHound backend
+- Executed kubehound dump and ingest commands successfully
+- Validated data ingestion: 60 identities, 70 permission sets, 20 pods, 21 containers, 29 volumes, 16 endpoints
+- Explored Jupyter notebooks for graph visualization
+
+**Success Metrics Achieved**:
+- ✅ Setup completes in 2m 46s (target: 3-5 minutes)
+- ✅ All components healthy: 20/20 pods Running, KubeHound backend accessible
+- ✅ KubeHound UI accessible at http://localhost:8888
+- ✅ No manual intervention required during setup
+- ✅ Repeatable and deterministic
+
+**Blocker Identified**:
+- ❌ Graph visualization queries not showing attack paths
+- ❌ Success criteria "Attack paths discovered and explorable" - NOT MET
+- Graph displays individual resources (volumes, pods, identities) but no attack path relationships
+- Unclear if issue is:
+  1. User error: Incorrect query syntax or notebook usage
+  2. Cluster incompatibility: Kubernetes Goat lacks vulnerability patterns KubeHound detects
+  3. Configuration issue: KubeHound setup or backend configuration problem
+
+**Root Cause Analysis**:
+- Kubernetes Goat is general security training platform (20+ scenarios)
+- KubeHound has purpose-built test cluster (24 attack-specific manifests)
+- No documented evidence of Goat + KubeHound integration testing
+- Attack path queries (e.g., container escape, privilege escalation) return "No data available"
+
+**Decision Made**:
+- Create parallel experimental setup with KubeHound's official test cluster
+- Validate whether attack path queries work when cluster is purpose-built for KubeHound
+- Use findings to either: fix Goat queries, supplement Goat with additional vulnerabilities, or switch to test cluster
+
+**Files Created**:
+- setup-demo.sh (orchestration script)
+- setup-kubehound-test-cluster.sh (evaluation script)
+- teardown-kubehound-test-cluster.sh (cleanup script)
+
+**Files Modified**:
+- .gitignore (added kubernetes-goat/, dump/)
+- PRD updated with dual-cluster evaluation decision
+
+**Branch Strategy**:
+- feature/prd-2-automated-demo-environment: Kubernetes Goat implementation (current)
+- experiment/kubehound-test-cluster: KubeHound test cluster evaluation
+
+**Next Steps**:
+1. Test setup-kubehound-test-cluster.sh
+2. Validate attack path queries work with purpose-built cluster
+3. Document correct query patterns
+4. Reassess Kubernetes Goat: supplement vulnerabilities or switch clusters
+5. Make final decision on demo cluster based on evaluation results
