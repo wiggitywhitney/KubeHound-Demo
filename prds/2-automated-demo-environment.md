@@ -59,10 +59,12 @@ priority: High
 ### 1. Automated Setup Script (`setup-demo.sh`)
 
 **Must do:**
-- Check prerequisites (Docker, Kind, Helm, kubehound) with helpful error messages
-- Create Kind cluster named "kubehound-demo" with appropriate configuration
-- Deploy Kubernetes Goat using Helm from official chart
-- Wait for all Kubernetes Goat pods to be Ready (with timeout)
+- Check prerequisites (Docker, Kind, Helm, kubectl, git, kubehound) with helpful error messages
+- Clone Kubernetes Goat repository if not present
+- Deploy Kubernetes Goat using their official `platforms/kind-setup/setup-kind-cluster-and-goat.sh` script
+  - Creates Kind cluster named "kubernetes-goat-cluster" (their default)
+  - Deploys all 20+ vulnerable scenarios
+- Wait for all Kubernetes Goat pods to be Ready (with timeout and progress indicators)
 - Start KubeHound backend stack (JanusGraph, MongoDB, UI)
 - Verify backend health and readiness
 - Print success message with:
@@ -84,7 +86,7 @@ priority: High
 
 **Must do:**
 - Stop KubeHound backend gracefully
-- Delete Kind cluster "kubehound-demo"
+- Delete Kind cluster "kubernetes-goat-cluster"
 - Clean up temporary files if any
 - Print confirmation message
 
@@ -122,8 +124,8 @@ priority: High
 ## Technical Architecture
 
 ### Components
-1. **Kind Cluster**: Local Kubernetes cluster named "kubehound-demo"
-2. **Kubernetes Goat**: Vulnerable K8s environment with 22 security scenarios
+1. **Kind Cluster**: Local Kubernetes cluster named "kubernetes-goat-cluster" (created by Goat's script)
+2. **Kubernetes Goat**: Vulnerable K8s environment with 20+ security scenarios (community-maintained)
 3. **KubeHound Backend**: JanusGraph (graph database), MongoDB (store), UI (visualization)
 
 ### Data Flow
@@ -195,6 +197,13 @@ setup-demo.sh → Kind cluster → Kubernetes Goat (Helm) → KubeHound backend 
 - **Impact**: Ensures at least 3 attack path types: VOLUME_ACCESS, ROLE_BIND, CE_PRIV_MOUNT
 - **Scope**: Minimal additional work, maximum reliability improvement
 
+✅ **Reuse Kubernetes Goat Scripts (Not Replicate)**: Wrap their official setup script in our orchestration
+- **Rationale**: Community-maintained, battle-tested, automatic updates, proper attribution, lower maintenance burden
+- **Impact**: Accept cluster name `kubernetes-goat-cluster` instead of `kubehound-demo`, rely on their repo structure
+- **Trade-offs**: Less control over deployment details, but gain community support and reduced maintenance
+- **Implementation**: Clone Goat repo, run `platforms/kind-setup/setup-kind-cluster-and-goat.sh`, add our value-adds (pod waiting, KubeHound backend, health verification)
+- **Benefits**: Automatic scenario updates, community documentation applies, lower risk of missing configurations
+
 ### Questions Resolved (2025-11-05)
 ✅ **What Kind cluster configuration is needed?**
 - Basic Kind cluster is sufficient
@@ -251,8 +260,10 @@ setup-demo.sh → Kind cluster → Kubernetes Goat (Helm) → KubeHound backend 
 - Docker (prerequisite)
 - Kind (prerequisite)
 - Helm (prerequisite)
+- kubectl (prerequisite)
+- git (prerequisite)
 - KubeHound binary (prerequisite)
-- Kubernetes Goat Helm chart (downloaded by setup script)
+- Kubernetes Goat repository (cloned by setup script from https://github.com/madhuakula/kubernetes-goat)
 
 **Internal:**
 - None (first feature in this repository)
@@ -359,3 +370,42 @@ setup-demo.sh → Kind cluster → Kubernetes Goat (Helm) → KubeHound backend 
 - Begin Phase 1 implementation: setup-demo.sh script
 - Examine Kubernetes Goat's Kind setup script
 - Implement core automation with validation checkpoints
+
+### 2025-11-05: Implementation Strategy Decision
+**Status**: In Progress
+
+**Activities**:
+- Examined Kubernetes Goat's Kind setup script structure
+- Evaluated trade-offs between replicating vs reusing their scripts
+- Made strategic decision on implementation approach
+
+**Key Decision**:
+✅ **Reuse Kubernetes Goat's Official Scripts** (not replicate)
+- Wrap their `platforms/kind-setup/setup-kind-cluster-and-goat.sh` in our orchestration
+- Accept their cluster name: `kubernetes-goat-cluster`
+- Add our value-adds: prerequisite checks, pod readiness waiting, KubeHound backend integration, health verification
+
+**Rationale**:
+- Community-maintained code = automatic updates, bug fixes, security patches
+- Battle-tested by hundreds/thousands of users
+- Proper attribution and support for OSS community
+- Lower maintenance burden for this project
+- Benefit from their documentation and troubleshooting resources
+- Reduced risk of missing important configurations
+
+**Trade-offs Accepted**:
+- Less control over cluster naming and deployment details
+- Dependency on their repository structure remaining stable
+- Less transparency into exact deployment steps (black box)
+
+**Impact on PRD**:
+- Updated Core Requirements: use their script, accept `kubernetes-goat-cluster` name
+- Updated Dependencies: added git, kubectl, clarified Goat repo dependency
+- Updated Technical Architecture: reflected community-maintained approach
+- Updated Design Decisions: documented reuse vs replicate decision
+
+**Next Steps**:
+- Implement setup-demo.sh as thin wrapper around Goat's script
+- Add robust pod readiness waiting (they don't have this)
+- Integrate KubeHound backend startup
+- Test complete workflow
