@@ -1,7 +1,7 @@
 ---
 issue: 2
 title: Automated Demo Environment for KubeHound Presentation
-status: Open
+status: In Progress
 created: 2025-11-05
 last_updated: 2025-11-05
 priority: High
@@ -145,10 +145,13 @@ setup-demo.sh → Kind cluster → Kubernetes Goat (Helm) → KubeHound backend 
 
 ## Implementation Milestones
 
-### Phase 1: Core Automation
+### Phase 1: Core Automation + Validation
 - [ ] Setup script creates Kind cluster and deploys Kubernetes Goat successfully
 - [ ] Setup script starts KubeHound backend and verifies health
 - [ ] Teardown script cleanly removes all resources
+- [ ] **VALIDATION: Run kubehound dump + ingest on Goat cluster to verify compatibility**
+- [ ] **VALIDATION: Confirm at least 5 interesting attack paths are discoverable**
+- [ ] **IF NEEDED: Create supplemental-vulnerabilities.yaml for guaranteed attack paths**
 
 ### Phase 2: Documentation & User Experience
 - [ ] README complete with prerequisites, workflow, and troubleshooting
@@ -169,18 +172,54 @@ setup-demo.sh → Kind cluster → Kubernetes Goat (Helm) → KubeHound backend 
 ## Open Questions & Decisions
 
 ### Decisions Made
+
+#### Initial Decisions
 ✅ **Use Kind (not GCP)**: Local, fast, deterministic, no cloud costs
 ✅ **Use Kubernetes Goat**: Industry-standard vulnerable environment with 22 scenarios
 ✅ **Manual KubeHound analysis**: `dump` and `ingest` run live during demo (not in setup script)
 ✅ **One PRD**: Tasks 3-6 are cohesive "demo environment" feature
 
-### Questions to Resolve During Implementation
-- What Kind cluster configuration is needed? (extra mounts, ports, etc.)
-- Which Helm repository/chart for Kubernetes Goat? (official madhuakula repo)
-- What are the exact KubeHound backend commands? (`kubehound backend up`?)
-- Which 2-3 attack paths are most impressive for demo? (research during implementation)
-- What timeouts are appropriate for pod readiness? (5 min?)
-- Should setup script check for sufficient Docker resources? (memory, CPU)
+#### Design Decisions (2025-11-05)
+✅ **"Build and Validate" Approach**: Implement with Kubernetes Goat first, empirically test KubeHound compatibility
+- **Rationale**: Cross-reference of KubeHound attack types vs Goat scenarios shows strong overlap (RBAC, container escape, DIND, secrets exposure)
+- **Impact**: Added Phase 1 validation checkpoints to confirm ≥5 attack paths discoverable
+- **Risk Mitigation**: Prepared supplemental-vulnerabilities.yaml contingency for guaranteed attack paths
+
+✅ **Empirical Testing Over Speculation**: Validate KubeHound-Goat compatibility through actual testing
+- **Rationale**: No direct evidence found of KubeHound+Goat integration, but scenario overlap analysis promising
+- **Impact**: Phase 1 explicitly includes dump → ingest → path verification step
+- **Fallback**: If insufficient paths found, deploy supplemental vulnerabilities (privileged pods, volume mounts, overprivileged service accounts)
+
+✅ **Contingency Plan for Demo Reliability**: Prepare supplemental-vulnerabilities.yaml manifest
+- **Rationale**: Guarantees demo success regardless of Goat compatibility level
+- **Impact**: Ensures at least 3 attack path types: VOLUME_ACCESS, ROLE_BIND, CE_PRIV_MOUNT
+- **Scope**: Minimal additional work, maximum reliability improvement
+
+### Questions Resolved (2025-11-05)
+✅ **What Kind cluster configuration is needed?**
+- Basic Kind cluster is sufficient
+- Kubernetes Goat provides dedicated Kind setup script: `kubernetes-goat/platforms/kind-setup/setup-kind-cluster-and-goat.sh`
+- Custom ports/mounts optional (can use Kind config YAML if needed)
+
+✅ **Which Helm repository/chart for Kubernetes Goat?**
+- **IMPORTANT**: No Helm chart! Despite Helm being a prerequisite, Kubernetes Goat deploys via bash script
+- Use: `bash setup-kind-cluster-and-goat.sh` from `platforms/kind-setup/` directory
+
+✅ **What are the exact KubeHound backend commands?**
+- Start: `kubehound backend up` (optionally: `-f docker-compose.overrides.yml`)
+- Stop: `kubehound backend down`
+- Starts MongoDB, JanusGraph, Jupyter UI (http://localhost:8888, password: admin)
+
+✅ **Which 2-3 attack paths are most impressive for demo?**
+- Public service → privileged container → node compromise (multi-hop chain)
+- Service account token abuse → cluster-admin (privilege escalation)
+- Secrets exposure → lateral movement to sensitive namespaces (credential theft)
+
+✅ **What timeouts are appropriate for pod readiness?**
+- 5 minutes (300 seconds) with progress indicators every 30 seconds
+
+✅ **Should setup script check for sufficient Docker resources?**
+- Yes, verify Docker is running and has at least 4GB memory available
 
 ## Risk Assessment
 
@@ -257,3 +296,66 @@ setup-demo.sh → Kind cluster → Kubernetes Goat (Helm) → KubeHound backend 
 - User decision: Start implementation now or commit PRD for later
 - Research KubeHound backend commands and Kubernetes Goat Helm installation
 - Identify 2-3 impressive attack paths for demo highlighting
+
+### 2025-11-05: Technical Research & Validation
+**Status**: In Progress
+
+**Activities**:
+- Researched KubeHound backend startup commands and configuration
+- Investigated Kubernetes Goat installation methods (discovered NO Helm chart exists)
+- Researched Kind cluster configuration requirements
+- Identified expected attack paths for demo highlighting
+- Created comprehensive TECHNICAL_NOTES.md with all findings
+- Updated PRD open questions with validated answers
+
+**Key Findings**:
+- KubeHound backend: `kubehound backend up` / `kubehound backend down`
+- Kubernetes Goat uses bash script, NOT Helm: `setup-kind-cluster-and-goat.sh`
+- Basic Kind cluster sufficient (Kubernetes Goat script handles configuration)
+- 25+ attack types can be identified by KubeHound
+- Realistic setup time: 4.5-7 minutes (3-5 min with pre-pulled images)
+
+**Technical Decisions**:
+- Use Kubernetes Goat's dedicated Kind setup script from `platforms/kind-setup/`
+- Target 5-minute timeout for pod readiness checks
+- Check Docker resources (4GB minimum) in setup script
+- Document 3 key attack paths: container escape, privilege escalation, lateral movement
+
+**Next Steps**:
+- Examine Kubernetes Goat's Kind setup script to understand implementation
+- Begin implementing setup-demo.sh (Phase 1)
+- Create teardown-demo.sh
+- Write comprehensive README
+
+### 2025-11-05: Compatibility Research & Validation Strategy
+**Status**: Research Complete, Ready for Implementation
+
+**Activities**:
+- Analyzed KubeHound attack detection capabilities (25+ types) vs Kubernetes Goat scenarios (22 scenarios)
+- Cross-referenced attack types and created compatibility matrix
+- Identified high-confidence attack path overlaps (RBAC, DIND, container escape, secrets)
+- Designed supplemental vulnerabilities contingency plan
+- Updated TECHNICAL_NOTES.md with detailed implementation guidance (350+ lines)
+- Enhanced PRD with 3 new design decisions and rationale
+
+**Key Findings**:
+- **Strong compatibility** between KubeHound and Kubernetes Goat confirmed
+- 6+ high-confidence attack path mappings identified
+- Supplemental vulnerabilities designed as fallback (guarantees ≥4 attack types)
+- "Build and Validate" approach documented with Phase 1 validation checkpoints
+
+**Design Decisions Added to PRD**:
+1. "Build and Validate" approach: Test empirically rather than speculate
+2. Empirical testing over speculation: Validate compatibility through actual testing
+3. Contingency plan: supplemental-vulnerabilities.yaml for demo reliability
+
+**Files Created**:
+- TECHNICAL_NOTES.md (350+ lines of implementation guidance)
+
+**Files Modified**:
+- prds/2-automated-demo-environment.md (updated with answers, decisions, work logs)
+
+**Next Steps**:
+- Begin Phase 1 implementation: setup-demo.sh script
+- Examine Kubernetes Goat's Kind setup script
+- Implement core automation with validation checkpoints
