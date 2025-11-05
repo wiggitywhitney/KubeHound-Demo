@@ -148,12 +148,13 @@ setup-demo.sh → Kind cluster → Kubernetes Goat (Helm) → KubeHound backend 
 ## Implementation Milestones
 
 ### Phase 1: Core Automation + Validation
-- [ ] Setup script creates Kind cluster and deploys Kubernetes Goat successfully
-- [ ] Setup script starts KubeHound backend and verifies health
-- [ ] Teardown script cleanly removes all resources
-- [ ] **VALIDATION: Run kubehound dump + ingest on Goat cluster to verify compatibility**
-- [ ] **VALIDATION: Confirm at least 5 interesting attack paths are discoverable**
-- [ ] **IF NEEDED: Create supplemental-vulnerabilities.yaml for guaranteed attack paths**
+- [x] Setup script creates Kind cluster and deploys Kubernetes Goat successfully (setup-demo.sh: 2m 46s, 20/20 pods healthy)
+- [x] Setup script starts KubeHound backend and verifies health (KubeHound UI accessible at localhost:8888)
+- [x] **VALIDATION: Run kubehound dump + ingest on Goat cluster to verify compatibility** (Completed: 60 identities, 70 permission sets ingested)
+- [ ] Teardown script for Kubernetes Goat cluster (teardown-demo.sh - not yet created)
+- [ ] **🔴 BLOCKER: Confirm at least 5 interesting attack paths are discoverable** (Graph queries return no data - evaluation in progress)
+- [ ] **TEST: Run setup-kubehound-test-cluster.sh and validate attack path queries work** (Script created, not yet tested)
+- [ ] **IF NEEDED: Create supplemental-vulnerabilities.yaml for guaranteed attack paths** (Design complete, implementation pending)
 
 ### Phase 2: Documentation & User Experience
 - [ ] README complete with prerequisites, workflow, and troubleshooting
@@ -493,3 +494,41 @@ setup-demo.sh → Kind cluster → Kubernetes Goat (Helm) → KubeHound backend 
 3. Document correct query patterns
 4. Reassess Kubernetes Goat: supplement vulnerabilities or switch clusters
 5. Make final decision on demo cluster based on evaluation results
+
+### 2025-11-05: Progress Update - Phase 1 Core Automation Complete
+**Status**: Phase 1 Partially Complete (43% - 3/7 items), Validation Blocked
+
+**Completion Summary**:
+✅ **Completed Items**:
+- Setup script (setup-demo.sh) successfully creates Kind cluster with Kubernetes Goat
+- Setup script starts KubeHound backend and verifies health
+- KubeHound dump + ingest completed successfully on Goat cluster
+- Commit-story MCP server configured and working
+- Experimental test cluster setup scripts created
+
+🔴 **Critical Blocker**:
+- Attack path visualization not working with Kubernetes Goat cluster
+- Graph queries return "No data available" despite successful ingestion
+- Root cause unclear: could be user error (query syntax), cluster incompatibility, or missing external endpoints
+
+📋 **Remaining Phase 1 Work**:
+- [ ] Create teardown-demo.sh for Kubernetes Goat cleanup
+- [ ] **TEST setup-kubehound-test-cluster.sh** (script created but not yet run)
+- [ ] Validate attack path queries work with KubeHound's purpose-built test cluster
+- [ ] Determine root cause of visualization issue and resolve
+
+**Key Decisions Pending**:
+1. **Cluster Choice**: Kubernetes Goat (community, more impressive) vs KubeHound test cluster (purpose-built, guaranteed to work)
+2. **GCP Alternative**: Consider deploying Goat to GCP with external endpoints if local clusters don't show attack paths
+3. **Supplemental Vulnerabilities**: May need to add attack manifests to Goat cluster
+
+**Evidence of Progress**:
+- Commits: c13e1d1 (setup-demo.sh), 4483c7c (test cluster scripts), 044286f (PRD updates)
+- Files Created: setup-demo.sh (400+ lines), setup-kubehound-test-cluster.sh, teardown-kubehound-test-cluster.sh, .mcp.json
+- Tests Run: Full setup workflow (2m 46s), ingestion (successful), graph UI exploration (blocker discovered)
+
+**Next Session Priorities**:
+1. Test setup-kubehound-test-cluster.sh to isolate root cause
+2. Create teardown-demo.sh for Kubernetes Goat
+3. Based on test results, decide on cluster strategy
+4. Resume Phase 2 (documentation) once validation unblocked

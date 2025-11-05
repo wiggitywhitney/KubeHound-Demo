@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "commit-story": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["node_modules/commit-story/src/mcp/server.js"],
+      "env": {}
+    }
+  }
+}
