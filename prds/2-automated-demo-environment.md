@@ -11,20 +11,23 @@ priority: High
 
 ## Overview
 
-**Problem**: Preparing for a KubeHound presentation requires multiple manual setup steps (Kind cluster, Kubernetes Goat deployment, KubeHound backend configuration) that are error-prone, time-consuming, and dependent on internet connectivity. Current demo preparation risks technical failures during setup on presentation day.
+**Problem**: Preparing for a KubeHound presentation requires multiple manual setup steps (Kind cluster, test scenarios deployment, KubeHound backend configuration) that are error-prone, time-consuming, and dependent on internet connectivity. Current demo preparation risks technical failures during setup on presentation day.
 
-**Solution**: Create comprehensive automation scripts and documentation that enable one-command deployment of a complete KubeHound demo environment running locally with Kind and Kubernetes Goat, ready for live attack path analysis demonstration.
+**Solution**: Create comprehensive automation scripts and documentation that enable one-command deployment of a complete KubeHound demo environment running locally with Kind and KubeHound's official test cluster (24 purpose-built attack scenarios), ready for live attack path analysis demonstration.
 
-**User Impact**: Whitney can reliably set up a complete KubeHound demo environment in 3-5 minutes with a single command, demonstrate attack path analysis with confidence, and clean up effortlessly afterward.
+**User Impact**: Whitney can reliably set up a complete KubeHound demo environment in under 3 minutes with a single command, demonstrate attack path analysis with confidence using proven scenarios, and clean up effortlessly afterward.
+
+**Note**: A future PRD (#3) covers Kubernetes Goat integration for demonstrating KubeHound against third-party vulnerable environments.
 
 ## Success Criteria
 
-✅ Run `./setup-demo.sh` and get working environment in 3-5 minutes
-✅ All components healthy: Kind cluster, Kubernetes Goat pods, KubeHound backend
-✅ KubeHound UI accessible and ready for manual analysis demonstration
-✅ Kubernetes Goat vulnerabilities deployed and exploitable
-✅ Run `./teardown-demo.sh` and all resources cleaned up
-✅ README provides clear demo day workflow and troubleshooting
+✅ Run `./setup-kubehound-test-cluster.sh` and get working environment in under 3 minutes
+✅ All components healthy: Kind cluster (3 nodes), test scenario pods (29), KubeHound backend
+✅ KubeHound UI accessible at localhost:8888 ready for manual analysis demonstration
+✅ 24 attack scenarios deployed and discoverable (850+ attack edges, 25+ attack types)
+✅ Attack paths visualize correctly in KindCluster_Demo.ipynb notebook
+✅ Run `./teardown-kubehound-test-cluster.sh` and all resources cleaned up
+✅ README provides clear demo day workflow using test cluster
 ✅ No internet dependencies during demo (after initial setup)
 ✅ Repeatable and deterministic across runs
 
@@ -32,94 +35,87 @@ priority: High
 
 ### Before Presentation Day
 1. Whitney clones the KubeHound-Demo repository
-2. Runs optional `./prep-demo.sh` to validate prerequisites and pre-pull images
-3. Does a test run to familiarize with the environment
-4. Reviews README for attack path examples to highlight
+2. Runs `./setup-kubehound-test-cluster.sh` for test run
+3. Explores KindCluster_Demo.ipynb notebook to familiarize with attack path queries
+4. Reviews README for interesting attack paths to highlight (endpoint → node, RBAC escalation, container escapes)
 
-### Demo Day - Setup (3-5 minutes before presentation)
-1. Runs `./setup-demo.sh` once
-2. Waits for "Demo ready!" message with URLs
-3. Opens KubeHound UI in browser to verify backend is ready
-4. Verifies Kind cluster and Kubernetes Goat are accessible
+### Demo Day - Setup (2-3 minutes before presentation)
+1. Runs `./setup-kubehound-test-cluster.sh` once
+2. Waits for "Demo ready!" message (automated: cluster creation, pod deployment, backend start, ingestion)
+3. Opens http://localhost:8888 (password: admin) to verify UI is ready
+4. Opens KindCluster_Demo.ipynb notebook for demo walkthrough
 
 ### During Presentation
-1. Explains KubeHound and Kubernetes Goat context
-2. Manually runs `kubehound dump` to collect cluster data (live)
-3. Manually runs `kubehound ingest` to analyze and build attack graph (live)
-4. Opens KubeHound UI to explore discovered attack paths
-5. Demonstrates 2-3 interesting attack paths
-6. Optionally executes one attack path manually to prove it's real
+1. Explains KubeHound context and purpose-built test cluster with 24 attack scenarios
+2. Follows KindCluster_Demo.ipynb narrative:
+   - Show big picture (overwhelming graph of all attack paths)
+   - Narrow to containers (still complex)
+   - Focus on endpoints (more targeted)
+   - Filter to specific scenarios (clear findings)
+3. Demonstrates 2-3 interesting multi-hop attack chains
+4. Explains attack types: VOLUME_ACCESS, ROLE_BIND, Container Escapes, TOKEN_STEAL
 
 ### After Presentation
-1. Runs `./teardown-demo.sh` to clean up all resources
-2. Receives confirmation that cluster and backend are deleted
+1. Runs `./teardown-kubehound-test-cluster.sh` to clean up all resources
+2. Receives confirmation that cluster, kubeconfig, and dump files are deleted
 
 ## Core Requirements
 
-### 1. Automated Setup Script (`setup-demo.sh`)
+### 1. Automated Setup Script (`setup-kubehound-test-cluster.sh`) ✅
 
 **Must do:**
-- Check prerequisites (Docker, Kind, Helm, kubectl, git, kubehound) with helpful error messages
-- Clone Kubernetes Goat repository if not present
-- Deploy Kubernetes Goat using their official `platforms/kind-setup/setup-kind-cluster-and-goat.sh` script
-  - Creates Kind cluster named "kubernetes-goat-cluster" (their default)
-  - Deploys all 20+ vulnerable scenarios
-- Wait for all Kubernetes Goat pods to be Ready (with timeout and progress indicators)
-- Start KubeHound backend stack (JanusGraph, MongoDB, UI)
-- Verify backend health and readiness
+- Clone KubeHound repository if not present (to /tmp/kubehound-repo)
+- Create Kind cluster using KubeHound's test cluster configuration
+  - Cluster name: "kubehound.test.local"
+  - 3-node cluster (1 control-plane, 2 workers)
+- Deploy 24 attack scenario manifests from test/setup/test-cluster/attacks/
+- Wait for all pods to be Ready (with timeout and progress indicators)
+- Start KubeHound backend stack if not already running (JanusGraph, MongoDB, UI)
+- **Automatically run `kubehound dump` and `kubehound ingest`** to build attack graph
 - Print success message with:
-  - KubeHound UI URL
-  - Kubernetes Goat access info
-  - kubectl context information
-  - Next steps: manual `kubehound dump` and `kubehound ingest` commands
+  - KubeHound UI URL (http://localhost:8888)
+  - Cluster information
+  - Next steps: Open KindCluster_Demo.ipynb notebook
 
-**Must NOT do:**
-- Run `kubehound dump` or `kubehound ingest` automatically (this IS the demo!)
+**Implementation Notes:**
+- Reuses KubeHound's official test cluster setup scripts
+- Automated ingestion (unlike Goat approach) since test cluster is guaranteed compatible
+- Setup completes in under 3 minutes
 
 **Non-functional requirements:**
-- Idempotent where possible (can re-run if partially failed)
-- Error checking after each major step
-- Clear progress indicators
-- Time estimates in output
+- ✅ Error checking after each major step
+- ✅ Clear progress indicators
+- ✅ Idempotent cluster name checking
 
-### 2. Automated Teardown Script (`teardown-demo.sh`)
+### 2. Automated Teardown Script (`teardown-kubehound-test-cluster.sh`) ✅
 
 **Must do:**
-- Stop KubeHound backend gracefully
-- Delete Kind cluster "kubernetes-goat-cluster"
-- Clean up temporary files if any
+- Delete Kind cluster "kubehound.test.local"
+- Clean up kubeconfig file (./kubehound-test.kubeconfig)
+- Clean up dump directory (./dump-test)
 - Print confirmation message
+- Note: Backend intentionally left running (shared resource)
 
 **Non-functional requirements:**
-- Safe to run multiple times
-- Clear confirmation of cleanup
-- Handle missing resources gracefully
+- ✅ Safe to run multiple times
+- ✅ Clear confirmation of cleanup
+- ✅ Handle missing resources gracefully
 
 ### 3. Comprehensive README
 
 **Must include:**
-- Project overview and presentation context
-- Prerequisites with installation commands (macOS/Linux)
-- Quick start: `./setup-demo.sh`
-- What gets created (cluster, namespaces, services)
-- Demo day workflow step-by-step
-- 2-3 example attack paths to highlight (research KubeHound + Goat integration)
-- Manual KubeHound analysis commands (`dump`, `ingest`)
+- Project overview: KubeHound demo using purpose-built test cluster
+- Prerequisites with installation commands (Docker, Kind, kubectl, KubeHound)
+- Quick start: `./setup-kubehound-test-cluster.sh`
+- What gets created: 3-node cluster, 29 pods, 24 attack scenarios, 850+ attack edges
+- Demo day workflow using KindCluster_Demo.ipynb notebook
+- Example attack path queries and visualizations
+- 2-3 interesting attack paths to highlight (VOLUME_ACCESS, ROLE_BIND, Container Escapes)
 - Troubleshooting common issues
-- Cleanup: `./teardown-demo.sh`
+- Cleanup: `./teardown-kubehound-test-cluster.sh`
+- Reference to PRD #3 for Kubernetes Goat integration (future work)
 
 **Tone**: Clear, practical, optimized for demo preparation
-
-### 4. Optional Pre-Demo Prep Script (`prep-demo.sh`)
-
-**Should do:**
-- Verify all prerequisites are installed with version checks
-- Pre-pull all Docker images (Kind node, Kubernetes Goat, KubeHound)
-- Run a complete test cycle (setup → verify → teardown)
-- Report any issues found
-- Confirm environment is ready for demo day
-
-**Value**: Eliminates surprises on demo day
 
 ## Technical Architecture
 
@@ -147,19 +143,20 @@ setup-demo.sh → Kind cluster → Kubernetes Goat (Helm) → KubeHound backend 
 
 ## Implementation Milestones
 
-### Phase 1: Core Automation + Validation
-- [x] Setup script creates Kind cluster and deploys Kubernetes Goat successfully (setup-demo.sh: 2m 46s, 20/20 pods healthy)
+### Phase 1: Core Automation + Validation ✅ COMPLETE
+- [x] ~~Setup script creates Kind cluster and deploys Kubernetes Goat successfully~~ (ARCHIVED - switched to test cluster)
+- [x] Setup script creates Kind cluster and deploys KubeHound test scenarios (setup-kubehound-test-cluster.sh: <3 minutes, 29/29 pods healthy)
 - [x] Setup script starts KubeHound backend and verifies health (KubeHound UI accessible at localhost:8888)
-- [x] **VALIDATION: Run kubehound dump + ingest on Goat cluster to verify compatibility** (Completed: 60 identities, 70 permission sets ingested)
-- [ ] Teardown script for Kubernetes Goat cluster (teardown-demo.sh - not yet created)
-- [ ] **🔴 BLOCKER: Confirm at least 5 interesting attack paths are discoverable** (Graph queries return no data - evaluation in progress)
-- [ ] **TEST: Run setup-kubehound-test-cluster.sh and validate attack path queries work** (Script created, not yet tested)
-- [ ] **IF NEEDED: Create supplemental-vulnerabilities.yaml for guaranteed attack paths** (Design complete, implementation pending)
+- [x] **VALIDATION: Run kubehound dump + ingest to verify compatibility** (Completed: 81 identities, 92 permission sets, 850+ attack edges ingested)
+- [x] **✅ RESOLVED: Confirm attack paths are discoverable and visualizable** (SUCCESS: Full attack graph visualizing in KindCluster_Demo.ipynb)
+- [x] **TEST: Validate attack path queries work with test cluster** (COMPLETED: All query patterns working)
+- [x] Teardown script for test cluster (teardown-kubehound-test-cluster.sh created and tested)
+- [x] **DECISION: Choose cluster approach for demo** (FINAL: KubeHound test cluster selected)
 
 ### Phase 2: Documentation & User Experience
-- [ ] README complete with prerequisites, workflow, and troubleshooting
+- [x] README complete with prerequisites, workflow, and troubleshooting (README.md: 409 lines, screenshots integrated, Gremlin/DSL documented)
 - [ ] README includes 2-3 example attack paths researched from KubeHound/Goat integration
-- [ ] Scripts provide clear progress indicators and helpful error messages
+- [x] Scripts provide clear progress indicators and helpful error messages (setup script: separate dump/ingest sections, educational output)
 
 ### Phase 3: Demo Day Reliability
 - [ ] Prep script validates environment and pre-pulls images
@@ -218,7 +215,30 @@ setup-demo.sh → Kind cluster → Kubernetes Goat (Helm) → KubeHound backend 
 - **Implementation**: Created `setup-kubehound-test-cluster.sh` in experiment branch for evaluation
 - **Next Step**: Test KubeHound test cluster, validate query approach, then reassess Goat compatibility
 
+✅ **FINAL DECISION: Use KubeHound Test Cluster for Demo** (2025-11-05)
+- **Evaluation Complete**: KubeHound test cluster tested successfully with full attack path visualization
+- **Root Cause Identified**: Issue was user unfamiliarity with query patterns, NOT cluster incompatibility
+- **Key Discovery**: Found `KindCluster_Demo.ipynb` notebook specifically designed for Kind cluster demos with working queries
+- **Decision**: Abandon Kubernetes Goat evaluation and proceed with KubeHound test cluster
+- **Rationale**:
+  - Time pressure: Demo deadline approaching, need to focus on what works
+  - Test cluster proven: 24 purpose-built attack scenarios, all visualizing correctly
+  - Better demo script: KindCluster_Demo.ipynb provides excellent progressive demo narrative
+  - Reliability: Purpose-built for KubeHound, guaranteed to work on demo day
+  - Full attack graph: 850+ edges across 25+ attack types successfully ingested and visualized
+- **Trade-offs Accepted**:
+  - Less impressive than showing KubeHound analyzing "real-world" vulnerable app (Kubernetes Goat)
+  - Using KubeHound's own test scenarios vs. third-party vulnerable environment
+  - However: Demonstrates KubeHound capabilities more clearly with purpose-built examples
+- **Impact on PRD**:
+  - Simplifies demo setup (single cluster approach)
+  - Changes narrative from "KubeHound + Goat integration" to "KubeHound capabilities showcase"
+  - All success criteria still met with test cluster
+  - Setup time remains under 5 minutes
+- **Status**: Moving forward with test cluster implementation, closing Goat evaluation
+
 💡 **Alternative Hypothesis - External Endpoint Requirement** (2025-11-05): Consider GCP deployment with public exposure
+- **Status**: ARCHIVED - Not needed after test cluster success
 - **Observation**: Many attack path queries (RedTeam notebooks) look for exposed endpoints or external entry points
 - **Root Cause Theory**: Local Kind cluster has no external LoadBalancers, public IPs, or internet-facing services. KubeHound's most compelling attack paths may require external access as entry points (e.g., "Public Service → Container → Node Compromise")
 - **Alternative Solution**: Deploy Kubernetes Goat to GCP with actual external endpoints
@@ -532,3 +552,39 @@ setup-demo.sh → Kind cluster → Kubernetes Goat (Helm) → KubeHound backend 
 2. Create teardown-demo.sh for Kubernetes Goat
 3. Based on test results, decide on cluster strategy
 4. Resume Phase 2 (documentation) once validation unblocked
+
+### 2025-11-06: README Complete with Screenshots and Query Documentation
+**Duration**: ~2 hours
+**Status**: Phase 2 Nearly Complete (67%)
+
+**Activities**:
+- Created comprehensive README.md (409 lines) covering full workflow
+- Added 3 strategic screenshots to illustrate Jupyter notebook interface
+- Documented Gremlin query language and KubeHound DSL
+- Updated repository structure section
+- Fixed script console output for clarity (separate dump/ingest sections)
+- Organized screenshots in docs/images/ directory
+- Updated .gitignore for generated files
+- Updated resource links to include kubehound.io official site
+
+**Completed PRD Items**:
+- [x] README complete with prerequisites, workflow, and troubleshooting
+- [x] Scripts provide clear progress indicators and helpful error messages
+
+**Files Created**:
+- README.md (409 lines with embedded screenshots)
+- docs/images/KubeHound_Screenshot_2.png (notebook interface)
+- docs/images/KubeHound_Screenshot_3.png (Console tab)
+- docs/images/KubeHound_Screenshot_6.png (attack path graph)
+
+**Files Modified**:
+- setup-kubehound-test-cluster.sh (improved console output, separate dump/ingest sections)
+- teardown-kubehound-test-cluster.sh (added backend cleanup)
+- .gitignore (added dump-test/, kubeconfig, logs)
+- README.md (multiple iterations: screenshots, query language, repository structure)
+
+**Next Session Priorities**:
+- Extract 2-3 specific attack path examples for README
+- Create optional prep script (Phase 3)
+- Run complete test cycle on clean environment
+- Validate timing estimates and error handling

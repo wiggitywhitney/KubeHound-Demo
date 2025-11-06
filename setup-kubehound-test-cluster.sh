@@ -24,7 +24,7 @@ CYAN='\033[0;36m'
 NC='\033[0m'
 
 # Configuration
-CLUSTER_NAME="kubehound-test-local"
+CLUSTER_NAME="kubehound.test.local"
 KUBEHOUND_REPO="/tmp/kubehound-repo"
 KUBECONFIG_FILE="./kubehound-test.kubeconfig"
 
@@ -49,6 +49,7 @@ log_step() {
 
 main() {
     local start_time=$(date +%s)
+    local REPO_ROOT="$(pwd)"
 
     echo ""
     echo -e "${CYAN}╔═══════════════════════════════════════════════════╗${NC}"
@@ -77,18 +78,32 @@ main() {
     cd "$KUBEHOUND_REPO/test/setup"
 
     log_info "Creating cluster with 24 attack scenarios..."
-    CLUSTER_NAME="$CLUSTER_NAME" bash manage-cluster.sh create
+    # Note: manage-cluster.sh has a kubeconfig bug but cluster creation succeeds
+    CLUSTER_NAME="$CLUSTER_NAME" bash manage-cluster.sh create || true
 
-    # Export kubeconfig
-    kind get kubeconfig --name "$CLUSTER_NAME" > "$KUBECONFIG_FILE"
-    export KUBECONFIG="$KUBECONFIG_FILE"
+    # Verify cluster was actually created despite the error
+    if ! kind get clusters 2>/dev/null | grep -q "^${CLUSTER_NAME}$"; then
+        log_error "Cluster creation failed!"
+        exit 1
+    fi
 
-    log_success "Cluster created"
+    # Export kubeconfig (working around KubeHound's script bug)
+    kind get kubeconfig --name "$CLUSTER_NAME" > "$REPO_ROOT/$KUBECONFIG_FILE"
+    export KUBECONFIG="$REPO_ROOT/$KUBECONFIG_FILE"
+
+    log_success "Cluster created (worked around KubeHound kubeconfig bug)"
 
     log_step "🎯 Deploying Attack Scenarios"
 
+    log_info "Creating required namespaces..."
+    kubectl create namespace vault --dry-run=client -o yaml | kubectl apply -f - > /dev/null 2>&1
+    kubectl create namespace dev --dry-run=client -o yaml | kubectl apply -f - > /dev/null 2>&1
+
     log_info "Applying 24 vulnerable resource manifests..."
-    CLUSTER_NAME="$CLUSTER_NAME" bash manage-cluster-resources.sh deploy
+    # Deploy attack scenarios directly (bypassing buggy script)
+    for attack in "$KUBEHOUND_REPO/test/setup/test-cluster/attacks"/*.yaml; do
+        kubectl apply -f "$attack" > /dev/null 2>&1
+    done
 
     log_success "Attack scenarios deployed"
 
@@ -118,7 +133,6 @@ main() {
 
     log_step "🔧 Starting KubeHound Backend"
 
-    log_info "Backend should already be running from previous setup"
     log_info "Checking backend health..."
 
     if docker ps | grep -q "kubehound-release"; then
@@ -130,17 +144,29 @@ main() {
         log_success "Backend started"
     fi
 
-    log_step "📊 Running KubeHound Analysis"
+    log_step "📥 Dumping Cluster Data"
 
-    log_info "Dumping cluster data..."
+    # Return to repo root for ingestion
+    cd - > /dev/null
+
+    log_info "Running: kubehound dump local ./dump-test -y"
+    log_info "Collects cluster data (pods, roles, bindings, volumes, etc.)"
     rm -rf ./dump-test
-    export KUBECONFIG="$(pwd)/../../$KUBECONFIG_FILE"
+    export KUBECONFIG="$REPO_ROOT/$KUBECONFIG_FILE"
     kubehound dump local ./dump-test -y
 
-    log_info "Ingesting data and building attack graph..."
-    kubehound ingest local ./dump-test --skip-backend
+    log_info "Extracting dump archive..."
+    cd dump-test/kind-kubehound.test.local
+    tar -xzf kubehound_kind-kubehound.test.local_*.tar.gz
+    cd "$REPO_ROOT"
 
-    log_success "Analysis complete!"
+    log_step "🔗 Building Attack Graph"
+
+    log_info "Running: kubehound ingest local dump-test/kind-kubehound.test.local"
+    log_info "Analyzes relationships and discovers attack paths"
+    kubehound ingest local dump-test/kind-kubehound.test.local --skip-backend
+
+    log_success "Attack graph built and ready to explore!"
 
     local end_time=$(date +%s)
     local duration=$((end_time - start_time))
@@ -155,16 +181,16 @@ main() {
     echo -e "${BLUE}🌐 KubeHound UI:${NC} http://localhost:8888"
     echo -e "   ${YELLOW}Password:${NC} admin"
     echo ""
-    echo -e "${BLUE}🎯 What's Different:${NC}"
-    echo -e "   • 24 attack scenarios (vs Goat's 20+ general scenarios)"
-    echo -e "   • Purpose-built for KubeHound detection"
-    echo -e "   • Cluster: kind-${CLUSTER_NAME}"
+    echo -e "${BLUE}🎯 What You Got:${NC}"
+    echo -e "   • 24 attack scenarios purpose-built for KubeHound"
+    echo -e "   • 3-node Kind cluster: $CLUSTER_NAME"
+    echo -e "   • Attack graph with multiple attack types"
     echo ""
     echo -e "${BLUE}📋 Next Steps:${NC}"
     echo -e "   1. Open http://localhost:8888"
     echo -e "   2. Navigate to kubehound_presets/"
-    echo -e "   3. Try RedTeam.ipynb or LowHangingFruit notebooks"
-    echo -e "   4. Compare graph results with Kubernetes Goat"
+    echo -e "   3. Open KindCluster_Demo.ipynb"
+    echo -e "   4. Run cells to explore attack paths"
     echo ""
     echo -e "${BLUE}🧹 Cleanup:${NC} ./teardown-kubehound-test-cluster.sh"
     echo ""
@@ -172,8 +198,6 @@ main() {
     echo ""
     log_success "Setup completed in ${minutes}m ${seconds}s"
     echo ""
-
-    cd - > /dev/null
 }
 
 main

@@ -17,7 +17,7 @@ CYAN='\033[0;36m'
 NC='\033[0m'
 
 # Configuration
-CLUSTER_NAME="kubehound-test-local"
+CLUSTER_NAME="kubehound.test.local"
 KUBECONFIG_FILE="./kubehound-test.kubeconfig"
 
 log_info() {
@@ -64,11 +64,23 @@ main() {
         log_success "Removed dump directory"
     fi
 
+    if [ -d "/tmp/kubehound-repo" ]; then
+        rm -rf /tmp/kubehound-repo
+        log_success "Removed KubeHound repository"
+    fi
+
+    log_step "🛑 Stopping KubeHound Backend"
+
+    if docker ps | grep -q "kubehound-release"; then
+        log_info "Stopping backend containers..."
+        kubehound backend down
+        log_success "Backend stopped"
+    else
+        log_info "Backend not running, nothing to stop"
+    fi
+
     echo ""
     echo -e "${GREEN}✅ Cleanup complete!${NC}"
-    echo ""
-    log_info "KubeHound backend is still running (shared with Goat setup)"
-    log_info "To stop backend: kubehound backend down"
     echo ""
 }
 

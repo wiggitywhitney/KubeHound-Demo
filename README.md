@@ -1,6 +1,6 @@
 # KubeHound Test Environment
 
-A local Kubernetes environment for learning and exploring [KubeHound](https://github.com/DataDog/KubeHound), a tool that identifies attack paths in Kubernetes clusters by building a graph of relationships between resources.
+A local Kubernetes environment for learning and exploring [KubeHound](https://kubehound.io/), a tool that identifies attack paths in Kubernetes clusters by building a graph of relationships between resources.
 
 This repository provides automation to deploy KubeHound's official test cluster (24 purpose-built attack scenarios) and explore discovered attack paths through an interactive Jupyter notebook interface.
 
@@ -267,6 +267,34 @@ When viewing results in the **Graph** tab, you'll see:
 
 **Reading a path:** Follow arrows from left to right to see the attack progression. Example: "Endpoint exposes Pod → Pod has privileged container → Container can CE_PRIV_MOUNT → Gains Node access."
 
+### Query Language: Gremlin and KubeHound DSL
+
+The queries in the notebook use **Gremlin**, a graph traversal language designed for querying graph databases. KubeHound provides a custom DSL (Domain-Specific Language) wrapper on top of Gremlin to make security analysis easier.
+
+**KubeHound DSL shortcuts:**
+- `kh.V()` - Get all vertices (all resources in the cluster)
+- `kh.containers()` - Get all container vertices
+- `kh.endpoints()` - Get all endpoint vertices (exposed services)
+- `.criticalPaths()` - Find paths that lead to critical access (nodes, cluster-admin, etc.)
+
+**Gremlin traversal methods:**
+- `.has("property", "value")` - Filter vertices by property
+- `.not(...)` - Exclude matching vertices
+- `.outE().inV()` - Follow outgoing edges to connected vertices
+- `.repeat(...).until(...)` - Traverse paths until a condition is met
+- `.path()` - Return the full path taken through the graph
+- `.limit(n)` - Limit results to n items
+
+**Example breakdown:**
+```gremlin
+kh.endpoints()                           // Start with all endpoints
+  .not(has("serviceEndpoint","kube-dns")) // Exclude kube-dns
+  .criticalPaths()                        // Find paths to critical access
+  .by(elementMap())                       // Include all properties
+```
+
+This query finds attack paths starting from exposed services (excluding system services) that lead to cluster compromise.
+
 ### Experimenting with Queries
 
 You can modify queries or add new cells:
@@ -275,7 +303,7 @@ You can modify queries or add new cells:
 2. **To modify a query:** Click into the cell, edit the code, press Shift+Enter
 3. **To restart:** Kernel → Restart & Clear Output
 
-**Tip:** Start with the existing queries and make small changes to learn the syntax.
+**Tip:** Start with the existing queries and make small changes to learn the syntax. The [Gremlin documentation](https://tinkerpop.apache.org/gremlin.html) and [KubeHound query examples](https://github.com/DataDog/KubeHound/tree/main/docs) are helpful references.
 
 ## Kubeconfig Isolation
 
@@ -291,81 +319,6 @@ Or use the `--kubeconfig` flag:
 ```bash
 kubectl --kubeconfig=./kubehound-test.kubeconfig get nodes
 ```
-
-## Troubleshooting
-
-### Docker Issues
-
-**Symptom:** `kind get clusters` hangs or setup script stalls
-
-**Solution:** Restart Docker Desktop or reboot your machine. Docker can get into a stuck state.
-
-### Backend Not Starting
-
-**Symptom:** Setup fails with "Backend not healthy"
-
-**Solution:**
-```bash
-# Stop any existing backend
-kubehound backend down
-
-# Remove old containers
-docker rm -f $(docker ps -a -q --filter name=kubehound-release)
-
-# Re-run setup
-./setup-kubehound-test-cluster.sh
-```
-
-### Cells Not Executing in Jupyter
-
-**Symptom:** Cell shows `[*]` and never completes
-
-**Possible causes:**
-1. **Previous cell still running** - Wait for it to finish
-2. **Docker/Backend stuck** - Check `docker ps` to verify containers are running
-3. **Kernel dead** - Restart the kernel (Kernel → Restart in Jupyter menu)
-
-**Solution:** Try running cells sequentially from the top. If stuck, restart the kernel.
-
-### Port Already in Use
-
-**Symptom:** "Port 8888 already in use"
-
-**Solution:**
-```bash
-# Find process using port 8888
-lsof -ti:8888 | xargs kill -9
-
-# Or change the backend port (not recommended for beginners)
-```
-
-### Cluster Already Exists
-
-**Symptom:** Setup fails with "Cluster 'kubehound.test.local' already exists"
-
-**Solution:** Run teardown first:
-```bash
-./teardown-kubehound-test-cluster.sh
-./setup-kubehound-test-cluster.sh
-```
-
-### Graph Tab Empty
-
-**Symptom:** Console tab shows data but Graph tab is blank
-
-**Possible causes:**
-1. Query returns table data (not graph data)
-2. Too many results to render (increase limit)
-3. Browser rendering issue
-
-**Solution:** Try clicking the Console tab to see if data exists. Some queries return tables, not graphs. Graphs appear when queries return paths (nodes + edges).
-
-## What's Next?
-
-- **Explore other notebooks** in `kubehound_presets/` like `RedTeam.ipynb`, `BlueTeam.ipynb`
-- **Modify the cluster** - Deploy your own workloads, then re-run `dump` and `ingest`
-- **Learn Gremlin** - The query language used by KubeHound (graph traversal)
-- **Try Kubernetes Goat** - See [PRD #3](prds/3-kubernetes-goat-integration.md) for future integration
 
 ## Architecture Overview
 
@@ -389,7 +342,8 @@ Visual attack path graphs
 
 ## Resources
 
-- **KubeHound Documentation** - https://github.com/DataDog/KubeHound
+- **KubeHound Official Site** - https://kubehound.io/
+- **KubeHound GitHub** - https://github.com/DataDog/KubeHound
 - **Gremlin Query Language** - https://tinkerpop.apache.org/gremlin.html
 - **Jupyter Notebook Basics** - https://jupyter.org/
 - **Kind Documentation** - https://kind.sigs.k8s.io/
@@ -398,15 +352,20 @@ Visual attack path graphs
 
 ```
 KubeHound-Demo/
-├── setup-kubehound-test-cluster.sh   # One-command setup
-├── teardown-kubehound-test-cluster.sh # Complete cleanup
-├── kubehound-test.kubeconfig          # Isolated cluster config (created by setup)
-├── dump-test/                         # Cluster data (created by setup)
+├── setup-kubehound-test-cluster.sh    # One-command setup script
+├── teardown-kubehound-test-cluster.sh  # Complete cleanup script
+├── docs/
+│   └── images/                        # Screenshots for README
 ├── prds/                              # Product requirement documents
 │   ├── 2-automated-demo-environment.md
-│   └── 3-kubernetes-goat-integration.md (future work)
+│   └── 3-kubernetes-goat-integration.md
 └── README.md                          # This file
 ```
+
+**Generated files (gitignored):**
+- `kubehound-test.kubeconfig` - Isolated cluster config
+- `dump-test/` - Cluster data dump
+- `*.log` - Setup/teardown logs
 
 ## Contributing
 
