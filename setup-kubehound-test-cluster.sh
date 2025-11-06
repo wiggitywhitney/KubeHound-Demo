@@ -55,12 +55,13 @@ main() {
     cd "$KUBEHOUND_REPO/test/setup"
 
     log_info "Creating cluster with 24 attack scenarios..."
-    # Note: manage-cluster.sh has a kubeconfig bug but cluster creation succeeds
-    CLUSTER_NAME="$CLUSTER_NAME" bash manage-cluster.sh create || true
+    # Note: KubeHound's script has a kubeconfig export bug that causes a harmless error at the end
+    # We suppress stderr to hide it and extract the kubeconfig ourselves using 'kind get kubeconfig'
+    CLUSTER_NAME="$CLUSTER_NAME" bash manage-cluster.sh create 2>/dev/null || true
 
-    # Verify cluster was actually created despite the error
+    # Verify cluster was created
     if ! kind get clusters 2>/dev/null | grep -q "^${CLUSTER_NAME}$"; then
-        log_error "Cluster creation failed!"
+        log_error "Cluster creation failed"
         exit 1
     fi
 
@@ -68,7 +69,7 @@ main() {
     kind get kubeconfig --name "$CLUSTER_NAME" > "$REPO_ROOT/$KUBECONFIG_FILE"
     export KUBECONFIG="$REPO_ROOT/$KUBECONFIG_FILE"
 
-    log_success "Cluster created (worked around KubeHound kubeconfig bug)"
+    log_success "Cluster created successfully"
 
     log_step "🎯 Deploying Attack Scenarios"
 
