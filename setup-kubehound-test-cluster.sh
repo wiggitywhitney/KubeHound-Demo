@@ -157,6 +157,13 @@ main() {
 
     log_info "Extracting dump archive..."
     cd dump-test/kind-kubehound.test.local
+
+    archive_count=$(ls -1 kubehound_kind-kubehound.test.local_*.tar.gz 2>/dev/null | wc -l)
+    if [ "$archive_count" -ne 1 ]; then
+        log_error "Expected 1 archive, found $archive_count"
+        exit 1
+    fi
+
     tar -xzf kubehound_kind-kubehound.test.local_*.tar.gz
     cd "$REPO_ROOT"
 
