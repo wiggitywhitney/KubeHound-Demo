@@ -204,7 +204,7 @@ verify_health() {
 
     # Check KubeHound UI accessibility
     log_info "Checking KubeHound UI accessibility..."
-    sleep 2
+    sleep 10
     if curl -s -o /dev/null -w "%{http_code}" http://localhost:8888 2>/dev/null | grep -qE "200|302|403"; then
         log_success "KubeHound UI is accessible at http://localhost:8888"
     else

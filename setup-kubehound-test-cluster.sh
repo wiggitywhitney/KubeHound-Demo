@@ -90,7 +90,13 @@ main() {
 
     log_info "Checking backend health..."
 
-    if docker ps | grep -q "kubehound-release"; then
+    if ! command -v docker &> /dev/null; then
+        log_error "Docker not found. Please install Docker and try again."
+        exit 1
+    elif ! docker info &> /dev/null; then
+        log_error "Docker daemon not running. Please start Docker and try again."
+        exit 1
+    elif docker ps | grep -q "kubehound-release"; then
         log_success "KubeHound backend is running"
     else
         log_info "Starting backend..."

@@ -26,11 +26,11 @@ kubehound backend up -f docker-compose.overrides.yml
 The backend command starts these services via Docker Compose v2 API:
 - **MongoDB**: `mongodb://localhost:27017` (data storage)
 - **JanusGraph**: `ws://localhost:8182/gremlin` (graph database)
-- **Jupyter UI**: http://localhost:8888 (default password: `admin`)
+- **Jupyter UI**: <http://localhost:8888> (default password: `admin`)
 - Additional UI components (invana-engine, invana-studio)
 
 ### Backend Health Check
-- Jupyter UI accessible at http://localhost:8888
+- Jupyter UI accessible at <http://localhost:8888>
 - Password can be changed via `NOTEBOOK_PASSWORD` env var
 - Connection timeouts default to 30s
 
