@@ -45,7 +45,7 @@ priority: Medium
 
 ### Architecture
 
-```
+```yaml
 setup-goat-demo.sh → Kind cluster → Kubernetes Goat (Helm) → KubeHound backend (ready)
                                                               ↓
                                             [MANUAL] kubehound dump (collect data)
@@ -172,7 +172,7 @@ setup-goat-demo.sh → Kind cluster → Kubernetes Goat (Helm) → KubeHound bac
 - ✅ PRD 2: Automated Demo Environment (test cluster implementation provides foundation)
 
 **External Dependencies:**
-- Kubernetes Goat repository: https://github.com/madhuakula/kubernetes-goat
+- Kubernetes Goat repository: <https://github.com/madhuakula/kubernetes-goat>
 - Community maintenance of Goat scenarios
 - KubeHound query documentation
 
@@ -217,7 +217,7 @@ setup-goat-demo.sh → Kind cluster → Kubernetes Goat (Helm) → KubeHound bac
 
 ## References
 
-- **Kubernetes Goat**: https://github.com/madhuakula/kubernetes-goat
-- **KubeHound**: https://github.com/DataDog/KubeHound
+- **Kubernetes Goat**: <https://github.com/madhuakula/kubernetes-goat>
+- **KubeHound**: <https://github.com/DataDog/KubeHound>
 - **PRD 2**: Automated Demo Environment (test cluster implementation)
 - **KindCluster_Demo.ipynb**: Query reference for attack path visualization

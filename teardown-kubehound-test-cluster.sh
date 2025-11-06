@@ -54,7 +54,11 @@ main() {
 
     log_step "🛑 Stopping KubeHound Backend"
 
-    if docker ps | grep -q "kubehound-release"; then
+    if ! command -v docker &> /dev/null; then
+        log_warning "Docker not found, skipping backend stop"
+    elif ! docker info &> /dev/null; then
+        log_warning "Docker daemon not running, skipping backend stop"
+    elif docker ps | grep -q "kubehound-release"; then
         log_info "Stopping backend containers..."
         kubehound backend down
         log_success "Backend stopped"

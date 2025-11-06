@@ -159,8 +159,8 @@ This analyzes the collected data and builds the attack graph in JanusGraph.
 Cross-referenced KubeHound's attack detection capabilities against Kubernetes Goat's vulnerable scenarios to validate compatibility.
 
 **Sources**:
-- KubeHound attack reference: https://kubehound.io/reference/graph/
-- Kubernetes Goat scenarios: https://madhuakula.com/kubernetes-goat/docs/
+- KubeHound attack reference: <https://kubehound.io/reference/graph/>
+- Kubernetes Goat scenarios: <https://madhuakula.com/kubernetes-goat/docs/>
 
 ### KubeHound Attack Detection Capabilities (25+ types)
 
@@ -537,9 +537,9 @@ fi
 
 ## References
 
-- **KubeHound Docs**: https://kubehound.io/
-- **KubeHound GitHub**: https://github.com/DataDog/KubeHound
-- **Kubernetes Goat Docs**: https://madhuakula.com/kubernetes-goat/
-- **Kubernetes Goat GitHub**: https://github.com/madhuakula/kubernetes-goat
-- **Kind Docs**: https://kind.sigs.k8s.io/
-- **Kind Configuration**: https://kind.sigs.k8s.io/docs/user/configuration/
+- **KubeHound Docs**: <https://kubehound.io/>
+- **KubeHound GitHub**: <https://github.com/DataDog/KubeHound>
+- **Kubernetes Goat Docs**: <https://madhuakula.com/kubernetes-goat/>
+- **Kubernetes Goat GitHub**: <https://github.com/madhuakula/kubernetes-goat>
+- **Kind Docs**: <https://kind.sigs.k8s.io/>
+- **Kind Configuration**: <https://kind.sigs.k8s.io/docs/user/configuration/>

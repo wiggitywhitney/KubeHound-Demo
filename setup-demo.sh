@@ -150,63 +150,14 @@ setup_kubernetes_goat() {
 # Wait for Pods Ready
 #######################################################################
 
-wait_for_pods_ready() {
-    log_step "⏳ Waiting for Pods to be Ready"
-
-    log_info "Timeout: ${POD_READY_TIMEOUT}s, checking every ${POD_CHECK_INTERVAL}s"
-    log_info "This ensures all Kubernetes Goat scenarios are fully deployed..."
-
-    local elapsed=0
-    local all_ready=false
-
-    # Give pods a moment to start appearing
-    sleep 5
-
-    while [ $elapsed -lt $POD_READY_TIMEOUT ]; do
-        # Get pod counts
-        local total_pods=$(kubectl get pods --all-namespaces --no-headers 2>/dev/null | wc -l | tr -d ' ')
-        local running_pods=$(kubectl get pods --all-namespaces --field-selector=status.phase=Running --no-headers 2>/dev/null | wc -l | tr -d ' ')
-
-        # Count ready pods (have Ready condition = True)
-        local ready_pods=0
-        if command -v jq &> /dev/null; then
-            ready_pods=$(kubectl get pods --all-namespaces -o json 2>/dev/null | jq -r '.items[] | select(.status.conditions[]? | select(.type=="Ready" and .status=="True")) | .metadata.name' 2>/dev/null | wc -l | tr -d ' ')
-        else
-            # Fallback if jq not available: assume Running = Ready
-            ready_pods=$running_pods
-        fi
-
-        # Handle case where no pods exist yet
-        if [ "$total_pods" -eq 0 ]; then
-            log_warning "No pods found yet, waiting... (${elapsed}s elapsed)"
-            sleep $POD_CHECK_INTERVAL
-            elapsed=$((elapsed + POD_CHECK_INTERVAL))
-            continue
-        fi
-
-        log_info "Progress: $ready_pods/$total_pods pods ready, $running_pods running (${elapsed}s elapsed)"
-
-        # Check if all pods are ready (allow for some tolerance)
-        # Consider it ready if running pods == total pods (simple check)
-        if [ "$running_pods" -eq "$total_pods" ] && [ "$total_pods" -gt 0 ]; then
-            all_ready=true
-            break
-        fi
-
-        sleep $POD_CHECK_INTERVAL
-        elapsed=$((elapsed + POD_CHECK_INTERVAL))
-    done
-
-    if [ "$all_ready" = true ]; then
-        log_success "All pods are ready! (took ${elapsed}s)"
-    else
-        log_error "Timeout waiting for pods to be ready after ${POD_READY_TIMEOUT}s"
+wait_for_all_pods_ready() {
+    wait_for_pods_ready $POD_READY_TIMEOUT $POD_CHECK_INTERVAL || {
+        log_error "Timeout waiting for pods to be ready"
         log_info "Current pod status:"
         kubectl get pods --all-namespaces
-        log_warning "Some pods may still be starting. You can continue, but demo may not work correctly."
-        log_info "Check status with: kubectl get pods --all-namespaces"
+        log_warning "Some pods may still be starting. Demo may not work correctly."
         exit 1
-    fi
+    }
 }
 
 #######################################################################
@@ -314,7 +265,7 @@ main() {
 
     check_prerequisites
     setup_kubernetes_goat
-    wait_for_pods_ready
+    wait_for_all_pods_ready
     start_kubehound_backend
     verify_health
 

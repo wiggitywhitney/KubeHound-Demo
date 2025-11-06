@@ -84,29 +84,7 @@ main() {
 
     log_success "Attack scenarios deployed"
 
-    log_step "⏳ Waiting for Pods to be Ready"
-
-    log_info "Waiting for all pods to reach Running state..."
-    sleep 10
-
-    local timeout=120
-    local elapsed=0
-    while [ $elapsed -lt $timeout ]; do
-        local total=$(kubectl get pods --all-namespaces --no-headers 2>/dev/null | wc -l | tr -d ' ')
-        local running=$(kubectl get pods --all-namespaces --field-selector=status.phase=Running --no-headers 2>/dev/null | wc -l | tr -d ' ')
-
-        if [ "$total" -eq 0 ]; then
-            log_info "No pods found yet, waiting..."
-        elif [ "$running" -eq "$total" ]; then
-            log_success "All $total pods are running"
-            break
-        else
-            log_info "Progress: $running/$total pods running (${elapsed}s elapsed)"
-        fi
-
-        sleep 10
-        elapsed=$((elapsed + 10))
-    done
+    wait_for_pods_ready 120 10
 
     log_step "🔧 Starting KubeHound Backend"
 
