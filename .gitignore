@@ -12,6 +12,9 @@ journal/
 # Commit story configuration (contains local settings)
 .commit-story.json
 
+# MCP server configuration (personal tooling setup)
+.mcp.json
+
 # Kubernetes Goat repository (cloned by setup script)
 kubernetes-goat/
 
