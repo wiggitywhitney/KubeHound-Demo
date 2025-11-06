@@ -1,0 +1,108 @@
+
+
+# Over-privileged service account
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: app-service-account
+  namespace: default
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: app-admin-binding
+subjects:
+- kind: ServiceAccount
+  name: app-service-account
+  namespace: default
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+
+---
+
+# Privileged container / unsafe security context
+apiVersion: v1
+kind: Pod
+metadata:
+  name: privileged-pod
+  namespace: default
+spec:
+  containers:
+  - name: myapp
+    image: nginx:latest
+    securityContext:
+      privileged: true
+      allowPrivilegeEscalation: true
+
+---
+# HostPath mount (host filesystem access)
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hostpath-pod
+  namespace: default
+spec:
+  volumes:
+  - name: host-root
+    hostPath:
+      path: /
+  containers:
+  - name: support-tool
+    image: busybox
+    volumeMounts:
+    - mountPath: /host
+      name: host-root
+    command: ["sleep", "3600"]
+---
+
+# Nothing! No NetworkPolicy objects defined.
+# By default, all pods can talk to all other pods and services.
+
+---
+
+# Insecure RBAC binding (too much privilege)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: jenkins-admin
+subjects:
+- kind: User
+  name: jenkins
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+
+---
+
+# Overly open API server (for reference only, not deployable via manifest)
+# These are kube-apiserver flags that might appear in your control plane config:
+# --anonymous-auth=true
+# --insecure-bind-address=0.0.0.0
+# --insecure-port=8080
+
+---
+
+# Permissive PodSecurityPolicy (legacy example)
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: permissive-psp
+spec:
+  privileged: true
+  allowPrivilegeEscalation: true
+  allowedHostPaths:
+  - pathPrefix: /
+  runAsUser:
+    rule: RunAsAny
+  seLinux:
+    rule: RunAsAny
+  fsGroup:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: RunAsAny
