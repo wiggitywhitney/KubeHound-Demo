@@ -7,6 +7,9 @@ journal/
 # Environment variables (API keys and secrets)
 .env
 
+# Commit story configuration (contains local settings)
+.commit-story.json
+
 # Kubernetes Goat repository (cloned by setup script)
 kubernetes-goat/
 
