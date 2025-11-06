@@ -19,13 +19,9 @@
 
 set -euo pipefail
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-CYAN='\033[0;36m'
-NC='\033[0m' # No Color
+# Source shared logging functions
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/scripts/common.sh"
 
 # Configuration
 CLUSTER_NAME="kubernetes-goat-cluster"
@@ -33,33 +29,6 @@ GOAT_REPO_DIR="./kubernetes-goat"
 GOAT_REPO_URL="https://github.com/madhuakula/kubernetes-goat.git"
 POD_READY_TIMEOUT=300  # 5 minutes
 POD_CHECK_INTERVAL=15   # Check every 15 seconds
-
-#######################################################################
-# Helper Functions
-#######################################################################
-
-log_info() {
-    echo -e "${BLUE}ℹ️  $1${NC}"
-}
-
-log_success() {
-    echo -e "${GREEN}✅ $1${NC}"
-}
-
-log_warning() {
-    echo -e "${YELLOW}⚠️  $1${NC}"
-}
-
-log_error() {
-    echo -e "${RED}❌ $1${NC}"
-}
-
-log_step() {
-    echo ""
-    echo -e "${CYAN}═══════════════════════════════════════════════════${NC}"
-    echo -e "${CYAN}$1${NC}"
-    echo -e "${CYAN}═══════════════════════════════════════════════════${NC}"
-}
 
 #######################################################################
 # Prerequisite Checks

@@ -15,37 +15,14 @@
 
 set -euo pipefail
 
-# Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-CYAN='\033[0;36m'
-NC='\033[0m'
+# Source shared logging functions
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/scripts/common.sh"
 
 # Configuration
 CLUSTER_NAME="kubehound.test.local"
 KUBEHOUND_REPO="/tmp/kubehound-repo"
 KUBECONFIG_FILE="./kubehound-test.kubeconfig"
-
-log_info() {
-    echo -e "${BLUE}ℹ️  $1${NC}"
-}
-
-log_success() {
-    echo -e "${GREEN}✅ $1${NC}"
-}
-
-log_error() {
-    echo -e "${RED}❌ $1${NC}"
-}
-
-log_step() {
-    echo ""
-    echo -e "${CYAN}═══════════════════════════════════════════════════${NC}"
-    echo -e "${CYAN}$1${NC}"
-    echo -e "${CYAN}═══════════════════════════════════════════════════${NC}"
-}
 
 main() {
     local start_time=$(date +%s)
