@@ -116,7 +116,7 @@ main() {
     # Return to repo root for ingestion
     cd - > /dev/null
 
-    log_info "KubeHound is collecting cluster configuration..."
+    log_info "KubeHound is collecting cluster configuration (aka 'dump')..."
     log_info "Gathering pods, roles, bindings, volumes, and other resources"
     rm -rf ./dump-test
     export KUBECONFIG="$REPO_ROOT/$KUBECONFIG_FILE"
@@ -136,7 +136,7 @@ main() {
 
     log_step "🔗 Building Attack Graph"
 
-    log_info "KubeHound is ingesting the collected data..."
+    log_info "KubeHound is ingesting the collected data (aka 'ingest')..."
     log_info "Analyzing relationships and discovering attack paths"
     kubehound ingest local dump-test/kind-kubehound.test.local --skip-backend
 
