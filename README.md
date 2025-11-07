@@ -11,6 +11,39 @@ This repository provides automation to deploy KubeHound's official test cluster 
 - **Interactive notebooks** for exploring attack paths visually
 - **One-command setup** that handles cluster creation, data collection, and attack graph generation
 
+## How KubeHound Works
+
+KubeHound has 4 main components in this setup:
+
+**1. KubeHound CLI (binary on your computer)**
+- The `kubehound` command you install
+- Connects to Kubernetes clusters to collect configuration data
+- Processes and stores data in the backend
+- Commands: `kubehound dump` (collect data), `kubehound ingest` (build graph)
+
+**2. MongoDB container (data storage)**
+- Stores raw Kubernetes resource data
+- Contains pods, roles, bindings, service accounts, volumes, etc.
+
+**3. JanusGraph container (graph database)**
+- Reads data from MongoDB
+- Builds the attack graph with vertices (resources) and edges (attack techniques)
+- Processes Gremlin queries to find attack paths
+
+**4. Jupyter container (web UI)**
+- Interactive notebook interface at http://localhost:8888
+- Runs queries against JanusGraph
+- Visualizes attack paths as graphs and tables
+
+**Data Flow:**
+```
+KubeHound CLI → Collects from Kind cluster → Stores in MongoDB
+                      ↓
+KubeHound CLI → Tells JanusGraph to ingest → Builds attack graph
+                      ↓
+You → Use Jupyter UI → Queries JanusGraph → See attack paths
+```
+
 ## Prerequisites
 
 Install these tools before running the setup:
