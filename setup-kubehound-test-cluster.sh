@@ -111,18 +111,18 @@ main() {
         docker cp "$REPO_ROOT/KindCluster_Demo_optimized.ipynb" kubehound-release-ui-jupyter-1:/kubehound/notebooks/kubehound_presets/KindCluster_Demo.ipynb 2>/dev/null
     fi
 
-    log_step "📥 Dumping Cluster Data"
+    log_step "📥 Collecting Cluster State"
 
     # Return to repo root for ingestion
     cd - > /dev/null
 
-    log_info "Running: kubehound dump local ./dump-test -y"
-    log_info "Collects cluster data (pods, roles, bindings, volumes, etc.)"
+    log_info "KubeHound is collecting cluster configuration..."
+    log_info "Gathering pods, roles, bindings, volumes, and other resources"
     rm -rf ./dump-test
     export KUBECONFIG="$REPO_ROOT/$KUBECONFIG_FILE"
     kubehound dump local ./dump-test -y
 
-    log_info "Extracting dump archive..."
+    log_info "KubeHound is extracting the collected data from tar archive..."
     cd dump-test/kind-kubehound.test.local
 
     archive_count=$(ls -1 kubehound_kind-kubehound.test.local_*.tar.gz 2>/dev/null | wc -l)
@@ -136,8 +136,8 @@ main() {
 
     log_step "🔗 Building Attack Graph"
 
-    log_info "Running: kubehound ingest local dump-test/kind-kubehound.test.local"
-    log_info "Analyzes relationships and discovers attack paths"
+    log_info "KubeHound is ingesting the collected data..."
+    log_info "Analyzing relationships and discovering attack paths"
     kubehound ingest local dump-test/kind-kubehound.test.local --skip-backend
 
     log_success "Attack graph built and ready to explore!"
