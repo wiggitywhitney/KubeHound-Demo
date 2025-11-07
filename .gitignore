@@ -11,6 +11,7 @@ journal/
 
 # Commit story configuration (contains local settings)
 .commit-story.json
+commit-story.config.json
 
 # MCP server configuration (personal tooling setup)
 .mcp.json

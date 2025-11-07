@@ -176,7 +176,7 @@ Starts with the big picture - queries all vertices (resources) and their critica
 
 **Query example:**
 ```gremlin
-kh.V().criticalPaths().by(elementMap()).limit(2000)
+kh.V().limit(100).criticalPaths().by(elementMap()).limit(500)
 ```
 
 **Result:** Overwhelming! Shows hundreds of attack paths. Too much to make sense of.
@@ -186,7 +186,7 @@ Narrows focus to just container-based attack paths.
 
 **Query example:**
 ```gremlin
-kh.containers().criticalPaths().by(elementMap())
+kh.containers().criticalPaths().by(elementMap()).limit(200)
 ```
 
 **Result:** Still too much. Demonstrates the need for further filtering.
@@ -196,7 +196,7 @@ Focuses on endpoints (exposed services) since they're the most realistic entry p
 
 **Query example:**
 ```gremlin
-kh.endpoints().criticalPaths().by(elementMap())
+kh.endpoints().criticalPaths().by(elementMap()).limit(100)
 ```
 
 **Result:** More manageable! Shows which exposed services can lead to critical access.

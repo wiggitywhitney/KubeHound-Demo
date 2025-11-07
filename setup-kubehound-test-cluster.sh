@@ -106,6 +106,11 @@ main() {
         log_success "Backend started"
     fi
 
+    # Apply notebook optimizations if available
+    if [ -f "$REPO_ROOT/KindCluster_Demo_optimized.ipynb" ]; then
+        docker cp "$REPO_ROOT/KindCluster_Demo_optimized.ipynb" kubehound-release-ui-jupyter-1:/kubehound/notebooks/kubehound_presets/KindCluster_Demo.ipynb 2>/dev/null
+    fi
+
     log_step "📥 Dumping Cluster Data"
 
     # Return to repo root for ingestion
