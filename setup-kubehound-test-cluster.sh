@@ -3,11 +3,11 @@
 #######################################################################
 # setup-kubehound-test-cluster.sh - KubeHound Test Cluster Setup
 #
-# This script deploys KubeHound's official test cluster with 24
-# pre-built attack scenarios specifically designed for KubeHound.
+# This script deploys KubeHound's official test cluster with the
+# ENDPOINT_EXPLOIT attack scenario designed for KubeHound.
 #
-# Purpose: Validate that KubeHound graph queries work correctly
-# Compare with Kubernetes Goat to determine best demo approach
+# Purpose: Demonstrate KubeHound attack path discovery with an
+# educational Jupyter notebook that shows progressive filtering
 #
 # Usage: ./setup-kubehound-test-cluster.sh
 # Cleanup: ./teardown-kubehound-test-cluster.sh
@@ -54,7 +54,7 @@ main() {
 
     cd "$KUBEHOUND_REPO/test/setup"
 
-    log_info "Creating cluster with 24 attack scenarios..."
+    log_info "Creating cluster..."
     # Note: KubeHound's script has a kubeconfig export bug that causes a harmless error at the end
     # We suppress stderr to hide it and extract the kubeconfig ourselves using 'kind get kubeconfig'
     CLUSTER_NAME="$CLUSTER_NAME" bash manage-cluster.sh create 2>/dev/null || true
@@ -77,7 +77,6 @@ main() {
     kubectl create namespace vault --dry-run=client -o yaml | kubectl apply -f - > /dev/null 2>&1
     kubectl create namespace dev --dry-run=client -o yaml | kubectl apply -f - > /dev/null 2>&1
 
-    # TESTING: Deploy only 1 scenario to test notebook performance
     log_info "Applying 1 vulnerable resource manifest (ENDPOINT_EXPLOIT)..."
     kubectl apply -f "$KUBEHOUND_REPO/test/setup/test-cluster/attacks/ENDPOINT_EXPLOIT.yaml" > /dev/null 2>&1
 
@@ -160,9 +159,9 @@ main() {
     echo -e "   ${YELLOW}Password:${NC} admin"
     echo ""
     echo -e "${BLUE}🎯 What You Got:${NC}"
-    echo -e "   • 24 attack scenarios purpose-built for KubeHound"
+    echo -e "   • 1 attack scenario (ENDPOINT_EXPLOIT) designed for KubeHound"
     echo -e "   • 3-node Kind cluster: $CLUSTER_NAME"
-    echo -e "   • Attack graph with multiple attack types"
+    echo -e "   • Attack graph with multiple attack paths"
     echo ""
     echo -e "${BLUE}📋 Next Steps:${NC}"
     echo -e "   1. Open http://localhost:8888"
