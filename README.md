@@ -2,11 +2,11 @@
 
 A local Kubernetes environment for learning and exploring [KubeHound](https://kubehound.io/), a tool that identifies attack paths in Kubernetes clusters by building a graph of relationships between resources.
 
-This repository provides automation to deploy KubeHound's official test cluster (24 purpose-built attack scenarios) and explore discovered attack paths through an interactive Jupyter notebook interface.
+This repository provides automation to deploy KubeHound's official test cluster (1 attack scenario: ENDPOINT_EXPLOIT) and explore discovered attack paths through an interactive Jupyter notebook interface.
 
 ## What You'll Get
 
-- **3-node Kind cluster** with 24 attack scenarios designed to demonstrate various Kubernetes security issues
+- **3-node Kind cluster** with 1 attack scenario (ENDPOINT_EXPLOIT) designed to demonstrate Kubernetes security issues
 - **KubeHound backend** (MongoDB, JanusGraph graph database, Jupyter UI)
 - **Interactive notebooks** for exploring attack paths visually
 - **One-command setup** that handles cluster creation, data collection, and attack graph generation
@@ -80,8 +80,8 @@ Run the setup script to create everything:
 **What this does:**
 1. Clones KubeHound repository to `/tmp/kubehound-repo`
 2. Creates a 3-node Kind cluster named `kubehound.test.local`
-3. Deploys 24 vulnerable resource manifests (pods, roles, service accounts, etc.)
-4. Waits for all 43 pods to reach Running state
+3. Deploys 1 vulnerable resource manifest (ENDPOINT_EXPLOIT: privileged pod with exposed service)
+4. Waits for all pods to reach Running state
 5. Starts KubeHound backend (MongoDB, JanusGraph, Jupyter UI)
 6. **Dumps cluster data** - Collects information about all cluster resources
 7. **Builds attack graph** - Analyzes relationships and identifies attack paths
@@ -167,9 +167,6 @@ You'll see the Jupyter file browser showing directories.
 
 This opens the main demo notebook designed specifically for Kind clusters.
 
-![KindCluster_Demo Notebook](docs/images/KubeHound_Screenshot_2.png)
-*The KindCluster_Demo notebook showing the title, introduction, and initial setup section*
-
 ### Understanding the Notebook Interface
 
 **Cell numbering:**
@@ -194,91 +191,58 @@ After executing a query cell, you'll see tabs above the results:
 
 Click between tabs to view results differently.
 
-![Console vs Graph Tabs](docs/images/KubeHound_Screenshot_3.png)
-*Console tab shows tabular data, while the Graph tab (shown with many scattered nodes) visualizes relationships*
-
 ### The KindCluster_Demo Notebook Structure
 
-The notebook walks you through attack path discovery with a progressive narrative:
+The notebook walks you through attack path discovery with a progressive filtering approach, demonstrating how to narrow down from hundreds of attack paths to the most critical, actionable findings:
 
 **1. Initial Setup**
-Configures graph visualization settings (smooth edges, arrows, etc.).
+Configures graph visualization settings (smooth edges, arrows).
 
-**2. "What are we looking at?"**
-Starts with the big picture - queries all vertices (resources) and their critical paths.
+**2. What are we looking at?**
+Shows all Kubernetes resources as individual dots, with each color representing a different resource type (pods, containers, identities, nodes, volumes).
 
-**Query example:**
-```gremlin
-kh.V().limit(100).criticalPaths().by(elementMap()).limit(500)
-```
+**3. Critical attack paths**
+Finds attack chains that lead to cluster compromise - when an attacker gains control of a Node and can access all containers, secrets, and data.
 
-**Result:** Overwhelming! Shows hundreds of attack paths. Too much to make sense of.
+**Result:** 388 attack paths found - overwhelming!
 
-**3. "Let's look at the containers then"**
-Narrows focus to just container-based attack paths.
+**4. Too much information!**
+Narrows down to containers since they often have misconfigurations like excessive permissions, container escape vulnerabilities, and access to sensitive volumes.
 
-**Query example:**
-```gremlin
-kh.containers().criticalPaths().by(elementMap()).limit(200)
-```
+**Result:** Still too many results.
 
-**Result:** Still too much. Demonstrates the need for further filtering.
+**5. Still too many results**
+Focuses on endpoints (exposed services) - the realistic entry points for external attackers. Supply chain attacks exist but are sophisticated and less common.
 
-**4. "Let's look at the basic, the endpoints"**
-Focuses on endpoints (exposed services) since they're the most realistic entry points for attackers.
+**Result:** More manageable - shows attack paths from externally accessible services.
 
-**Query example:**
-```gremlin
-kh.endpoints().criticalPaths().by(elementMap()).limit(100)
-```
+**6. Identify the vulnerable services**
+Steps back from complex graphs to get a simple list of which services (by name and port) have critical attack paths.
 
-**Result:** More manageable! Shows which exposed services can lead to critical access.
+**Result:** Table showing vulnerable service endpoints and ports.
 
-**5. "Let's get the vulnerability context"**
-Groups endpoints by service to understand which services are vulnerable.
+**7. Filter out internal infrastructure**
+Removes internal services like `kube-dns` (Kubernetes' internal DNS service) to focus on externally-accessible services attackers would actually target.
 
-**Query example:**
-```gremlin
-kh.endpoints().criticalPaths().limit(local,1)
-  .dedup().valueMap("serviceEndpoint","port")
-  .group().by("serviceEndpoint").by("port")
-```
+**Result:** Clean attack paths from interesting services only.
 
-**Result:** Table showing service endpoints and their exposed ports.
-
-**6. "Let's look at the specific services that interest us"**
-Filters out noise (like `kube-dns`) to focus on actual vulnerable services.
-
-**Query example:**
-```gremlin
-kh.endpoints().not(has("serviceEndpoint","kube-dns")).criticalPaths().by(elementMap())
-```
-
-**Result:** Clean list of attack paths from interesting services.
-
-**7. "Initial exposure identified"**
-Shows multi-hop attack chains: starts from an endpoint, follows the attack path, stops when it reaches a Node.
+**8. Trace the complete attack path**
+Shows the complete step-by-step attack chain: which endpoint an attacker starts from, what they compromise along the way (containers, identities, permissions), and how they reach Node access.
 
 **Query example:**
 ```gremlin
 kh.endpoints().not(has("serviceEndpoint","kube-dns"))
-  .repeat(
-    outE().inV().simplePath()
-  )
-  .until(
-    hasLabel("Node")
-    .or()
-    .loops().is(5)
-  )
+  .repeat(outE().inV().simplePath())
+  .until(hasLabel("Node").or().loops().is(5))
   .hasLabel("Node")
-  .path()
-  .by(elementMap())
+  .path().by(elementMap())
   .limit(100)
 ```
 
-**Result:** Multi-step attack paths showing: Endpoint → Container → Pod → Node
+**Result:** Complete attack chains from external entry points to cluster compromise.
 
-This is the "true findings" section showing realistic attack scenarios.
+**9. Congratulations!**
+You've successfully filtered down from hundreds of attack paths to the most critical, actionable findings.
 
 ### Understanding Attack Path Graphs
 
@@ -287,9 +251,6 @@ When viewing results in the **Graph** tab, you'll see:
 - **Nodes (circles)** - Kubernetes resources (pods, containers, identities, roles, nodes)
 - **Edges (arrows)** - Attack steps connecting resources
 - **Edge labels** - Attack type (e.g., VOLUME_ACCESS, ROLE_BIND, CE_PRIV_MOUNT)
-
-![Attack Path Graph](docs/images/KubeHound_Screenshot_6.png)
-*An unfiltered attack path graph showing ALL relationships - this is overwhelming! The notebook explains "this is bad" and demonstrates why filtering is necessary. Different colored nodes represent different resource types.*
 
 **Common attack types:**
 - **VOLUME_ACCESS** - Container can access a volume containing sensitive data
@@ -357,7 +318,7 @@ kubectl --kubeconfig=./kubehound-test.kubeconfig get nodes
 
 **Components:**
 - **Kind cluster** (`kubehound.test.local`) - 3 nodes running Kubernetes v1.33.1
-- **Attack scenarios** - 24 YAML manifests deploying vulnerable configurations
+- **Attack scenarios** - 1 YAML manifest (ENDPOINT_EXPLOIT) deploying vulnerable configuration
 - **MongoDB** - Stores normalized cluster data
 - **JanusGraph** - Graph database storing attack paths
 - **Jupyter UI** - Web interface for exploring the graph at http://localhost:8888
