@@ -77,11 +77,15 @@ main() {
     kubectl create namespace vault --dry-run=client -o yaml | kubectl apply -f - > /dev/null 2>&1
     kubectl create namespace dev --dry-run=client -o yaml | kubectl apply -f - > /dev/null 2>&1
 
-    log_info "Applying 24 vulnerable resource manifests..."
-    # Deploy attack scenarios directly (bypassing buggy script)
-    for attack in "$KUBEHOUND_REPO/test/setup/test-cluster/attacks"/*.yaml; do
-        kubectl apply -f "$attack" > /dev/null 2>&1
-    done
+    # TESTING: Deploy only 1 scenario to test notebook performance
+    log_info "Applying 1 vulnerable resource manifest (ENDPOINT_EXPLOIT)..."
+    kubectl apply -f "$KUBEHOUND_REPO/test/setup/test-cluster/attacks/ENDPOINT_EXPLOIT.yaml" > /dev/null 2>&1
+
+    # To deploy all 24 scenarios, uncomment below and comment out the line above:
+    # log_info "Applying 24 vulnerable resource manifests..."
+    # for attack in "$KUBEHOUND_REPO/test/setup/test-cluster/attacks"/*.yaml; do
+    #     kubectl apply -f "$attack" > /dev/null 2>&1
+    # done
 
     log_success "Attack scenarios deployed"
 
