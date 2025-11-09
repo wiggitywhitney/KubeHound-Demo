@@ -252,7 +252,7 @@ When viewing results in the **Graph** tab, you'll see:
 - **Edges (arrows)** - Attack steps connecting resources
 - **Edge labels** - Attack type (e.g., VOLUME_ACCESS, ROLE_BIND, CE_PRIV_MOUNT)
 
-**Common attack types:**
+**Common attack types:** (see [full attack library](https://kubehound.io/reference/attacks/))
 - **VOLUME_ACCESS** - Container can access a volume containing sensitive data
 - **ROLE_BIND** - Identity can bind a privileged role to itself
 - **CE_PRIV_MOUNT** - Container can escape to host via privileged mount
