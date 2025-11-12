@@ -58,7 +58,7 @@ main() {
         log_warning "Docker not found, skipping backend stop"
     elif ! docker info &> /dev/null; then
         log_warning "Docker daemon not running, skipping backend stop"
-    elif docker ps | grep -q "kubehound-release"; then
+    elif [ -n "$(docker ps --filter "name=kubehound-release" --quiet)" ]; then
         log_info "Stopping backend containers..."
         kubehound backend down
         log_success "Backend stopped"

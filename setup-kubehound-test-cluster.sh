@@ -100,7 +100,7 @@ main() {
     elif ! docker info &> /dev/null; then
         log_error "Docker daemon not running. Please start Docker and try again."
         exit 1
-    elif docker ps | grep -q "kubehound-release"; then
+    elif [ -n "$(docker ps --filter "name=kubehound-release" --quiet)" ]; then
         log_success "KubeHound backend is running"
     else
         log_info "Starting backend..."
