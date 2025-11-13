@@ -123,6 +123,8 @@ main() {
     log_info "Gathering pods, roles, bindings, volumes, and other resources"
     rm -rf ./dump-test
     export KUBECONFIG="$REPO_ROOT/$KUBECONFIG_FILE"
+    echo ""
+    log_command "kubehound dump local ./dump-test -y"
     kubehound dump local ./dump-test -y
 
     log_info "KubeHound is extracting the collected data from tar archive..."
@@ -141,6 +143,8 @@ main() {
 
     log_info "KubeHound is ingesting the collected data (aka 'ingest')..."
     log_info "Analyzing relationships and discovering attack paths"
+    echo ""
+    log_command "kubehound ingest local dump-test/kind-kubehound.test.local --skip-backend"
     kubehound ingest local dump-test/kind-kubehound.test.local --skip-backend
 
     log_success "Attack graph built and ready to explore!"

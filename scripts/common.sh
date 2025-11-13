@@ -31,6 +31,10 @@ log_step() {
     echo -e "${CYAN}═══════════════════════════════════════════════════${NC}"
 }
 
+log_command() {
+    echo -e "${YELLOW}$ $1${NC}"
+}
+
 wait_for_pods_ready() {
     local timeout=${1:-300}
     local interval=${2:-15}
