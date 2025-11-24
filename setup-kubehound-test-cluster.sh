@@ -21,7 +21,6 @@ source "$SCRIPT_DIR/scripts/common.sh"
 
 # Configuration
 CLUSTER_NAME="kubehound.test.local"
-KUBEHOUND_REPO="/tmp/kubehound-repo"
 KUBECONFIG_FILE="./kubehound-test.kubeconfig"
 
 main() {
@@ -34,16 +33,6 @@ main() {
     echo -e "${CYAN}╚═══════════════════════════════════════════════════╝${NC}"
     echo ""
 
-    log_step "📦 Checking KubeHound Repository"
-
-    if [ ! -d "$KUBEHOUND_REPO" ]; then
-        log_info "Cloning KubeHound repository..."
-        git clone --depth 1 https://github.com/DataDog/KubeHound.git "$KUBEHOUND_REPO"
-        log_success "Repository cloned"
-    else
-        log_success "Repository already exists at $KUBEHOUND_REPO"
-    fi
-
     log_step "🏗️  Creating Kind Cluster: $CLUSTER_NAME"
 
     if kind get clusters 2>/dev/null | grep -q "^${CLUSTER_NAME}$"; then
@@ -52,12 +41,11 @@ main() {
         exit 1
     fi
 
-    cd "$KUBEHOUND_REPO/test/setup"
-
-    log_info "Creating cluster..."
-    # Note: KubeHound's script has a kubeconfig export bug that causes a harmless error at the end
-    # We suppress stderr to hide it and extract the kubeconfig ourselves using 'kind get kubeconfig'
-    CLUSTER_NAME="$CLUSTER_NAME" bash manage-cluster.sh create 2>/dev/null || true
+    log_info "Creating 3-node cluster with Kind..."
+    kind create cluster \
+        --name "$CLUSTER_NAME" \
+        --config "$SCRIPT_DIR/cluster-config/kind-cluster.yaml" \
+        --wait 2m
 
     # Verify cluster was created
     if ! kind get clusters 2>/dev/null | grep -q "^${CLUSTER_NAME}$"; then
@@ -65,7 +53,7 @@ main() {
         exit 1
     fi
 
-    # Export kubeconfig (working around KubeHound's script bug)
+    # Export kubeconfig
     kind get kubeconfig --name "$CLUSTER_NAME" > "$REPO_ROOT/$KUBECONFIG_FILE"
     export KUBECONFIG="$REPO_ROOT/$KUBECONFIG_FILE"
 
@@ -78,13 +66,7 @@ main() {
     kubectl create namespace dev --dry-run=client -o yaml | kubectl apply -f - > /dev/null 2>&1
 
     log_info "Applying 1 vulnerable resource manifest (ENDPOINT_EXPLOIT)..."
-    kubectl apply -f "$KUBEHOUND_REPO/test/setup/test-cluster/attacks/ENDPOINT_EXPLOIT.yaml" > /dev/null 2>&1
-
-    # To deploy all 24 scenarios, uncomment below and comment out the line above:
-    # log_info "Applying 24 vulnerable resource manifests..."
-    # for attack in "$KUBEHOUND_REPO/test/setup/test-cluster/attacks"/*.yaml; do
-    #     kubectl apply -f "$attack" > /dev/null 2>&1
-    # done
+    kubectl apply -f "$SCRIPT_DIR/attacks/ENDPOINT_EXPLOIT.yaml" > /dev/null 2>&1
 
     log_success "Attack scenarios deployed"
 

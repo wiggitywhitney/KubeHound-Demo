@@ -47,11 +47,6 @@ main() {
         log_success "Removed dump directory"
     fi
 
-    if [ -d "/tmp/kubehound-repo" ]; then
-        rm -rf /tmp/kubehound-repo
-        log_success "Removed KubeHound repository"
-    fi
-
     log_step "🛑 Stopping KubeHound Backend"
 
     if ! command -v docker &> /dev/null; then

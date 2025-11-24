@@ -78,13 +78,12 @@ Run the setup script to create everything:
 ```
 
 **What this does:**
-1. Clones KubeHound repository to `/tmp/kubehound-repo`
-2. Creates a 3-node Kind cluster named `kubehound.test.local`
-3. Deploys 1 vulnerable resource manifest (ENDPOINT_EXPLOIT: privileged pod with exposed service)
-4. Waits for all pods to reach Running state
-5. Starts KubeHound backend (MongoDB, JanusGraph, Jupyter UI)
-6. **Dumps cluster data** - Collects information about all cluster resources
-7. **Builds attack graph** - Analyzes relationships and identifies attack paths
+1. Creates a 3-node Kind cluster named `kubehound.test.local`
+2. Deploys 1 vulnerable resource manifest (ENDPOINT_EXPLOIT: privileged pod with exposed service)
+3. Waits for all pods to reach Running state
+4. Starts KubeHound backend (MongoDB, JanusGraph, Jupyter UI)
+5. **Dumps cluster data** - Collects information about all cluster resources
+6. **Builds attack graph** - Analyzes relationships and identifies attack paths
 
 Setup takes about 2-3 minutes. When complete, you'll see:
 
@@ -103,7 +102,7 @@ Remove everything:
 ./teardown-kubehound-test-cluster.sh
 ```
 
-This deletes the cluster, backend containers, kubeconfig file, dump data, and cloned KubeHound repository.
+This deletes the cluster, backend containers, kubeconfig file, and dump data.
 
 ## Understanding KubeHound Commands
 
