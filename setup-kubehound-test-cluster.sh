@@ -98,9 +98,6 @@ main() {
 
     log_step "📥 Collecting Cluster State"
 
-    # Return to repo root for ingestion
-    cd - > /dev/null
-
     log_info "KubeHound is collecting cluster configuration (aka 'dump')..."
     log_info "Gathering pods, roles, bindings, volumes, and other resources"
     rm -rf ./dump-test

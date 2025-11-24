@@ -379,6 +379,7 @@ None at this time. All decisions have been made.
 |------|-----------|-------|
 | 2025-11-22 | PRD Created | Initial planning phase complete |
 | 2025-11-24 | Milestone 1 Complete | Eliminated external KubeHound repo dependency. Demo is now self-contained. |
+| 2025-11-24 | Milestone 1 Validated | End-to-end testing confirmed: cluster creation (1m 37s), attack scenarios deployed, attack graph built successfully. No external repo cloned. Fixed bug discovered during testing. |
 
 ---
 
