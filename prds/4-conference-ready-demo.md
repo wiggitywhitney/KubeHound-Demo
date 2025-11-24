@@ -1,10 +1,10 @@
 # PRD: Conference-Ready KubeHound Demo
 
-**Status**: Planning
+**Status**: In Progress
 **Priority**: High
 **GitHub Issue**: [#4](https://github.com/wiggitywhitney/KubeHound-Demo/issues/4)
 **Created**: 2025-11-22
-**Last Updated**: 2025-11-22
+**Last Updated**: 2025-11-24
 
 ---
 
@@ -96,13 +96,13 @@ Transform the KubeHound demo into a **self-contained, cross-platform, educationa
 **Goal**: Make the demo self-contained by removing the KubeHound repository clone requirement.
 
 **Tasks**:
-- [ ] Copy `cluster.yaml` from KubeHound repo to `cluster-config/kind-cluster.yaml`
-- [ ] Copy `ENDPOINT_EXPLOIT.yaml` from KubeHound repo to `attacks/ENDPOINT_EXPLOIT.yaml`
-- [ ] Modify `setup-kubehound-test-cluster.sh` to use local YAML files
-- [ ] Replace `manage-cluster.sh` dependency with direct `kind create cluster` command
-- [ ] Remove repository cloning code from setup script
-- [ ] Update teardown script to reflect removed clone step
-- [ ] Test that setup works without cloning external repo
+- [x] Copy `cluster.yaml` from KubeHound repo to `cluster-config/kind-cluster.yaml`
+- [x] Copy `ENDPOINT_EXPLOIT.yaml` from KubeHound repo to `attacks/ENDPOINT_EXPLOIT.yaml`
+- [x] Modify `setup-kubehound-test-cluster.sh` to use local YAML files
+- [x] Replace `manage-cluster.sh` dependency with direct `kind create cluster` command
+- [x] Remove repository cloning code from setup script
+- [x] Update teardown script to reflect removed clone step
+- [x] Test that setup works without cloning external repo
 
 **Success Criteria**: Setup completes successfully without cloning KubeHound repository. All functionality works as before.
 
@@ -378,6 +378,7 @@ None at this time. All decisions have been made.
 | Date | Milestone | Notes |
 |------|-----------|-------|
 | 2025-11-22 | PRD Created | Initial planning phase complete |
+| 2025-11-24 | Milestone 1 Complete | Eliminated external KubeHound repo dependency. Demo is now self-contained. |
 
 ---
 
