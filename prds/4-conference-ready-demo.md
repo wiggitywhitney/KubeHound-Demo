@@ -131,11 +131,11 @@ Transform the KubeHound demo into a **self-contained, cross-platform, educationa
 **Goal**: Remove clutter from Jupyter UI so users see only the relevant demo notebook.
 
 **Tasks**:
-- [ ] Identify which notebooks from KubeHound repo appear in Jupyter UI
-- [ ] Modify setup script to remove unwanted notebooks after container startup
-- [ ] Verify that KindCluster_Demo.ipynb is still accessible and functional
-- [ ] Test that removed notebooks don't break any container functionality
-- [ ] Update README to reflect simplified notebook experience
+- [x] Identify which notebooks from KubeHound repo appear in Jupyter UI
+- [x] Modify setup script to remove unwanted notebooks after container startup
+- [x] Verify that KindCluster_Demo.ipynb is still accessible and functional
+- [x] Test that removed notebooks don't break any container functionality
+- [x] Update README to reflect simplified notebook experience
 
 **Success Criteria**: When users access http://localhost:8888 and navigate to `kubehound_presets/`, they see only KindCluster_Demo.ipynb.
 
@@ -380,6 +380,7 @@ None at this time. All decisions have been made.
 | 2025-11-22 | PRD Created | Initial planning phase complete |
 | 2025-11-24 | Milestone 1 Complete | Eliminated external KubeHound repo dependency. Demo is now self-contained. |
 | 2025-11-24 | Milestone 1 Validated | End-to-end testing confirmed: cluster creation (1m 37s), attack scenarios deployed, attack graph built successfully. No external repo cloned. Fixed bug discovered during testing. |
+| 2025-11-24 | Milestone 3 Complete | Cleaned Jupyter UI to show only demo notebook. Removed 8 extra notebooks from KubeHound container. Updated README documentation. End-to-end testing confirmed functionality intact. |
 
 ---
 

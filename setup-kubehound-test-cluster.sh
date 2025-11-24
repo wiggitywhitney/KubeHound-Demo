@@ -96,6 +96,12 @@ main() {
         docker cp "$REPO_ROOT/KindCluster_Demo_v2.ipynb" kubehound-release-ui-jupyter-1:/kubehound/notebooks/kubehound_presets/KindCluster_Demo.ipynb 2>/dev/null
     fi
 
+    # Clean up Jupyter UI: Remove all notebooks except KindCluster_Demo.ipynb
+    log_info "Cleaning up Jupyter notebook interface..."
+    docker exec kubehound-release-ui-jupyter-1 bash -c \
+        'cd /kubehound/notebooks/kubehound_presets && find . -maxdepth 1 -name "*.ipynb" ! -name "KindCluster_Demo.ipynb" -delete' 2>/dev/null
+    log_success "Jupyter UI cleaned - only demo notebook visible"
+
     log_step "📥 Collecting Cluster State"
 
     log_info "KubeHound is collecting cluster configuration (aka 'dump')..."

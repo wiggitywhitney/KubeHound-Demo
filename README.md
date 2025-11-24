@@ -8,7 +8,7 @@ This repository provides automation to deploy KubeHound's official test cluster 
 
 - **3-node Kind cluster** with 1 attack scenario (ENDPOINT_EXPLOIT) designed to demonstrate Kubernetes security issues
 - **KubeHound backend** (MongoDB, JanusGraph graph database, Jupyter UI)
-- **Interactive notebooks** for exploring attack paths visually
+- **Interactive notebook** for exploring attack paths visually
 - **One-command setup** that handles cluster creation, data collection, and attack graph generation
 
 ## How KubeHound Works
@@ -164,7 +164,7 @@ You'll see the Jupyter file browser showing directories.
 1. Navigate to the `kubehound_presets/` folder
 2. Click on **`KindCluster_Demo.ipynb`**
 
-This opens the main demo notebook designed specifically for Kind clusters.
+This is the demo notebook designed specifically for Kind clusters.
 
 ### Understanding the Notebook Interface
 
