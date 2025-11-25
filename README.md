@@ -46,26 +46,14 @@ You → Use Jupyter UI → Queries JanusGraph → See attack paths
 
 ## Prerequisites
 
-Install these tools before running the setup:
+Install these tools before running the setup script:
 
-```bash
-# Docker Desktop (must be running)
-# https://www.docker.com/products/docker-desktop
-
-# Kind (Kubernetes in Docker)
-brew install kind
-
-# kubectl
-brew install kubectl
-
-# KubeHound CLI
-# https://github.com/DataDog/KubeHound#installation
-```
-
-Verify Docker is running:
-```bash
-docker ps
-```
+| Tool | Purpose | Installation |
+|------|---------|--------------|
+| **Docker** | Container runtime | [Install Docker](https://docs.docker.com/get-docker/) |
+| **Kind** | Local Kubernetes clusters | [Install Kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) |
+| **kubectl** | Kubernetes CLI | [Install kubectl](https://kubernetes.io/docs/tasks/tools/) |
+| **KubeHound CLI** | Attack path analysis | [Install KubeHound](https://kubehound.io/getting-started/installation/) |
 
 ## Quick Start
 
@@ -359,6 +347,74 @@ KubeHound-Demo/
 - `kubehound-test.kubeconfig` - Isolated cluster config
 - `dump-test/` - Cluster data dump
 - `*.log` - Setup/teardown logs
+
+## Troubleshooting
+
+### Setup Issues
+
+**"Missing required tools" error**
+- The setup script checks for Docker, Kind, kubectl, and KubeHound CLI
+- Follow the installation links provided in the error message
+- macOS users: Most tools are available via Homebrew
+
+**"Docker is installed but not running"**
+- macOS/Windows: Start Docker Desktop application
+- Linux: Start Docker daemon with `sudo systemctl start docker`
+
+**"Cluster already exists" error**
+```bash
+./teardown-kubehound-test-cluster.sh
+./setup-kubehound-test-cluster.sh
+```
+
+### Cluster Issues
+
+**Cluster creation takes too long or times out**
+- Ensure Docker has sufficient resources (8GB RAM recommended)
+- macOS/Windows: Docker Desktop → Settings → Resources
+- Check Docker is not running other resource-intensive containers
+
+**Pods stuck in Pending or CrashLoopBackOff**
+```bash
+# Check pod status
+export KUBECONFIG=./kubehound-test.kubeconfig
+kubectl get pods --all-namespaces
+
+# Check specific pod logs
+kubectl logs <pod-name> -n <namespace>
+```
+
+### KubeHound Backend Issues
+
+**"Backend health check timeout"**
+- JanusGraph and MongoDB can take 60-90 seconds to start
+- Check container status: `docker ps`
+- Check logs: `docker logs kubehound-release-janus-1`
+
+**Cannot access Jupyter at http://localhost:8888**
+- Verify container is running: `docker ps | grep jupyter`
+- Check if port is already in use: `lsof -i :8888` (macOS/Linux)
+- Restart container: `docker restart kubehound-release-ui-jupyter-1`
+
+### Platform-Specific Issues
+
+**Windows: Cannot access localhost:8888 from browser**
+- WSL2 should forward ports automatically
+- If not working, find WSL2 IP: `ip addr show eth0`
+- Access via `http://<WSL2-IP>:8888` in Windows browser
+
+**Linux: Permission denied connecting to Docker**
+```bash
+# Add user to docker group
+sudo usermod -aG docker $USER
+# Logout and login, or run:
+newgrp docker
+```
+
+**macOS: "kind: command not found" after installation**
+- Verify Homebrew installation: `brew doctor`
+- Reinstall if needed: `brew reinstall kind`
+- Ensure `/opt/homebrew/bin` (Apple Silicon) or `/usr/local/bin` (Intel) is in PATH
 
 ## Contributing
 

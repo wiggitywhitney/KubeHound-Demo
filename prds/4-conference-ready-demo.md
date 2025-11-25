@@ -113,11 +113,11 @@ Transform the KubeHound demo into a **self-contained, cross-platform, educationa
 **Goal**: Provide clear installation instructions for Mac, Linux, and Windows platforms.
 
 **Tasks**:
-- [ ] Document Mac prerequisites with `brew install` commands
-- [ ] Document Linux prerequisites with package manager options (apt, yum, dnf)
-- [ ] Document Windows prerequisites using WSL2
-- [ ] Add platform-specific notes for Docker Desktop installation
-- [ ] Create troubleshooting section for platform-specific issues
+- [x] Document Mac prerequisites with `brew install` commands
+- [x] Document Linux prerequisites with package manager options (apt, yum, dnf)
+- [x] Document Windows prerequisites using WSL2
+- [x] Add platform-specific notes for Docker Desktop installation
+- [x] Create troubleshooting section for platform-specific issues
 - [ ] Test installation instructions on Mac
 - [ ] Test installation instructions on Linux (Ubuntu or similar)
 - [ ] Test installation instructions on Windows with WSL2
@@ -381,6 +381,7 @@ None at this time. All decisions have been made.
 | 2025-11-24 | Milestone 1 Complete | Eliminated external KubeHound repo dependency. Demo is now self-contained. |
 | 2025-11-24 | Milestone 1 Validated | End-to-end testing confirmed: cluster creation (1m 37s), attack scenarios deployed, attack graph built successfully. No external repo cloned. Fixed bug discovered during testing. |
 | 2025-11-24 | Milestone 3 Complete | Cleaned Jupyter UI to show only demo notebook. Removed 8 extra notebooks from KubeHound container. Updated README documentation. End-to-end testing confirmed functionality intact. |
+| 2025-11-25 | Milestone 2 Progress | Completed cross-platform documentation. Updated Prerequisites section to link to official installation docs. Added prerequisite check function to setup script with platform-specific guidance (Mac Homebrew hints, Linux package managers, Windows WSL2). Created comprehensive Troubleshooting section covering setup, cluster, backend, and platform-specific issues. Testing on Mac/Linux/Windows still required. |
 
 ---
 

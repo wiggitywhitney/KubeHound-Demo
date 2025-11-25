@@ -23,6 +23,75 @@ source "$SCRIPT_DIR/scripts/common.sh"
 CLUSTER_NAME="kubehound.test.local"
 KUBECONFIG_FILE="./kubehound-test.kubeconfig"
 
+check_prerequisites() {
+    local missing_tools=()
+    local os_type=$(uname -s)
+
+    # Check Docker
+    if ! command -v docker &> /dev/null; then
+        missing_tools+=("docker")
+    elif ! docker info &> /dev/null; then
+        log_error "Docker is installed but not running"
+        if [[ "$os_type" == "Darwin" ]] || [[ "$os_type" == "MINGW"* ]] || [[ "$os_type" == "MSYS"* ]]; then
+            log_info "Start Docker Desktop and try again"
+        else
+            log_info "Start Docker daemon: sudo systemctl start docker"
+        fi
+        exit 1
+    fi
+
+    # Check Kind
+    if ! command -v kind &> /dev/null; then
+        missing_tools+=("kind")
+    fi
+
+    # Check kubectl
+    if ! command -v kubectl &> /dev/null; then
+        missing_tools+=("kubectl")
+    fi
+
+    # Check KubeHound CLI
+    if ! command -v kubehound &> /dev/null; then
+        missing_tools+=("kubehound")
+    fi
+
+    # If any tools are missing, show installation guidance
+    if [ ${#missing_tools[@]} -gt 0 ]; then
+        log_error "Missing required tools: ${missing_tools[*]}"
+        echo ""
+        echo "Please install the missing tools:"
+        echo ""
+
+        for tool in "${missing_tools[@]}"; do
+            case $tool in
+                docker)
+                    echo "  Docker: https://docs.docker.com/get-docker/"
+                    ;;
+                kind)
+                    echo "  Kind: https://kind.sigs.k8s.io/docs/user/quick-start/#installation"
+                    if [[ "$os_type" == "Darwin" ]]; then
+                        echo "    (macOS: brew install kind)"
+                    fi
+                    ;;
+                kubectl)
+                    echo "  kubectl: https://kubernetes.io/docs/tasks/tools/"
+                    if [[ "$os_type" == "Darwin" ]]; then
+                        echo "    (macOS: brew install kubectl)"
+                    fi
+                    ;;
+                kubehound)
+                    echo "  KubeHound CLI: https://kubehound.io/getting-started/installation/"
+                    if [[ "$os_type" == "Darwin" ]]; then
+                        echo "    (macOS: brew install datadog/kubehound/kubehound)"
+                    fi
+                    ;;
+            esac
+        done
+        echo ""
+        exit 1
+    fi
+}
+
 main() {
     local start_time=$(date +%s)
     local REPO_ROOT="$(pwd)"
@@ -32,6 +101,10 @@ main() {
     echo -e "${CYAN}║   KubeHound Test Cluster Setup (Evaluation)      ║${NC}"
     echo -e "${CYAN}╚═══════════════════════════════════════════════════╝${NC}"
     echo ""
+
+    log_step "✅ Checking Prerequisites"
+    check_prerequisites
+    log_success "All required tools are installed"
 
     log_step "🏗️  Creating Kind Cluster: $CLUSTER_NAME"
 
@@ -76,13 +149,7 @@ main() {
 
     log_info "Checking backend health..."
 
-    if ! command -v docker &> /dev/null; then
-        log_error "Docker not found. Please install Docker and try again."
-        exit 1
-    elif ! docker info &> /dev/null; then
-        log_error "Docker daemon not running. Please start Docker and try again."
-        exit 1
-    elif [ -n "$(docker ps --filter "name=kubehound-release" --quiet)" ]; then
+    if [ -n "$(docker ps --filter "name=kubehound-release" --quiet)" ]; then
         log_success "KubeHound backend is running"
     else
         log_info "Starting backend..."
