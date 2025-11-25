@@ -422,6 +422,42 @@ None at this time. All decisions have been made.
 
 ---
 
+### Decision: Bash Scripts with Documentation over Platform-Specific Scripts
+**Date**: 2025-11-25
+**Status**: Approved
+
+**Decision**: Maintain single bash script implementation with improved Windows documentation rather than creating platform-specific scripts (PowerShell for Windows).
+
+**Context**: During Windows testing, user encountered confusion about running bash scripts in Windows cmd/PowerShell. Question arose: should we create PowerShell scripts for native Windows support?
+
+**Rationale**:
+- **Maintenance burden**: Platform-specific scripts require 2-3x maintenance effort (every change tested in bash AND PowerShell)
+- **Kubernetes ecosystem alignment**: Docker Desktop + WSL2 is the standard Windows workflow for Kubernetes tooling
+- **PRD scope**: "PowerShell scripts for Windows" explicitly listed as out-of-scope, "WSL2 is the documented approach"
+- **Git Bash works**: Windows users have multiple bash-compatible options (WSL2, Git Bash)
+- **Docker Desktop prerequisite**: Windows users already need to install additional software regardless
+
+**Impact**:
+- **No scope change**: Maintain single bash script codebase
+- **Documentation improvements needed**:
+  - Add explicit "clone repo" instructions (missing prerequisite step)
+  - Clarify Windows users need bash environment (WSL2 recommended, Git Bash alternative)
+  - Explain WHY WSL2 is better (Docker Desktop integration, Kubernetes tooling compatibility)
+  - Add troubleshooting for "which environment am I in?"
+- **README updates**: Getting Started section, Windows prerequisites clarification
+
+**Alternatives Considered**:
+- **PowerShell scripts**: Rejected due to maintenance burden and ecosystem misalignment
+- **Detect platform and run different script**: Over-engineered for demo use case
+- **Windows-only installer**: Out of scope, doesn't address bash requirement
+
+**Next Steps**:
+1. Add "Getting Started" section to README with clone instructions
+2. Expand Windows prerequisites to explain bash requirement and options
+3. Add Windows troubleshooting for bash environment confusion
+
+---
+
 ### Decision: Gated Milestone Validation Approach
 **Date**: 2025-11-25
 **Status**: Approved
