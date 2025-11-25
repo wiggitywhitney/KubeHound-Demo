@@ -145,19 +145,36 @@ Transform the KubeHound demo into a **self-contained, cross-platform, educationa
 
 **Goal**: Help users understand WHY attack paths matter and define key terminology.
 
-**Tasks**:
+**Pre-Implementation Tasks** (Complete foundation validation before starting educational content):
+- [ ] Create PR to merge Milestones 1-3 work to master
+- [ ] Complete CodeRabbit review process and address feedback
+- [ ] Conduct real Windows/WSL2 testing with external user
+- [ ] Address any issues discovered from Windows testing
+- [ ] Merge PR after all reviews approved
+- [ ] Create new branch for Milestone 4 educational content work
+
+**Content Development Tasks**:
 - [ ] Write "Why KubeHound Matters" section for README
-  - Include concrete attack scenario (endpoint → container → node compromise)
-  - Explain business impact and security implications
+  - **IMPORTANT**: Consult `SLIDE_NARRATIVE.md` for story arc and tone
+  - Follow presentation narrative: Hook → Problem → Key Insight → Solution → Process → Outcome
+  - Use conversational, approachable tone (acknowledge good intentions behind misconfigurations)
+  - Include concrete examples: over-privileged service accounts, HostPath mounts, insecure RBAC
+  - Emphasize key differentiation: "Graphs not Lists" - connections matter more than individual problems
   - Position before setup instructions
 - [ ] Create "Key Concepts" section defining:
+  - **IMPORTANT**: Use terminology from `SLIDE_NARRATIVE.md` for consistency
+  - Attack Primitives (catalog of small attacker moves)
   - Vertices (Kubernetes resources as graph nodes)
   - Edges (attack techniques connecting resources)
-  - Attack paths (chains of attack techniques)
+  - Attack paths (chains of primitives into realistic attack scenarios)
   - Critical paths (chains leading to cluster compromise)
-  - Dump and ingest processes
+  - Entity data (what KubeHound collects from K8s API)
+  - Dump and ingest processes (the three-step workflow)
 - [ ] Add learning objectives to notebook Cell 0
-- [ ] Review and ensure risk narrative connects to notebook walkthrough
+  - Align with conference presentation goals
+  - Focus on: understanding graph-based thinking, identifying critical paths, practical security prioritization
+- [ ] Review and ensure README narrative flows like slide presentation
+  - Story should feel cohesive from "Why KubeHound Matters" through notebook walkthrough
 
 **Success Criteria**: A newcomer reading the README understands why attack path analysis matters before starting the demo. Core terminology is defined and referenced consistently.
 
@@ -370,6 +387,65 @@ The following are explicitly **not** part of this PRD:
 ## Open Questions
 
 None at this time. All decisions have been made.
+
+---
+
+## Decision Log
+
+### Decision: Align README Narrative with Conference Presentation
+**Date**: 2025-11-25
+**Status**: Approved
+
+**Decision**: Create reference document from slide speaker notes and align README educational content with proven conference presentation narrative.
+
+**Rationale**:
+- Conference presentation has a proven story arc that resonates with audiences
+- README should follow same narrative flow for consistency
+- Speaker notes contain key messages, tone, and structure that work well
+- Reference document preserves context for future content development
+
+**Impact**:
+- Created `SLIDE_NARRATIVE.md` as reference document for Milestone 4 content development
+- README "Why KubeHound Matters" section should follow slide narrative arc
+- Key Concepts section should align with presentation terminology
+- Tone should be conversational and approachable, matching slide style
+
+**Reference Document**: `SLIDE_NARRATIVE.md` (temporary file, to be consulted during Milestone 4)
+
+**Story Arc to Follow**:
+1. Hook: What is KubeHound? (Attack path identification)
+2. Problem: Misconfigurations are common and often well-intentioned
+3. Key Insight: Graphs vs Lists - seeing connections matters
+4. Solution: Attack Primitives Library + chaining = real attack paths
+5. Process: Three steps (collect, build graph, query/visualize)
+6. Outcome: Answer real security questions
+
+---
+
+### Decision: Gated Milestone Validation Approach
+**Date**: 2025-11-25
+**Status**: Approved
+
+**Decision**: Implement PR validation workflow with external Windows testing before proceeding to Milestone 4 educational content development.
+
+**Rationale**:
+- Real Windows/WSL2 testing requires actual hardware (Mac and Linux tested in controlled environments)
+- Milestones 1-3 represent complete foundation worthy of review checkpoint
+- CodeRabbit and external testing feedback might affect documentation that educational content references
+- Ensures solid foundation before building educational content on top
+
+**Impact**:
+- Added 6 pre-implementation validation tasks to Milestone 4
+- Introduces external testing dependency (Windows user availability)
+- Changes workflow from linear development to gated approach with validation checkpoints
+- No scope or feature changes - validation only
+
+**Next Steps**:
+1. Create PR for Milestones 1-3
+2. Complete CodeRabbit review
+3. Conduct external Windows testing
+4. Merge after approval
+5. Begin Milestone 4 on new branch
 
 ---
 
