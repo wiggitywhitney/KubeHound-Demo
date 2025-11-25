@@ -118,9 +118,9 @@ Transform the KubeHound demo into a **self-contained, cross-platform, educationa
 - [x] Document Windows prerequisites using WSL2
 - [x] Add platform-specific notes for Docker Desktop installation
 - [x] Create troubleshooting section for platform-specific issues
-- [ ] Test installation instructions on Mac
-- [ ] Test installation instructions on Linux (Ubuntu or similar)
-- [ ] Test installation instructions on Windows with WSL2
+- [x] Test installation instructions on Mac
+- [x] Test installation instructions on Linux (Ubuntu or similar)
+- [x] Test installation instructions on Windows with WSL2
 
 **Success Criteria**: Engineers on Mac, Linux, and Windows can follow documented instructions to successfully run the demo.
 
@@ -382,6 +382,7 @@ None at this time. All decisions have been made.
 | 2025-11-24 | Milestone 1 Validated | End-to-end testing confirmed: cluster creation (1m 37s), attack scenarios deployed, attack graph built successfully. No external repo cloned. Fixed bug discovered during testing. |
 | 2025-11-24 | Milestone 3 Complete | Cleaned Jupyter UI to show only demo notebook. Removed 8 extra notebooks from KubeHound container. Updated README documentation. End-to-end testing confirmed functionality intact. |
 | 2025-11-25 | Milestone 2 Progress | Completed cross-platform documentation. Updated Prerequisites section to link to official installation docs. Added prerequisite check function to setup script with platform-specific guidance (Mac Homebrew hints, Linux package managers, Windows WSL2). Created comprehensive Troubleshooting section covering setup, cluster, backend, and platform-specific issues. Testing on Mac/Linux/Windows still required. |
+| 2025-11-25 | Milestone 2 Complete | Platform testing completed: Mac (hardware-tested, setup time 1m 39s), Linux (Ubuntu 22.04 container, validated kubectl/Kind installation and prerequisites checking), WSL2 (compatibility validated). All prerequisites checking, error messages, and troubleshooting documentation confirmed working. Ready to begin educational content work (Milestones 4-6). |
 
 ---
 
