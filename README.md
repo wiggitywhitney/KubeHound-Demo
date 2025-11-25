@@ -304,7 +304,7 @@ kubectl --kubeconfig=./kubehound-test.kubeconfig get nodes
 ## Architecture Overview
 
 **Components:**
-- **Kind cluster** (`kubehound.test.local`) - 3 nodes running Kubernetes v1.33.1
+- **Kind cluster** (`kubehound.test.local`) - 3-node Kubernetes cluster
 - **Attack scenarios** - 1 YAML manifest (ENDPOINT_EXPLOIT) deploying vulnerable configuration
 - **MongoDB** - Stores normalized cluster data
 - **JanusGraph** - Graph database storing attack paths
@@ -391,7 +391,7 @@ kubectl logs <pod-name> -n <namespace>
 - Check container status: `docker ps`
 - Check logs: `docker logs kubehound-release-janus-1`
 
-**Cannot access Jupyter at http://localhost:8888**
+**Cannot access Jupyter at <http://localhost:8888>**
 - Verify container is running: `docker ps | grep jupyter`
 - Check if port is already in use: `lsof -i :8888` (macOS/Linux)
 - Restart container: `docker restart kubehound-release-ui-jupyter-1`

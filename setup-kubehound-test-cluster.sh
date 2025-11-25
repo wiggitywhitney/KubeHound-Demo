@@ -25,7 +25,8 @@ KUBECONFIG_FILE="./kubehound-test.kubeconfig"
 
 check_prerequisites() {
     local missing_tools=()
-    local os_type=$(uname -s)
+    local os_type
+    os_type=$(uname -s)
 
     # Check Docker
     if ! command -v docker &> /dev/null; then
@@ -164,10 +165,14 @@ main() {
     fi
 
     # Clean up Jupyter UI: Remove all notebooks except KindCluster_Demo.ipynb
+    # This is non-critical - if it fails, the demo still works
     log_info "Cleaning up Jupyter notebook interface..."
-    docker exec kubehound-release-ui-jupyter-1 bash -c \
-        'cd /kubehound/notebooks/kubehound_presets && find . -maxdepth 1 -name "*.ipynb" ! -name "KindCluster_Demo.ipynb" -delete' 2>/dev/null
-    log_success "Jupyter UI cleaned - only demo notebook visible"
+    if docker exec kubehound-release-ui-jupyter-1 bash -c \
+        'cd /kubehound/notebooks/kubehound_presets && find . -maxdepth 1 -name "*.ipynb" ! -name "KindCluster_Demo.ipynb" -delete' 2>/dev/null; then
+        log_success "Jupyter UI cleaned - only demo notebook visible"
+    else
+        log_info "Note: Could not clean Jupyter UI (non-critical - demo will still work)"
+    fi
 
     log_step "📥 Collecting Cluster State"
 

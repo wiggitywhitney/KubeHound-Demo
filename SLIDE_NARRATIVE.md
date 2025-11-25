@@ -164,7 +164,7 @@ The goal is for defenders to be able to answer real questions such as "What is t
 ---
 
 ## Slide 27: Demo Repository
-https://github.com/wiggitywhitney/KubeHound-Demo
+[KubeHound Demo Repository](https://github.com/wiggitywhitney/KubeHound-Demo)
 
 ---
 
