@@ -8,7 +8,7 @@ This repository provides automation to deploy KubeHound's official test cluster 
 
 - **3-node Kind cluster** with 1 attack scenario (ENDPOINT_EXPLOIT) designed to demonstrate Kubernetes security issues
 - **KubeHound backend** (MongoDB, JanusGraph graph database, Jupyter UI)
-- **Interactive notebooks** for exploring attack paths visually
+- **Interactive notebook** for exploring attack paths visually
 - **One-command setup** that handles cluster creation, data collection, and attack graph generation
 
 ## How KubeHound Works
@@ -46,26 +46,14 @@ You → Use Jupyter UI → Queries JanusGraph → See attack paths
 
 ## Prerequisites
 
-Install these tools before running the setup:
+Install these tools before running the setup script:
 
-```bash
-# Docker Desktop (must be running)
-# https://www.docker.com/products/docker-desktop
-
-# Kind (Kubernetes in Docker)
-brew install kind
-
-# kubectl
-brew install kubectl
-
-# KubeHound CLI
-# https://github.com/DataDog/KubeHound#installation
-```
-
-Verify Docker is running:
-```bash
-docker ps
-```
+| Tool | Purpose | Installation |
+|------|---------|--------------|
+| **Docker** | Container runtime | [Install Docker](https://docs.docker.com/get-docker/) |
+| **Kind** | Local Kubernetes clusters | [Install Kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) |
+| **kubectl** | Kubernetes CLI | [Install kubectl](https://kubernetes.io/docs/tasks/tools/) |
+| **KubeHound CLI** | Attack path analysis | [Install KubeHound](https://kubehound.io/getting-started/installation/) |
 
 ## Quick Start
 
@@ -78,13 +66,12 @@ Run the setup script to create everything:
 ```
 
 **What this does:**
-1. Clones KubeHound repository to `/tmp/kubehound-repo`
-2. Creates a 3-node Kind cluster named `kubehound.test.local`
-3. Deploys 1 vulnerable resource manifest (ENDPOINT_EXPLOIT: privileged pod with exposed service)
-4. Waits for all pods to reach Running state
-5. Starts KubeHound backend (MongoDB, JanusGraph, Jupyter UI)
-6. **Dumps cluster data** - Collects information about all cluster resources
-7. **Builds attack graph** - Analyzes relationships and identifies attack paths
+1. Creates a 3-node Kind cluster named `kubehound.test.local`
+2. Deploys 1 vulnerable resource manifest (ENDPOINT_EXPLOIT: privileged pod with exposed service)
+3. Waits for all pods to reach Running state
+4. Starts KubeHound backend (MongoDB, JanusGraph, Jupyter UI)
+5. **Dumps cluster data** - Collects information about all cluster resources
+6. **Builds attack graph** - Analyzes relationships and identifies attack paths
 
 Setup takes about 2-3 minutes. When complete, you'll see:
 
@@ -103,7 +90,7 @@ Remove everything:
 ./teardown-kubehound-test-cluster.sh
 ```
 
-This deletes the cluster, backend containers, kubeconfig file, dump data, and cloned KubeHound repository.
+This deletes the cluster, backend containers, kubeconfig file, and dump data.
 
 ## Understanding KubeHound Commands
 
@@ -165,7 +152,7 @@ You'll see the Jupyter file browser showing directories.
 1. Navigate to the `kubehound_presets/` folder
 2. Click on **`KindCluster_Demo.ipynb`**
 
-This opens the main demo notebook designed specifically for Kind clusters.
+This is the demo notebook designed specifically for Kind clusters.
 
 ### Understanding the Notebook Interface
 
@@ -317,7 +304,7 @@ kubectl --kubeconfig=./kubehound-test.kubeconfig get nodes
 ## Architecture Overview
 
 **Components:**
-- **Kind cluster** (`kubehound.test.local`) - 3 nodes running Kubernetes v1.33.1
+- **Kind cluster** (`kubehound.test.local`) - 3-node Kubernetes cluster
 - **Attack scenarios** - 1 YAML manifest (ENDPOINT_EXPLOIT) deploying vulnerable configuration
 - **MongoDB** - Stores normalized cluster data
 - **JanusGraph** - Graph database storing attack paths
@@ -360,6 +347,74 @@ KubeHound-Demo/
 - `kubehound-test.kubeconfig` - Isolated cluster config
 - `dump-test/` - Cluster data dump
 - `*.log` - Setup/teardown logs
+
+## Troubleshooting
+
+### Setup Issues
+
+**"Missing required tools" error**
+- The setup script checks for Docker, Kind, kubectl, and KubeHound CLI
+- Follow the installation links provided in the error message
+- macOS users: Most tools are available via Homebrew
+
+**"Docker is installed but not running"**
+- macOS/Windows: Start Docker Desktop application
+- Linux: Start Docker daemon with `sudo systemctl start docker`
+
+**"Cluster already exists" error**
+```bash
+./teardown-kubehound-test-cluster.sh
+./setup-kubehound-test-cluster.sh
+```
+
+### Cluster Issues
+
+**Cluster creation takes too long or times out**
+- Ensure Docker has sufficient resources (8GB RAM recommended)
+- macOS/Windows: Docker Desktop → Settings → Resources
+- Check Docker is not running other resource-intensive containers
+
+**Pods stuck in Pending or CrashLoopBackOff**
+```bash
+# Check pod status
+export KUBECONFIG=./kubehound-test.kubeconfig
+kubectl get pods --all-namespaces
+
+# Check specific pod logs
+kubectl logs <pod-name> -n <namespace>
+```
+
+### KubeHound Backend Issues
+
+**"Backend health check timeout"**
+- JanusGraph and MongoDB can take 60-90 seconds to start
+- Check container status: `docker ps`
+- Check logs: `docker logs kubehound-release-janus-1`
+
+**Cannot access Jupyter at <http://localhost:8888>**
+- Verify container is running: `docker ps | grep jupyter`
+- Check if port is already in use: `lsof -i :8888` (macOS/Linux)
+- Restart container: `docker restart kubehound-release-ui-jupyter-1`
+
+### Platform-Specific Issues
+
+**Windows: Cannot access localhost:8888 from browser**
+- WSL2 should forward ports automatically
+- If not working, find WSL2 IP: `ip addr show eth0`
+- Access via `http://<WSL2-IP>:8888` in Windows browser
+
+**Linux: Permission denied connecting to Docker**
+```bash
+# Add user to docker group
+sudo usermod -aG docker $USER
+# Logout and login, or run:
+newgrp docker
+```
+
+**macOS: "kind: command not found" after installation**
+- Verify Homebrew installation: `brew doctor`
+- Reinstall if needed: `brew reinstall kind`
+- Ensure `/opt/homebrew/bin` (Apple Silicon) or `/usr/local/bin` (Intel) is in PATH
 
 ## Contributing
 

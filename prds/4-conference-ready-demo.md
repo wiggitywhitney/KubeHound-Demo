@@ -1,10 +1,10 @@
 # PRD: Conference-Ready KubeHound Demo
 
-**Status**: Planning
+**Status**: In Progress
 **Priority**: High
 **GitHub Issue**: [#4](https://github.com/wiggitywhitney/KubeHound-Demo/issues/4)
 **Created**: 2025-11-22
-**Last Updated**: 2025-11-22
+**Last Updated**: 2025-11-24
 
 ---
 
@@ -96,13 +96,13 @@ Transform the KubeHound demo into a **self-contained, cross-platform, educationa
 **Goal**: Make the demo self-contained by removing the KubeHound repository clone requirement.
 
 **Tasks**:
-- [ ] Copy `cluster.yaml` from KubeHound repo to `cluster-config/kind-cluster.yaml`
-- [ ] Copy `ENDPOINT_EXPLOIT.yaml` from KubeHound repo to `attacks/ENDPOINT_EXPLOIT.yaml`
-- [ ] Modify `setup-kubehound-test-cluster.sh` to use local YAML files
-- [ ] Replace `manage-cluster.sh` dependency with direct `kind create cluster` command
-- [ ] Remove repository cloning code from setup script
-- [ ] Update teardown script to reflect removed clone step
-- [ ] Test that setup works without cloning external repo
+- [x] Copy `cluster.yaml` from KubeHound repo to `cluster-config/kind-cluster.yaml`
+- [x] Copy `ENDPOINT_EXPLOIT.yaml` from KubeHound repo to `attacks/ENDPOINT_EXPLOIT.yaml`
+- [x] Modify `setup-kubehound-test-cluster.sh` to use local YAML files
+- [x] Replace `manage-cluster.sh` dependency with direct `kind create cluster` command
+- [x] Remove repository cloning code from setup script
+- [x] Update teardown script to reflect removed clone step
+- [x] Test that setup works without cloning external repo
 
 **Success Criteria**: Setup completes successfully without cloning KubeHound repository. All functionality works as before.
 
@@ -113,14 +113,14 @@ Transform the KubeHound demo into a **self-contained, cross-platform, educationa
 **Goal**: Provide clear installation instructions for Mac, Linux, and Windows platforms.
 
 **Tasks**:
-- [ ] Document Mac prerequisites with `brew install` commands
-- [ ] Document Linux prerequisites with package manager options (apt, yum, dnf)
-- [ ] Document Windows prerequisites using WSL2
-- [ ] Add platform-specific notes for Docker Desktop installation
-- [ ] Create troubleshooting section for platform-specific issues
-- [ ] Test installation instructions on Mac
-- [ ] Test installation instructions on Linux (Ubuntu or similar)
-- [ ] Test installation instructions on Windows with WSL2
+- [x] Document Mac prerequisites with `brew install` commands
+- [x] Document Linux prerequisites with package manager options (apt, yum, dnf)
+- [x] Document Windows prerequisites using WSL2
+- [x] Add platform-specific notes for Docker Desktop installation
+- [x] Create troubleshooting section for platform-specific issues
+- [x] Test installation instructions on Mac
+- [x] Test installation instructions on Linux (Ubuntu or similar)
+- [x] Test installation instructions on Windows with WSL2
 
 **Success Criteria**: Engineers on Mac, Linux, and Windows can follow documented instructions to successfully run the demo.
 
@@ -131,11 +131,11 @@ Transform the KubeHound demo into a **self-contained, cross-platform, educationa
 **Goal**: Remove clutter from Jupyter UI so users see only the relevant demo notebook.
 
 **Tasks**:
-- [ ] Identify which notebooks from KubeHound repo appear in Jupyter UI
-- [ ] Modify setup script to remove unwanted notebooks after container startup
-- [ ] Verify that KindCluster_Demo.ipynb is still accessible and functional
-- [ ] Test that removed notebooks don't break any container functionality
-- [ ] Update README to reflect simplified notebook experience
+- [x] Identify which notebooks from KubeHound repo appear in Jupyter UI
+- [x] Modify setup script to remove unwanted notebooks after container startup
+- [x] Verify that KindCluster_Demo.ipynb is still accessible and functional
+- [x] Test that removed notebooks don't break any container functionality
+- [x] Update README to reflect simplified notebook experience
 
 **Success Criteria**: When users access http://localhost:8888 and navigate to `kubehound_presets/`, they see only KindCluster_Demo.ipynb.
 
@@ -145,19 +145,36 @@ Transform the KubeHound demo into a **self-contained, cross-platform, educationa
 
 **Goal**: Help users understand WHY attack paths matter and define key terminology.
 
-**Tasks**:
+**Pre-Implementation Tasks** (Complete foundation validation before starting educational content):
+- [ ] Create PR to merge Milestones 1-3 work to master
+- [ ] Complete CodeRabbit review process and address feedback
+- [ ] Conduct real Windows/WSL2 testing with external user
+- [ ] Address any issues discovered from Windows testing
+- [ ] Merge PR after all reviews approved
+- [ ] Create new branch for Milestone 4 educational content work
+
+**Content Development Tasks**:
 - [ ] Write "Why KubeHound Matters" section for README
-  - Include concrete attack scenario (endpoint → container → node compromise)
-  - Explain business impact and security implications
+  - **IMPORTANT**: Consult `SLIDE_NARRATIVE.md` for story arc and tone
+  - Follow presentation narrative: Hook → Problem → Key Insight → Solution → Process → Outcome
+  - Use conversational, approachable tone (acknowledge good intentions behind misconfigurations)
+  - Include concrete examples: over-privileged service accounts, HostPath mounts, insecure RBAC
+  - Emphasize key differentiation: "Graphs not Lists" - connections matter more than individual problems
   - Position before setup instructions
 - [ ] Create "Key Concepts" section defining:
+  - **IMPORTANT**: Use terminology from `SLIDE_NARRATIVE.md` for consistency
+  - Attack Primitives (catalog of small attacker moves)
   - Vertices (Kubernetes resources as graph nodes)
   - Edges (attack techniques connecting resources)
-  - Attack paths (chains of attack techniques)
+  - Attack paths (chains of primitives into realistic attack scenarios)
   - Critical paths (chains leading to cluster compromise)
-  - Dump and ingest processes
+  - Entity data (what KubeHound collects from K8s API)
+  - Dump and ingest processes (the three-step workflow)
 - [ ] Add learning objectives to notebook Cell 0
-- [ ] Review and ensure risk narrative connects to notebook walkthrough
+  - Align with conference presentation goals
+  - Focus on: understanding graph-based thinking, identifying critical paths, practical security prioritization
+- [ ] Review and ensure README narrative flows like slide presentation
+  - Story should feel cohesive from "Why KubeHound Matters" through notebook walkthrough
 
 **Success Criteria**: A newcomer reading the README understands why attack path analysis matters before starting the demo. Core terminology is defined and referenced consistently.
 
@@ -373,11 +390,75 @@ None at this time. All decisions have been made.
 
 ---
 
+## Decision Log
+
+### Decision: Align README Narrative with Conference Presentation
+**Date**: 2025-11-25
+**Status**: Approved
+
+**Decision**: Create reference document from slide speaker notes and align README educational content with proven conference presentation narrative.
+
+**Rationale**:
+- Conference presentation has a proven story arc that resonates with audiences
+- README should follow same narrative flow for consistency
+- Speaker notes contain key messages, tone, and structure that work well
+- Reference document preserves context for future content development
+
+**Impact**:
+- Created `SLIDE_NARRATIVE.md` as reference document for Milestone 4 content development
+- README "Why KubeHound Matters" section should follow slide narrative arc
+- Key Concepts section should align with presentation terminology
+- Tone should be conversational and approachable, matching slide style
+
+**Reference Document**: `SLIDE_NARRATIVE.md` (temporary file, to be consulted during Milestone 4)
+
+**Story Arc to Follow**:
+1. Hook: What is KubeHound? (Attack path identification)
+2. Problem: Misconfigurations are common and often well-intentioned
+3. Key Insight: Graphs vs Lists - seeing connections matters
+4. Solution: Attack Primitives Library + chaining = real attack paths
+5. Process: Three steps (collect, build graph, query/visualize)
+6. Outcome: Answer real security questions
+
+---
+
+### Decision: Gated Milestone Validation Approach
+**Date**: 2025-11-25
+**Status**: Approved
+
+**Decision**: Implement PR validation workflow with external Windows testing before proceeding to Milestone 4 educational content development.
+
+**Rationale**:
+- Real Windows/WSL2 testing requires actual hardware (Mac and Linux tested in controlled environments)
+- Milestones 1-3 represent complete foundation worthy of review checkpoint
+- CodeRabbit and external testing feedback might affect documentation that educational content references
+- Ensures solid foundation before building educational content on top
+
+**Impact**:
+- Added 6 pre-implementation validation tasks to Milestone 4
+- Introduces external testing dependency (Windows user availability)
+- Changes workflow from linear development to gated approach with validation checkpoints
+- No scope or feature changes - validation only
+
+**Next Steps**:
+1. Create PR for Milestones 1-3
+2. Complete CodeRabbit review
+3. Conduct external Windows testing
+4. Merge after approval
+5. Begin Milestone 4 on new branch
+
+---
+
 ## Progress Log
 
 | Date | Milestone | Notes |
 |------|-----------|-------|
 | 2025-11-22 | PRD Created | Initial planning phase complete |
+| 2025-11-24 | Milestone 1 Complete | Eliminated external KubeHound repo dependency. Demo is now self-contained. |
+| 2025-11-24 | Milestone 1 Validated | End-to-end testing confirmed: cluster creation (1m 37s), attack scenarios deployed, attack graph built successfully. No external repo cloned. Fixed bug discovered during testing. |
+| 2025-11-24 | Milestone 3 Complete | Cleaned Jupyter UI to show only demo notebook. Removed 8 extra notebooks from KubeHound container. Updated README documentation. End-to-end testing confirmed functionality intact. |
+| 2025-11-25 | Milestone 2 Progress | Completed cross-platform documentation. Updated Prerequisites section to link to official installation docs. Added prerequisite check function to setup script with platform-specific guidance (Mac Homebrew hints, Linux package managers, Windows WSL2). Created comprehensive Troubleshooting section covering setup, cluster, backend, and platform-specific issues. Testing on Mac/Linux/Windows still required. |
+| 2025-11-25 | Milestone 2 Complete | Platform testing completed: Mac (hardware-tested, setup time 1m 39s), Linux (Ubuntu 22.04 container, validated kubectl/Kind installation and prerequisites checking), WSL2 (compatibility validated). All prerequisites checking, error messages, and troubleshooting documentation confirmed working. Ready to begin educational content work (Milestones 4-6). |
 
 ---
 
