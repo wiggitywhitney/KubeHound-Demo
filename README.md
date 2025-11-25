@@ -53,7 +53,7 @@ Install these tools before running the setup script:
 | **Docker** | Container runtime | [Install Docker](https://docs.docker.com/get-docker/) |
 | **Kind** | Local Kubernetes clusters | [Install Kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) |
 | **kubectl** | Kubernetes CLI | [Install kubectl](https://kubernetes.io/docs/tasks/tools/) |
-| **KubeHound CLI** | Attack path analysis | [Install KubeHound](https://kubehound.io/getting-started/installation/) |
+| **KubeHound CLI** | Attack path analysis | [Install KubeHound](https://kubehound.io/user-guide/getting-started/) |
 
 ## Quick Start
 
