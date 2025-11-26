@@ -44,12 +44,10 @@ This PRD is complete when:
    - What core KubeHound concepts mean (vertices, edges, critical paths)
    - How to interpret attack types (CE_PRIV_MOUNT, TOKEN_STEAL, etc.)
    - How to read attack path graphs
-   - What to do with discovered vulnerabilities
 5. ✅ A newcomer with Kubernetes knowledge but zero KubeHound experience can complete the demo and understand:
    - What KubeHound analyzes
    - Why attack path analysis matters for security
    - How to interpret results
-   - Basic remediation approaches
 6. ✅ Human evaluation: Whitney approves the experience as conference-ready
 
 ---
@@ -146,22 +144,22 @@ Transform the KubeHound demo into a **self-contained, cross-platform, educationa
 **Goal**: Help users understand WHY attack paths matter and define key terminology.
 
 **Pre-Implementation Tasks** (Complete foundation validation before starting educational content):
-- [ ] Create PR to merge Milestones 1-3 work to master
-- [ ] Complete CodeRabbit review process and address feedback
-- [ ] Conduct real Windows/WSL2 testing with external user
-- [ ] Address any issues discovered from Windows testing
-- [ ] Merge PR after all reviews approved
-- [ ] Create new branch for Milestone 4 educational content work
+- [x] Create PR to merge Milestones 1-3 work to master
+- [x] Complete CodeRabbit review process and address feedback
+- [x] Conduct real Windows/WSL2 testing with external user
+- [x] Address any issues discovered from Windows testing
+- [x] Merge PR after all reviews approved
+- [x] Create new branch for Milestone 4 educational content work
 
 **Content Development Tasks**:
-- [ ] Write "Why KubeHound Matters" section for README
+- [x] Write "Why KubeHound Matters" section for README
   - **IMPORTANT**: Consult `SLIDE_NARRATIVE.md` for story arc and tone
   - Follow presentation narrative: Hook → Problem → Key Insight → Solution → Process → Outcome
   - Use conversational, approachable tone (acknowledge good intentions behind misconfigurations)
   - Include concrete examples: over-privileged service accounts, HostPath mounts, insecure RBAC
   - Emphasize key differentiation: "Graphs not Lists" - connections matter more than individual problems
   - Position before setup instructions
-- [ ] Create "Key Concepts" section defining:
+- [x] Create "Key Concepts" section defining:
   - **IMPORTANT**: Use terminology from `SLIDE_NARRATIVE.md` for consistency
   - Attack Primitives (catalog of small attacker moves)
   - Vertices (Kubernetes resources as graph nodes)
@@ -170,10 +168,10 @@ Transform the KubeHound demo into a **self-contained, cross-platform, educationa
   - Critical paths (chains leading to cluster compromise)
   - Entity data (what KubeHound collects from K8s API)
   - Dump and ingest processes (the three-step workflow)
-- [ ] Add learning objectives to notebook Cell 0
+- [x] Add learning objectives to notebook Cell 0
   - Align with conference presentation goals
   - Focus on: understanding graph-based thinking, identifying critical paths, practical security prioritization
-- [ ] Review and ensure README narrative flows like slide presentation
+- [x] Review and ensure README narrative flows like slide presentation
   - Story should feel cohesive from "Why KubeHound Matters" through notebook walkthrough
 
 **Success Criteria**: A newcomer reading the README understands why attack path analysis matters before starting the demo. Core terminology is defined and referenced consistently.
@@ -182,65 +180,40 @@ Transform the KubeHound demo into a **self-contained, cross-platform, educationa
 
 ### Milestone 5: Attack Type Glossary and Graph Interpretation
 
-**Goal**: Demystify attack type abbreviations and teach users how to read visual attack graphs.
+**Status**: Skipped - Deemed unnecessary
 
-**Tasks**:
-- [ ] Create attack type reference table with columns:
-  - Attack type abbreviation (CE_PRIV_MOUNT, TOKEN_STEAL, etc.)
-  - Plain English explanation
-  - Why it matters for security
-  - Example remediation
-- [ ] Include at least: CE_PRIV_MOUNT, VOLUME_ACCESS, TOKEN_STEAL, ROLE_BIND, IDENTITY_ASSUME, ENDPOINT_EXPLOIT
-- [ ] Link to full KubeHound attack library reference
-- [ ] Expand "Understanding Attack Path Graphs" section:
-  - Add step-by-step guide for reading graphs (left to right, follow arrows)
-  - Include annotated example showing attack chain interpretation
-  - Explain what to do when finding specific attack types
-- [ ] Add examples of good vs bad findings
+**Original Goal**: Demystify attack type abbreviations and teach users how to read visual attack graphs.
 
-**Success Criteria**: Users encountering attack type abbreviations in results can look them up and understand what they mean. Users viewing graph visualizations can interpret the attack chains.
+**Decision**: The Milestone 4 work already provides sufficient attack type education:
+- Misconfigurations vs Attacks table explains 6 attack types in context
+- Link to full KubeHound Attack Reference for users who want more detail
+- Existing "Understanding Attack Path Graphs" section covers graph interpretation
+- Attack graph screenshot provides visual example
+
+A separate glossary would be redundant. Users can reference the KubeHound Attack Library for comprehensive details.
 
 ---
 
 ### Milestone 6: Remediation Guidance and Learning Outcomes
 
-**Goal**: Connect discovered vulnerabilities to actionable remediation steps.
+**Status**: Skipped - Out of scope
 
-**Tasks**:
-- [ ] Add remediation guidance cell to notebook (before congratulations section)
-- [ ] Include remediation examples for common findings:
-  - Exposed endpoints with critical paths → network policies
-  - Privileged containers → security contexts
-  - Excessive RBAC permissions → least privilege principle
-- [ ] Add "What to do next" section to README
-- [ ] Include links to Kubernetes security best practices
-- [ ] Add troubleshooting section for common setup issues
-- [ ] Ensure notebook conclusion reinforces learning objectives
+**Original Goal**: Connect discovered vulnerabilities to actionable remediation steps.
 
-**Success Criteria**: After completing the demo, users understand not just WHAT vulnerabilities exist but WHAT TO DO about them. The learning journey has clear beginning, middle, and end.
+**Decision**: This demo focuses on understanding KubeHound and attack path analysis, not security remediation. Adding remediation guidance would expand scope beyond the core goal of helping presenters and attendees understand what KubeHound does and why it matters.
 
 ---
 
-### Milestone 7: Documentation Polish and Validation
+### Milestone 7: Final Validation
 
-**Goal**: Ensure all documentation is clear, consistent, and complete.
+**Goal**: Validate the demo works end-to-end and get approval.
 
 **Tasks**:
-- [ ] Review README for terminology consistency
-- [ ] Standardize use of terms: "attack scenarios" vs "attacks", "dump" vs "data collection"
-- [ ] Add glossary if needed
-- [ ] Ensure all links work (KubeHound docs, GitHub repo, external references)
-- [ ] Add troubleshooting section with common failure modes:
-  - Docker not running
-  - Jupyter UI timeout
-  - Backend health check failures
-  - Cluster creation issues
-- [ ] Proofread all content for clarity and accuracy
+- [x] Ensure all links work (KubeHound docs, GitHub repo, external references)
 - [ ] Test complete flow end-to-end on fresh machine
-- [ ] Validate newcomer experience with someone unfamiliar with KubeHound
 - [ ] Get final approval from Whitney
 
-**Success Criteria**: Documentation is polished, consistent, and complete. Newcomer testing validates that learning objectives are met. Whitney approves the demo as conference-ready.
+**Success Criteria**: Demo works reliably, all links valid, Whitney approves as conference-ready.
 
 ---
 
@@ -264,8 +237,7 @@ Transform the KubeHound demo into a **self-contained, cross-platform, educationa
 3. **Setup**: Run one-command setup script (`./setup-kubehound-test-cluster.sh`)
 4. **Exploration**: Open Jupyter UI, navigate to notebook, run cells sequentially
 5. **Learning**: Understand attack path concepts through progressive filtering approach
-6. **Interpretation**: Read attack type glossary and graph interpretation guide to understand results
-7. **Action**: Learn basic remediation approaches for discovered vulnerabilities
+6. **Interpretation**: Use graph visualization and attack type references to understand results
 
 **Time investment**: 30-60 minutes for complete demo
 
@@ -485,6 +457,24 @@ None at this time. All decisions have been made.
 
 ---
 
+### Decision: Skip Milestones 5 & 6, Trim Milestone 7
+**Date**: 2025-11-26
+**Status**: Approved
+
+**Decision**: Skip Milestones 5 (Attack Type Glossary) and 6 (Remediation Guidance) entirely. Trim Milestone 7 to essential validation tasks only.
+
+**Rationale**:
+- **Milestone 5**: The Milestone 4 work already provides sufficient attack type education through the Misconfigurations vs Attacks table, Attack Primitives Library section, and link to KubeHound Attack Reference. A separate glossary would be redundant.
+- **Milestone 6**: This demo focuses on understanding KubeHound, not security remediation. Remediation guidance expands scope beyond the core goal.
+- **Milestone 7**: Most polish tasks are either covered by CodeRabbit review, already addressed, or nice-to-have. Essential tasks retained: link validation, end-to-end test, Whitney approval.
+
+**Impact**:
+- Reduces remaining work from 20 items to 4 items (1 in Milestone 4, 3 in Milestone 7)
+- Keeps demo focused on its core purpose
+- Faster path to conference-ready state
+
+---
+
 ## Progress Log
 
 | Date | Milestone | Notes |
@@ -495,6 +485,7 @@ None at this time. All decisions have been made.
 | 2025-11-24 | Milestone 3 Complete | Cleaned Jupyter UI to show only demo notebook. Removed 8 extra notebooks from KubeHound container. Updated README documentation. End-to-end testing confirmed functionality intact. |
 | 2025-11-25 | Milestone 2 Progress | Completed cross-platform documentation. Updated Prerequisites section to link to official installation docs. Added prerequisite check function to setup script with platform-specific guidance (Mac Homebrew hints, Linux package managers, Windows WSL2). Created comprehensive Troubleshooting section covering setup, cluster, backend, and platform-specific issues. Testing on Mac/Linux/Windows still required. |
 | 2025-11-25 | Milestone 2 Complete | Platform testing completed: Mac (hardware-tested, setup time 1m 39s), Linux (Ubuntu 22.04 container, validated kubectl/Kind installation and prerequisites checking), WSL2 (compatibility validated). All prerequisites checking, error messages, and troubleshooting documentation confirmed working. Ready to begin educational content work (Milestones 4-6). |
+| 2025-11-26 | Milestone 4 Progress | Educational content added to README aligned with SLIDE_NARRATIVE.md. Added "Why Attack Paths Matter" section with 3 misconfiguration screenshots, problem/list table, and attack graph example. Added "How KubeHound Works" subsections: Misconfigurations vs Attacks (with example table), Attack Primitives Library (with MITRE ATT&CK reference), Collect/Build/Query three-step process. Added "Running at Scale" section with performance stats and KubeHound as a Service architecture diagram. Added skip-to-setup link. Verified all 6 slide narrative story arc elements covered. Remaining: notebook learning objectives. |
 
 ---
 
