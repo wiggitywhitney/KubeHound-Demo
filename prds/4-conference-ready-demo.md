@@ -44,12 +44,10 @@ This PRD is complete when:
    - What core KubeHound concepts mean (vertices, edges, critical paths)
    - How to interpret attack types (CE_PRIV_MOUNT, TOKEN_STEAL, etc.)
    - How to read attack path graphs
-   - What to do with discovered vulnerabilities
 5. ✅ A newcomer with Kubernetes knowledge but zero KubeHound experience can complete the demo and understand:
    - What KubeHound analyzes
    - Why attack path analysis matters for security
    - How to interpret results
-   - Basic remediation approaches
 6. ✅ Human evaluation: Whitney approves the experience as conference-ready
 
 ---
@@ -239,8 +237,7 @@ A separate glossary would be redundant. Users can reference the KubeHound Attack
 3. **Setup**: Run one-command setup script (`./setup-kubehound-test-cluster.sh`)
 4. **Exploration**: Open Jupyter UI, navigate to notebook, run cells sequentially
 5. **Learning**: Understand attack path concepts through progressive filtering approach
-6. **Interpretation**: Read attack type glossary and graph interpretation guide to understand results
-7. **Action**: Learn basic remediation approaches for discovered vulnerabilities
+6. **Interpretation**: Use graph visualization and attack type references to understand results
 
 **Time investment**: 30-60 minutes for complete demo
 

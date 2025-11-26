@@ -10,19 +10,19 @@ This repository provides automation to deploy KubeHound's official test cluster 
 
 Kubernetes misconfigurations are common—and often introduced with the best intentions. A developer hits a permissions error during deployment and grants `cluster-admin` "just to make it work." A CI/CD job fails, so someone adds broad RBAC access to get it running. A support engineer needs quick access to logs and mounts the host filesystem.
 
-**Example: Over-privileged Service Account**
+### Example: Over-privileged Service Account
 
 ![Over-privileged Service Account](docs/images/misconfig-overprivileged-sa.png)
 
 *A service account granted cluster-admin privileges—often done to bypass permission errors during development.*
 
-**Example: HostPath Mount**
+### Example: HostPath Mount
 
 ![HostPath Mount](docs/images/misconfig-hostpath-mount.png)
 
 *A pod mounting the host's root filesystem—breaks container isolation entirely.*
 
-**Example: Insecure RBAC Binding**
+### Example: Insecure RBAC Binding
 
 ![Insecure RBAC Binding](docs/images/misconfig-insecure-rbac.png)
 
