@@ -44,6 +44,17 @@ KubeHound CLI → Tells JanusGraph to ingest → Builds attack graph
 You → Use Jupyter UI → Queries JanusGraph → See attack paths
 ```
 
+## Getting Started
+
+First, clone this repository:
+
+```bash
+git clone https://github.com/wiggitywhitney/KubeHound-Demo.git
+cd KubeHound-Demo
+```
+
+Then proceed to install the prerequisites below.
+
 ## Prerequisites
 
 Install these tools before running the setup script:
@@ -54,6 +65,23 @@ Install these tools before running the setup script:
 | **Kind** | Local Kubernetes clusters | [Install Kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) |
 | **kubectl** | Kubernetes CLI | [Install kubectl](https://kubernetes.io/docs/tasks/tools/) |
 | **KubeHound CLI** | Attack path analysis | [Install KubeHound](https://kubehound.io/user-guide/getting-started/) |
+
+### Windows Users: Bash Environment Required
+
+This demo uses bash scripts. Windows Command Prompt and PowerShell are not compatible. Choose one of these bash environments:
+
+**Option A: WSL2 (Recommended)**
+- Full Linux environment with native Docker Desktop integration
+- Best compatibility with Kubernetes tooling
+- Install: [WSL2 Setup Guide](https://learn.microsoft.com/en-us/windows/wsl/install)
+- After installing WSL2, install Docker Desktop and enable WSL2 integration in Docker Desktop settings
+
+**Option B: Git Bash**
+- Lightweight bash environment included with [Git for Windows](https://git-scm.com/download/win)
+- Works for running these scripts
+- May require additional Docker configuration
+
+**Important**: Install the prerequisites (Docker, Kind, kubectl, KubeHound) inside your chosen bash environment.
 
 ## Quick Start
 
