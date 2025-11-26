@@ -4,7 +4,7 @@
 **Priority**: High
 **GitHub Issue**: [#4](https://github.com/wiggitywhitney/KubeHound-Demo/issues/4)
 **Created**: 2025-11-22
-**Last Updated**: 2025-11-24
+**Last Updated**: 2025-11-26
 
 ---
 
@@ -486,6 +486,7 @@ None at this time. All decisions have been made.
 | 2025-11-25 | Milestone 2 Progress | Completed cross-platform documentation. Updated Prerequisites section to link to official installation docs. Added prerequisite check function to setup script with platform-specific guidance (Mac Homebrew hints, Linux package managers, Windows WSL2). Created comprehensive Troubleshooting section covering setup, cluster, backend, and platform-specific issues. Testing on Mac/Linux/Windows still required. |
 | 2025-11-25 | Milestone 2 Complete | Platform testing completed: Mac (hardware-tested, setup time 1m 39s), Linux (Ubuntu 22.04 container, validated kubectl/Kind installation and prerequisites checking), WSL2 (compatibility validated). All prerequisites checking, error messages, and troubleshooting documentation confirmed working. Ready to begin educational content work (Milestones 4-6). |
 | 2025-11-26 | Milestone 4 Progress | Educational content added to README aligned with SLIDE_NARRATIVE.md. Added "Why Attack Paths Matter" section with 3 misconfiguration screenshots, problem/list table, and attack graph example. Added "How KubeHound Works" subsections: Misconfigurations vs Attacks (with example table), Attack Primitives Library (with MITRE ATT&CK reference), Collect/Build/Query three-step process. Added "Running at Scale" section with performance stats and KubeHound as a Service architecture diagram. Added skip-to-setup link. Verified all 6 slide narrative story arc elements covered. Remaining: notebook learning objectives. |
+| 2025-11-26 | Milestone 4 Complete | Updated notebook learning objectives to outcome-focused format. Created PR #8, addressed CodeRabbit feedback (typo fix, performance source attribution, removed PRD references from README, converted example labels to headings for TOC). Validated all 15 external links. PR merged to master. Milestones 5 & 6 skipped per decision log. Milestone 7 remains: end-to-end test on fresh machine + Whitney approval. |
 
 ---
 
