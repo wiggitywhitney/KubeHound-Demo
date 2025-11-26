@@ -439,7 +439,7 @@ This demo runs KubeHound locally against a small Kind cluster. In production, Ku
 
 ### Performance
 
-KubeHound is designed for speed:
+KubeHound is [designed for speed](https://kubehound.io/#:~:text=KubeHound%20was%20built%20with%20efficiency%20in%20mind%20and%20can%20consequently%20handle%20very%20large%20clusters.%20Ingestion%20and%20computation%20of%20attack%20paths%20typically%20takes%20a%20few%20seconds%20for%20a%20cluster%20with%201%27000%20running%20pods%2C%202%20minutes%20for%2010%27000%20pods%2C%20and%205%20minutes%20for%2025%27000%20pods.):
 - **~1,000 pods**: A few seconds for ingestion and graph construction
 - **~10,000 pods**: About 2 minutes
 
@@ -475,9 +475,6 @@ KubeHound-Demo/
 ├── teardown-kubehound-test-cluster.sh  # Complete cleanup script
 ├── docs/
 │   └── images/                        # Screenshots for README
-├── prds/                              # Product requirement documents
-│   ├── 2-automated-demo-environment.md
-│   └── 3-kubernetes-goat-integration.md
 └── README.md                          # This file
 ```
 
