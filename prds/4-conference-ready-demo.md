@@ -211,7 +211,7 @@ A separate glossary would be redundant. Users can reference the KubeHound Attack
 **Goal**: Validate the demo works end-to-end and get approval.
 
 **Tasks**:
-- [ ] Ensure all links work (KubeHound docs, GitHub repo, external references)
+- [x] Ensure all links work (KubeHound docs, GitHub repo, external references)
 - [ ] Test complete flow end-to-end on fresh machine
 - [ ] Get final approval from Whitney
 
