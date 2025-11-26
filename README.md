@@ -4,6 +4,55 @@ A local Kubernetes environment for learning and exploring [KubeHound](https://ku
 
 This repository provides automation to deploy KubeHound's official test cluster (1 attack scenario: ENDPOINT_EXPLOIT) and explore discovered attack paths through an interactive Jupyter notebook interface.
 
+> **Just want to run the demo?** [Skip to Getting Started](#getting-started)
+
+## Why Attack Paths Matter
+
+Kubernetes misconfigurations are common—and often introduced with the best intentions. A developer hits a permissions error during deployment and grants `cluster-admin` "just to make it work." A CI/CD job fails, so someone adds broad RBAC access to get it running. A support engineer needs quick access to logs and mounts the host filesystem.
+
+**Example: Over-privileged Service Account**
+
+![Over-privileged Service Account](docs/images/misconfig-overprivileged-sa.png)
+
+*A service account granted cluster-admin privileges—often done to bypass permission errors during development.*
+
+**Example: HostPath Mount**
+
+![HostPath Mount](docs/images/misconfig-hostpath-mount.png)
+
+*A pod mounting the host's root filesystem—breaks container isolation entirely.*
+
+**Example: Insecure RBAC Binding**
+
+![Insecure RBAC Binding](docs/images/misconfig-insecure-rbac.png)
+
+*A ClusterRoleBinding giving broad permissions to automation—often created when CI/CD pipelines fail with access errors.*
+
+### The Problem with Lists
+
+Security scanners can find these issues. But they give you a list:
+
+| Finding | Count |
+|---------|-------|
+| Container escapes | 14 |
+| Privilege escalations (RBAC) | 32 |
+| Escape to host (volume configs) | 34 |
+| Lateral movement between containers | 72 |
+
+Here's the critical question: **Is this cluster actually secure?**
+
+You can't tell from a list. Which of these 152 findings actually matter? Can an attacker chain them together to reach critical assets? What should you fix first?
+
+### Graphs, Not Lists
+
+KubeHound answers these questions by modeling your cluster as a graph:
+
+![KubeHound Attack Graph](docs/images/attack-graph-example.png)
+
+Instead of listing problems, KubeHound shows how they connect—revealing actual attack paths from entry points to cluster compromise. Each node is a resource (Container, Node, Identity, Volume). Each edge is an attack technique (TOKEN_STEAL, VOLUME_ACCESS, ENDPOINT_EXPLOIT).
+
+This lets you focus your security efforts on what truly matters: the paths attackers can actually exploit.
+
 ## What You'll Get
 
 - **3-node Kind cluster** with 1 attack scenario (ENDPOINT_EXPLOIT) designed to demonstrate Kubernetes security issues
@@ -12,6 +61,41 @@ This repository provides automation to deploy KubeHound's official test cluster 
 - **One-command setup** that handles cluster creation, data collection, and attack graph generation
 
 ## How KubeHound Works
+
+### Misconfigurations vs. Attacks
+
+It's important to distinguish between **misconfigurations** and **attacks**:
+
+- **Misconfigurations** are opportunities—a privileged container, an overly permissive role binding, a hostPath mount. They're not inherently exploited, but they create openings.
+- **Attacks** are actions an attacker takes to exploit those opportunities—stealing a token, escaping a container, binding a new role.
+
+Here are some example attacks that exploit our misconfiguration examples from earlier:
+
+| Misconfiguration | Example Attacks |
+|------------------|-----------------|
+| Over-privileged Service Account | TOKEN_STEAL (steal the powerful token), IDENTITY_ASSUME (act as that identity) |
+| HostPath Mount | EXPLOIT_HOST_READ/WRITE (access host files), CE_PRIV_MOUNT (escape container) |
+| Insecure RBAC Binding | ROLE_BIND (grant yourself more permissions), POD_CREATE (spawn privileged pods) |
+
+### Attack Primitives Library
+
+KubeHound includes a library of ~27 attack primitives—small, discrete actions an attacker might take in a Kubernetes cluster. These primitives are mapped to the [MITRE ATT&CK framework](https://attack.mitre.org/), a widely-used knowledge base of adversary tactics and techniques. MITRE categories like "Privilege Escalation," "Credential Access," and "Lateral Movement" help security teams understand attacks using industry-standard terminology.
+
+KubeHound chains these primitives together based on your cluster's actual configuration—turning individual misconfigurations into realistic, exploitable attack paths.
+
+See the full list: [KubeHound Attack Reference](https://kubehound.io/reference/attacks/)
+
+### Collect, Build, Query
+
+KubeHound analyzes your cluster in three steps:
+
+**Step 1: Collect** — KubeHound connects to the Kubernetes API and gathers entity data. This isn't just a list of resources—it's the security-relevant details: pod security contexts, volume mounts, service account bindings, RBAC permissions, network policies, and more.
+
+**Step 2: Build Graph** — KubeHound processes the collected data and constructs an attack graph. Resources become nodes; attack primitives become edges connecting them.
+
+**Step 3: Query & Visualize** — You explore the graph to find attack paths. KubeHound provides a DSL (domain-specific language) on top of Gremlin that makes common security questions easy to ask, like *"What's the shortest path from a public endpoint to cluster-admin?"*
+
+### Components
 
 KubeHound has 4 main components in this setup:
 
@@ -348,6 +432,32 @@ MongoDB + JanusGraph
     ↓ (Jupyter queries)
 Visual attack path graphs
 ```
+
+## Running at Scale
+
+This demo runs KubeHound locally against a small Kind cluster. In production, KubeHound handles much larger environments.
+
+### Performance
+
+KubeHound is designed for speed:
+- **~1,000 pods**: A few seconds for ingestion and graph construction
+- **~10,000 pods**: About 2 minutes
+
+### KubeHound as a Service
+
+For production clusters, KubeHound can run as a distributed service:
+
+![KubeHound as a Service Architecture](docs/images/kubehound-as-a-service-architecture.png)
+
+1. **Collectors** run on each cluster (prod, staging, dev), gathering entity data from the Kubernetes API
+2. **Push dump** — Collectors push data to centralized storage (e.g., S3)
+3. **gRPC signal** — Triggers the ingestor when new data arrives
+4. **Graph creation** — The KH Ingestor processes data and builds the attack graph in JanusGraph
+5. **Data visualization** — Jupyter UI provides a unified view across all clusters
+
+This architecture lets you monitor attack paths across your entire Kubernetes fleet from one place.
+
+For more details, see the [KubeHound documentation](https://kubehound.io/).
 
 ## Resources
 
