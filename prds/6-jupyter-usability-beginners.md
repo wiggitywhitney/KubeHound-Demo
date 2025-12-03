@@ -67,6 +67,8 @@ These improvements allow beginners to successfully navigate the demo without pri
   - Run cells in order from top to bottom
   - Where to find results (tabs: Console/Graph/Query Metadata)
   - Tip: Click "Graph" tab to see visual attack paths
+- [ ] For "What are we looking at?" section (cell 2): Add reminder to click Graph tab to see colored dots representing different resource types
+- [ ] For "Identify the vulnerable services" section (cell 6): Clarify that this query returns table/JSON output only, no graph visualization
 - [ ] Test with someone unfamiliar with Jupyter
 
 **Success Criteria**: Jupyter beginner can start using notebook without reading external docs
@@ -186,6 +188,12 @@ kh.endpoints().not(has("serviceEndpoint","kube-dns"))
 ---
 
 ## Progress Log
+
+### 2025-12-03: Additional Feedback Captured
+- Added task: "Click Graph tab" reminder for "What are we looking at?" section
+- Added task: Clarify which queries return table output vs graph visualization
+- Milestone 3 already covers showing container names instead of generic labels
+- **Open question**: Should we mention that experienced security professionals can skip the progressive filtering walkthrough and write direct queries? (framing consideration for intro text)
 
 ### 2025-11-26: PRD Created
 - Created GitHub issue #6

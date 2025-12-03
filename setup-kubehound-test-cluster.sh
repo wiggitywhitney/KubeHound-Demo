@@ -83,7 +83,7 @@ check_prerequisites() {
                 kubehound)
                     echo "  KubeHound CLI: https://kubehound.io/user-guide/getting-started/"
                     if [[ "$os_type" == "Darwin" ]]; then
-                        echo "    (macOS: brew install datadog/kubehound/kubehound)"
+                        echo "    (macOS: brew install kubehound)"
                     fi
                     ;;
             esac

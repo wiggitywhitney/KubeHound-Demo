@@ -194,15 +194,10 @@ Setup takes about 2-3 minutes. When complete, you'll see:
    Password: admin
 ```
 
-### Cleanup
+### What do you want to do next?
 
-Remove everything:
-
-```bash
-./teardown-kubehound-test-cluster.sh
-```
-
-This deletes the cluster, backend containers, kubeconfig file, and dump data.
+- **[Explore the notebook](#exploring-attack-paths-with-jupyter-notebook)** — Jump straight into querying attack paths in the Jupyter UI
+- **[Understand the setup](#understanding-kubehound-commands)** — Learn what the setup script did and how KubeHound commands work
 
 ## Understanding KubeHound Commands
 
@@ -458,6 +453,16 @@ For production clusters, KubeHound can run as a distributed service:
 This architecture lets you monitor attack paths across your entire Kubernetes fleet from one place.
 
 For more details, see the [KubeHound documentation](https://kubehound.io/).
+
+## Cleanup
+
+When you're done exploring, remove everything:
+
+```bash
+./teardown-kubehound-test-cluster.sh
+```
+
+This deletes the cluster, backend containers, kubeconfig file, and dump data.
 
 ## Resources
 
