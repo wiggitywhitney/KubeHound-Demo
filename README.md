@@ -275,6 +275,10 @@ This is the demo notebook designed specifically for Kind clusters.
 
 **Important:** Run cells sequentially from top to bottom. Some cells depend on previous ones.
 
+![Jupyter cell with code and console output](docs/images/Jupyter_Cells_Console.png)
+
+*A code cell showing the query, execution indicator `[3]`, and results in the Console tab.*
+
 ### Result Tabs
 
 After executing a query cell, you'll see tabs above the results:
@@ -284,6 +288,14 @@ After executing a query cell, you'll see tabs above the results:
 - **Query Metadata** - Shows query execution details
 
 Click between tabs to view results differently.
+
+![Result tabs showing Console, Graph, and Query Metadata](docs/images/Jupyter_Cells_Tabs.png)
+
+*Click the **Graph** tab to see visual attack paths instead of raw data.*
+
+![Graph visualization of attack paths](docs/images/Jupyter_Cells_Visualization.png)
+
+*The Graph tab shows attack paths as connected nodes - this is where the visual insights are!*
 
 ### The KindCluster_Demo Notebook Structure
 

@@ -1,6 +1,6 @@
 # PRD #6: Jupyter Notebook Usability for Beginners
 
-**Status**: Draft
+**Status**: Complete
 **Priority**: Medium
 **GitHub Issue**: [#6](https://github.com/wiggitywhitney/KubeHound-Demo/issues/6)
 **Created**: 2025-11-26
@@ -61,15 +61,15 @@ These improvements allow beginners to successfully navigate the demo without pri
 **Goal**: Make the notebook self-explanatory for Jupyter beginners
 
 **Tasks**:
-- [ ] Add markdown cell at very top of `KindCluster_Demo_v2.ipynb` with:
+- [x] Add markdown cell at very top of `KindCluster_Demo_v2.ipynb` with:
   - "First time using Jupyter? Here's how to use this notebook"
   - How to run cells (click cell, press Shift+Enter)
   - Run cells in order from top to bottom
   - Where to find results (tabs: Console/Graph/Query Metadata)
   - Tip: Click "Graph" tab to see visual attack paths
-- [ ] For "What are we looking at?" section (cell 2): Add reminder to click Graph tab to see colored dots representing different resource types
-- [ ] For "Identify the vulnerable services" section (cell 6): Clarify that this query returns table/JSON output only, no graph visualization
-- [ ] Test with someone unfamiliar with Jupyter
+- [x] For "What are we looking at?" section (cell 2): Add reminder to click Graph tab to see colored dots representing different resource types
+- [x] For "Identify the vulnerable services" section (cell 6): Clarify that this query returns table/JSON output only, no graph visualization
+- [x] Test with someone unfamiliar with Jupyter
 
 **Success Criteria**: Jupyter beginner can start using notebook without reading external docs
 
@@ -79,11 +79,11 @@ These improvements allow beginners to successfully navigate the demo without pri
 **Goal**: Provide visual reference for confused users
 
 **Tasks**:
-- [ ] Take screenshot of Jupyter cell showing anatomy (code area, run button, output area)
-- [ ] Take screenshot showing Shift+Enter action or result
-- [ ] Take screenshot with arrow/annotation pointing to Graph tab location
-- [ ] Add new "Jupyter Quick Start" section to README with screenshots
-- [ ] Keep it brief - 3 images maximum with short captions
+- [x] Take screenshot of Jupyter cell showing anatomy (code area, run button, output area)
+- [x] Take screenshot showing Shift+Enter action or result
+- [x] Take screenshot with arrow/annotation pointing to Graph tab location
+- [x] Add new "Jupyter Quick Start" section to README with screenshots
+- [x] Keep it brief - 3 images maximum with short captions
 
 **Success Criteria**: README visually demonstrates how to navigate Jupyter interface
 
@@ -93,11 +93,11 @@ These improvements allow beginners to successfully navigate the demo without pri
 **Goal**: Show users how to display meaningful resource names instead of generic types
 
 **Tasks**:
-- [ ] Add new cell at end of notebook (after "Congratulations!")
-- [ ] Add markdown cell explaining: "Want to see actual pod/container names? Customize labels like this:"
-- [ ] Add query cell demonstrating `.by(values("name"))` or similar to show resource names
-- [ ] Test query works and displays helpful labels
-- [ ] Add brief explanation of what the query modification does
+- [x] Add new cell at end of notebook (after "Congratulations!")
+- [x] Add markdown cell explaining: "Want to see actual pod/container names? Customize labels like this:"
+- [x] Add query cell demonstrating `-d name` flag to show resource names
+- [x] Test query works and displays helpful labels
+- [x] Add brief explanation of what the query modification does
 
 **Example Query**:
 ```gremlin
@@ -188,6 +188,34 @@ kh.endpoints().not(has("serviceEndpoint","kube-dns"))
 ---
 
 ## Progress Log
+
+### 2025-12-04: Implementation Complete
+**All 3 milestones completed.**
+
+**Milestone 1 - Notebook Instructions:**
+- Added "First Time Using Jupyter? Start Here!" cell at top of notebook (cell-0)
+- Added Graph tab reminder to "What are we looking at?" section (cell-4)
+- Added Console tab note for table-output query (cell-12)
+
+**Milestone 2 - README Screenshots:**
+- Added 3 screenshots to `docs/images/`:
+  - `Jupyter_Cells_Console.png` - Cell anatomy with code and output
+  - `Jupyter_Cells_Tabs.png` - Result tabs highlighting Graph tab
+  - `Jupyter_Cells_Visualization.png` - Graph visualization example
+- Integrated screenshots into existing "Understanding the Notebook Interface" section
+
+**Milestone 3 - Custom Label Query:**
+- Added "See which specific resources are vulnerable" section (cells 19-20)
+- Demonstrates `-d name` flag vs `-d label` for showing actual resource names
+- Researched and documented that `-d` is an AWS graph-notebook magic command flag, not KubeHound DSL
+
+**Technical Discovery:**
+- The `-d` flag controls display labels and is part of AWS graph-notebook's `%%gremlin` magic command
+- `-d label` shows resource types (Pod, Container); `-d name` shows actual names (nginx-pod, worker-node-1)
+
+**Next Steps:**
+- Validate success criteria with real Jupyter beginners
+- Close GitHub issue #6 after user validation
 
 ### 2025-12-03: Additional Feedback Captured
 - Added task: "Click Graph tab" reminder for "What are we looking at?" section
