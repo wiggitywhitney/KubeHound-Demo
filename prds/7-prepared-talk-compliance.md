@@ -1,6 +1,6 @@
 # PRD #7: Prepared Talk Standards Compliance Review
 
-**Status**: Draft
+**Status**: In Progress
 **Priority**: Low (Target: before 2024-12-23)
 **GitHub Issue**: [#7](https://github.com/wiggitywhitney/KubeHound-Demo/issues/7)
 **Created**: 2025-11-26
@@ -23,16 +23,16 @@ The KubeHound demo repository will be central to a prepared talk at Datadog. Bef
 
 ## Solution Overview
 
-Conduct comprehensive compliance review of all demo materials against three internal guideline documents:
-- `internal-docs/writing-prepared-talk.md` - Content creation guidelines
-- `internal-docs/prepared-talks-guidelines.md` - Reviewing and refreshing process
-- `internal-docs/datadog-identity.md` - Brand voice and personality
+Conduct comprehensive compliance review of all demo materials against Datadog's internal guideline documents:
+- Writing a Prepared Talk guidelines
+- Reviewing and Refreshing Prepared Talks guidelines
+- Datadog Identity guidelines
 
 **Materials to Review**:
 - `README.md` - Primary documentation
 - `KindCluster_Demo_v2.ipynb` - Jupyter notebook with demo walkthrough
 - `SLIDE_NARRATIVE.md` - Conference presentation speaker notes (reference for narrative alignment)
-- Google Slides deck (external, link TBD)
+- Google Slides deck
 
 Fix any compliance issues found, then record presentation as final validation artifact.
 
@@ -40,7 +40,7 @@ Fix any compliance issues found, then record presentation as final validation ar
 
 ## Success Criteria
 
-- [ ] All content aligns with Datadog Identity (`internal-docs/datadog-identity.md`)
+- [ ] All content aligns with Datadog Identity guidelines
 - [ ] Demo provides value for ALL attendees (customers, non-customers, competitors' users)
 - [ ] No product pitches, extensive demos, or infomercial content
 - [ ] All images properly credited with source URLs
@@ -75,16 +75,13 @@ Fix any compliance issues found, then record presentation as final validation ar
 **Goal**: Identify all compliance issues across demo materials
 
 **Instructions for Implementation**:
-1. Read all three guideline documents in `internal-docs/`:
-   - `internal-docs/writing-prepared-talk.md`
-   - `internal-docs/prepared-talks-guidelines.md`
-   - `internal-docs/datadog-identity.md`
+1. Review Datadog's internal guideline documents
 2. Review each material against the checklist below
 3. Document issues with specific file locations (e.g., "README.md line 45")
 
 **Review Checklist**:
 
-**Guidelines from `internal-docs/writing-prepared-talk.md`**:
+**Writing a Prepared Talk guidelines**:
 - [ ] Demo provides value for ALL attendees (not just Datadog customers)
 - [ ] Uses modern technologies and practices (current K8s security tools)
 - [ ] Avoids product pitches and infomercials
@@ -94,16 +91,16 @@ Fix any compliance issues found, then record presentation as final validation ar
 - [ ] One clear primary takeaway ("The One Thing")
 - [ ] Logical flow without unnecessary agenda/introduction overhead
 
-**Guidelines from `internal-docs/prepared-talks-guidelines.md`**:
+**Reviewing and Refreshing Prepared Talks guidelines**:
 - [ ] Aligns with Datadog's current branding and messaging
 - [ ] Content is fresh and relevant (no obsolete tech/practices)
 - [ ] Demos and screenshots show current tool state
-- [ ] References better/newer Datadog solutions if available
+- [~] References better/newer Datadog solutions if available (N/A - not a Datadog product demo)
 - [ ] No references to current events, pop culture that translate poorly
 - [ ] Images have credit or attribution
-- [ ] Demos and screenshots of Datadog are up-to-date
+- [~] Demos and screenshots of Datadog are up-to-date (N/A - KubeHound demo, not Datadog UI)
 
-**Guidelines from `internal-docs/datadog-identity.md`**:
+**Datadog Identity guidelines**:
 - [ ] Tone is enthusiastic but humble
 - [ ] Treats users as peers (not pushing/selling)
 - [ ] Friendly and inclusive language (no clique words)
@@ -114,19 +111,19 @@ Fix any compliance issues found, then record presentation as final validation ar
 - [ ] Focuses on useful over cool, substance over image
 
 **Materials to Review**:
-- [ ] `README.md` - Review against all checklist items above
-- [ ] `KindCluster_Demo_v2.ipynb` - Review against all checklist items above
-- [ ] `SLIDE_NARRATIVE.md` - Review for narrative alignment with guidelines
+- [x] `README.md` - Review against all checklist items above
+- [x] `KindCluster_Demo_v2.ipynb` - Review against all checklist items above
+- [x] `SLIDE_NARRATIVE.md` - Review for narrative alignment with guidelines
 - [ ] Google Slides deck - Review against all checklist items above
 
 **Tasks**:
-- [ ] Read guideline documents in `internal-docs/` directory
-- [ ] Review `README.md` against checklist
-- [ ] Review `KindCluster_Demo_v2.ipynb` against checklist
-- [ ] Review `SLIDE_NARRATIVE.md` for narrative alignment
+- [x] Read guideline documents
+- [x] Review `README.md` against checklist
+- [x] Review `KindCluster_Demo_v2.ipynb` against checklist
+- [x] Review `SLIDE_NARRATIVE.md` for narrative alignment
 - [ ] Review Google Slides deck against checklist
-- [ ] Document all issues found with specific location references
-- [ ] Prioritize fixes (critical vs nice-to-have)
+- [x] Document all issues found with specific location references
+- [x] Prioritize fixes (critical vs nice-to-have)
 
 **Success Criteria**: Complete audit report with actionable fix list
 
@@ -135,15 +132,13 @@ Fix any compliance issues found, then record presentation as final validation ar
 ### Milestone 2: Documentation & Attribution
 **Goal**: Ensure all images and data are properly credited
 
-**Reference**: See image and data source requirements in `internal-docs/prepared-talks-guidelines.md` and `internal-docs/writing-prepared-talk.md`
-
 **Image Attribution Requirements** (cloud partners are strict):
-- [ ] All images in `README.md` have credit/attribution
-- [ ] All images in `KindCluster_Demo_v2.ipynb` have credit/attribution
+- [x] All images in `README.md` have credit/attribution
+- [~] All images in `KindCluster_Demo_v2.ipynb` have credit/attribution (N/A - no external images)
 - [ ] All images in Google Slides have credit on slide itself (e.g., "CC-BY SA 2.0")
 - [ ] Image source URLs documented in speaker notes (Google Slides)
 - [ ] Images without clear origin are replaced with royalty-free alternatives
-- [ ] Approved image sources used: Pexels, Pixabay, Unsplash, Noun Project (see `internal-docs/writing-prepared-talk.md`)
+- [ ] Approved image sources used: Pexels, Pixabay, Unsplash, Noun Project
 
 **Data Source Requirements**:
 - [ ] All statistics in `README.md` cited have source links
@@ -154,12 +149,12 @@ Fix any compliance issues found, then record presentation as final validation ar
 - [ ] Use Datadog's "Approved Stats" when referencing company data
 
 **Tasks**:
-- [ ] Audit all images in `README.md` for attribution
-- [ ] Audit all images in `KindCluster_Demo_v2.ipynb` for attribution
+- [x] Audit all images in `README.md` for attribution
+- [x] Audit all images in `KindCluster_Demo_v2.ipynb` for attribution
 - [ ] Audit all images in Google Slides for attribution
-- [ ] Add credits/licenses where missing
-- [ ] Replace images with unclear rights
-- [ ] Audit all statistics across all materials for source citations
+- [x] Add credits/licenses where missing (added to README)
+- [~] Replace images with unclear rights (N/A - all images verified)
+- [x] Audit all statistics across all materials for source citations
 - [ ] Add source URLs to speaker notes in Google Slides
 
 **Success Criteria**: Every image and statistic has documented source/attribution
@@ -169,9 +164,7 @@ Fix any compliance issues found, then record presentation as final validation ar
 ### Milestone 3: Tone & Messaging Alignment
 **Goal**: Fix any Datadog Identity violations found in audit
 
-**Reference**: Apply guidelines from `internal-docs/datadog-identity.md` to all content
-
-**Tone Fixes** (based on `internal-docs/datadog-identity.md`):
+**Tone Fixes** (based on Datadog Identity guidelines):
 - [ ] Replace buzzwords with precise technical language
 - [ ] Remove management-speak and empty superlatives
 - [ ] Ensure humble tone (no bragging, treats users as peers)
@@ -195,14 +188,12 @@ Fix any compliance issues found, then record presentation as final validation ar
 - [ ] Validate changes maintain technical accuracy
 - [ ] Get peer review on tone improvements (optional but recommended)
 
-**Success Criteria**: All content aligns with `internal-docs/datadog-identity.md` guidelines
+**Success Criteria**: All content aligns with Datadog Identity guidelines
 
 ---
 
 ### Milestone 4: Demo Accessibility & Value
 **Goal**: Ensure demo provides value for ALL attendees, not just Datadog customers
-
-**Reference**: Apply "Prepared Talk Goals" from `internal-docs/writing-prepared-talk.md`
 
 **Value for All Attendees**:
 - [ ] Demo in `README.md` works standalone (doesn't require Datadog account/product)
@@ -210,13 +201,13 @@ Fix any compliance issues found, then record presentation as final validation ar
 - [ ] Primary lesson is technology/practice, not Datadog features
 - [ ] KubeHound knowledge is transferable and broadly useful
 
-**Avoid Product Pitch** (per `internal-docs/writing-prepared-talk.md`):
+**Avoid Product Pitch**:
 - [ ] Demo is not an infomercial for Datadog
 - [ ] Datadog mentions are minimal and contextual
 - [ ] Demo doesn't depend on Datadog features for value
 - [ ] Focus is on security problem and KubeHound solution
 
-**The One Thing** (per `internal-docs/writing-prepared-talk.md`):
+**The One Thing**:
 - [ ] Primary takeaway is clear and focused in `README.md`
 - [ ] `SLIDE_NARRATIVE.md` emphasizes one primary lesson
 - [ ] Secondary points support the primary lesson
@@ -238,16 +229,14 @@ Fix any compliance issues found, then record presentation as final validation ar
 ### Milestone 5: Speaker Enablement
 **Goal**: Prepare materials for other speakers to deliver this talk
 
-**Reference**: Follow "Setting up speakers for success" from `internal-docs/writing-prepared-talk.md`
-
 **Google Slides Requirements**:
 - [ ] Uses official Datadog Google Slides Template
 - [ ] Speaker notes include bullet points for each slide
 - [ ] Speaker notes include full talk script
 - [ ] Cover slide with modification instructions (if needed)
 - [ ] Documentation on how to adapt talk length (30min → 20min, etc.)
-- [ ] Image credits in speaker notes (per `internal-docs/writing-prepared-talk.md`)
-- [ ] Data source links in speaker notes (per `internal-docs/writing-prepared-talk.md`)
+- [ ] Image credits in speaker notes
+- [ ] Data source links in speaker notes
 
 **Additional Documentation**:
 - [ ] `README.md` clearly documents demo setup for speakers
@@ -283,7 +272,7 @@ Fix any compliance issues found, then record presentation as final validation ar
 - [ ] `KindCluster_Demo_v2.ipynb` reviewed and approved
 - [ ] `SLIDE_NARRATIVE.md` aligned with guidelines
 - [ ] Google Slides deck reviewed and approved
-- [ ] All three guideline documents in `internal-docs/` satisfied
+- [ ] All guideline documents satisfied
 - [ ] Peer review completed (recommended)
 - [ ] Dry run completed (recommended)
 
@@ -308,7 +297,7 @@ Fix any compliance issues found, then record presentation as final validation ar
 
 **IMPORTANT**: Only proceed after Milestones 1-6 are 100% complete. Recording should be the very last step to avoid re-recording due to compliance fixes.
 
-**Recording Requirements** (per `internal-docs/prepared-talks-guidelines.md`):
+**Recording Requirements**:
 - [ ] Deliver full presentation as if at conference
 - [ ] Record with clear audio and video
 - [ ] Upload recording for speaker reference
@@ -332,26 +321,18 @@ Fix any compliance issues found, then record presentation as final validation ar
 
 ## Technical Considerations
 
-### Internal Documents Reference
-Three internal guideline documents saved locally in `internal-docs/` directory (gitignored):
-- `internal-docs/writing-prepared-talk.md` - Content creation guidelines
-- `internal-docs/prepared-talks-guidelines.md` - Reviewing and refreshing process
-- `internal-docs/datadog-identity.md` - Brand voice and personality
-
-**IMPORTANT**: These documents are private Datadog internal documentation and are NOT committed to the public repository. They are gitignored.
-
 ### Materials Under Review
 All materials to be reviewed are in the repository root:
 - `README.md` - Primary demo documentation
 - `KindCluster_Demo_v2.ipynb` - Interactive demo notebook
 - `SLIDE_NARRATIVE.md` - Conference presentation speaker notes (gitignored reference)
-- Google Slides deck - External (link TBD when deck finalized)
+- Google Slides deck
 
 ### Google Slides Location
-Deck location: [To be added when deck is finalized]
+Deck location: https://docs.google.com/presentation/d/16KHfx-AcHmi7j6CATfOvCsb7a_W-oR5jc0tR9G65tM8/edit
 
 ### EPCAT Submission
-Process for adding to Prepared Talks Catalog (per `internal-docs/prepared-talks-guidelines.md`):
+Process for adding to Prepared Talks Catalog:
 - Set "Prepared Talk" field to true
 - Fill fields: Topic Tags, Abstract, Deck, Recording, Last Update
 - Check "Includes a demo?" field
@@ -376,15 +357,15 @@ Process for adding to Prepared Talks Catalog (per `internal-docs/prepared-talks-
 | Google Slides deck major changes | Medium - invalidates audit work | Wait for deck to be reasonably stable before starting |
 | Unclear EPCAT submission process | Low - doesn't block content readiness | Document process when encountered, focus on content quality first |
 | Peer review reveals major issues | Medium - requires rework | Build in peer review at Milestone 6 before recording |
-| International translation concerns | Low - handled by regional teams | Focus on avoiding idioms/jokes per `internal-docs/writing-prepared-talk.md` |
+| International translation concerns | Low - handled by regional teams | Focus on avoiding idioms/jokes per guidelines |
 
 ---
 
 ## Timeline & Effort Estimate
 
-- **Milestone 1** (Content Audit): 2 hours (thorough review of all materials against `internal-docs/` guidelines)
+- **Milestone 1** (Content Audit): 2 hours
 - **Milestone 2** (Attribution): 1-2 hours (depends on image sourcing needs)
-- **Milestone 3** (Tone Fixes): 2-3 hours (writing improvements per `internal-docs/datadog-identity.md`)
+- **Milestone 3** (Tone Fixes): 2-3 hours
 - **Milestone 4** (Accessibility): 1 hour (validation and minor adjustments)
 - **Milestone 5** (Speaker Enablement): 2-3 hours (speaker notes, documentation)
 - **Milestone 6** (Final Validation): 1 hour (checklist review, dry run)
@@ -398,29 +379,45 @@ Process for adding to Prepared Talks Catalog (per `internal-docs/prepared-talks-
 
 ## Progress Log
 
+### 2025-12-04: Milestone 1 & 2 Progress
+**Started implementation work on compliance review.**
+
+**Milestone 1 - Content Compliance Audit (partial):**
+- Read internal guideline documents
+- Reviewed README.md, KindCluster_Demo_v2.ipynb, SLIDE_NARRATIVE.md against guidelines
+- All reviewed materials pass compliance checks (tone, messaging, value for all attendees, no product pitch)
+- **Blocked:** Cannot access Google Slides content directly - needs manual review or PDF export
+
+**Milestone 2 - Documentation & Attribution (partial):**
+- Audited all images in README.md and notebook
+- Added attribution for `attack-graph-example.png` (source: kubehound.io)
+- Added attribution for `kubehound-as-a-service-architecture.png` (source: kubehound.io/khaas/getting-started/)
+- Verified: `misconfig-*.png` and `Jupyter_Cells_*.png` are original screenshots (no attribution needed)
+- **Pending:** Google Slides image attribution in speaker notes
+
+**Issues Found & Fixed:**
+- 2 images from kubehound.io needed attribution → Added source links to README
+
+**Next Steps:**
+- User to review Google Slides deck (template verification, speaker notes, image attribution)
+- Complete Milestone 1 & 2 checklist items once slides verified
+
 ### 2025-11-26: PRD Created
 - Created GitHub issue #7
-- Saved three internal guideline documents to `internal-docs/` (gitignored)
-- Added `SLIDE_NARRATIVE.md` to gitignore (working reference)
 - Defined 7 milestones for comprehensive compliance review
 - Identified all materials for review with explicit file paths
 - Set recording as final milestone to avoid rework
-- Added explicit file path references throughout for future Claude instances
 
 ---
 
 ## References
 
-- **Internal Guidelines** (in `internal-docs/` directory, gitignored):
-  - `internal-docs/writing-prepared-talk.md` - Content creation standards
-  - `internal-docs/prepared-talks-guidelines.md` - Review and refresh process
-  - `internal-docs/datadog-identity.md` - Brand voice and personality
 - **Materials to Review** (repository root):
   - `README.md` - Primary demo documentation
   - `KindCluster_Demo_v2.ipynb` - Interactive demo notebook
   - `SLIDE_NARRATIVE.md` - Speaker notes reference (gitignored)
-  - Google Slides deck (external, link TBD)
-- **Datadog Resources** (internal, referenced in `internal-docs/writing-prepared-talk.md`):
+  - Google Slides deck
+- **Datadog Resources** (internal):
   - Official Datadog Google Slides Template
   - Commonly Used Slides deck
   - Customer Marketing Assets Knowledge Base

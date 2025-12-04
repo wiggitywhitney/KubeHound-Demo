@@ -49,6 +49,8 @@ KubeHound answers these questions by modeling your cluster as a graph:
 
 ![KubeHound Attack Graph](docs/images/attack-graph-example.png)
 
+*Source: [kubehound.io](https://kubehound.io/)*
+
 Instead of listing problems, KubeHound shows how they connect—revealing actual attack paths from entry points to cluster compromise. Each node is a resource (Container, Node, Identity, Volume). Each edge is an attack technique (TOKEN_STEAL, VOLUME_ACCESS, ENDPOINT_EXPLOIT).
 
 This lets you focus your security efforts on what truly matters: the paths attackers can actually exploit.
@@ -455,6 +457,8 @@ KubeHound is [designed for speed](https://kubehound.io/#:~:text=KubeHound%20was%
 For production clusters, KubeHound can run as a distributed service:
 
 ![KubeHound as a Service Architecture](docs/images/kubehound-as-a-service-architecture.png)
+
+*Source: [KubeHound Documentation](https://kubehound.io/khaas/getting-started/)*
 
 1. **Collectors** run on each cluster (prod, staging, dev), gathering entity data from the Kubernetes API
 2. **Push dump** — Collectors push data to centralized storage (e.g., S3)
