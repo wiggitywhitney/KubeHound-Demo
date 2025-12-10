@@ -416,22 +416,22 @@ KubeHound analyzes your cluster in three steps:
 
 KubeHound has 4 main components in this setup:
 
-**1. KubeHound CLI (binary on your computer)**
+#### 1. KubeHound CLI (binary on your computer)
 - The `kubehound` command you install
 - Connects to Kubernetes clusters to collect configuration data
 - Processes and stores data in the backend
 - Commands: `kubehound dump` (collect data), `kubehound ingest` (build graph)
 
-**2. MongoDB container (data storage)**
+#### 2. MongoDB container (data storage)
 - Stores raw Kubernetes resource data
 - Contains pods, roles, bindings, service accounts, volumes, etc.
 
-**3. JanusGraph container (graph database)**
+#### 3. JanusGraph container (graph database)
 - Reads data from MongoDB
 - Builds the attack graph with vertices (resources) and edges (attack techniques)
 - Processes Gremlin queries to find attack paths
 
-**4. Jupyter container (web UI)**
+#### 4. Jupyter container (web UI)
 - Interactive notebook interface at [http://localhost:8888](http://localhost:8888)
 - Runs queries against JanusGraph
 - Visualizes attack paths as graphs and tables
