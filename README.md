@@ -156,7 +156,7 @@ Setup takes about 2-3 minutes. When complete, you'll see:
 - **One-command setup** that handles cluster creation, data collection, and attack graph generation
 
 **Data flow:**
-```
+```text
 Kubernetes Cluster
     ↓ (kubehound dump)
 Compressed cluster data
@@ -432,12 +432,12 @@ KubeHound has 4 main components in this setup:
 - Processes Gremlin queries to find attack paths
 
 **4. Jupyter container (web UI)**
-- Interactive notebook interface at http://localhost:8888
+- Interactive notebook interface at [http://localhost:8888](http://localhost:8888)
 - Runs queries against JanusGraph
 - Visualizes attack paths as graphs and tables
 
 **Data Flow:**
-```
+```text
 KubeHound CLI → Collects from Kind cluster → Stores in MongoDB
                       ↓
 KubeHound CLI → Tells JanusGraph to ingest → Builds attack graph
