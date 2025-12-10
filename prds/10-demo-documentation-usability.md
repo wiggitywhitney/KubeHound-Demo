@@ -35,8 +35,8 @@ Restructure documentation following Smart Brevity principles:
 ## Success Criteria
 
 - [x] README restructured with Quick Start at top, theory at bottom
-- [ ] Prerequisites either bundled in setup script OR inline with OS-specific details
-- [ ] Setup script output consolidated with clearer next steps
+- [x] Prerequisites either bundled in setup script OR inline with OS-specific details
+- [x] Setup script output consolidated with clearer next steps
 - [ ] Notebook interface instructions moved from README to notebook
 - [ ] Notebook has conclusion summarizing what user accomplished and next steps
 - [ ] All items in `docs/eddie-rowe-feedback.md` marked as addressed
@@ -76,17 +76,17 @@ Restructure documentation following Smart Brevity principles:
 
 ---
 
-### Milestone 2: Reduce Prerequisite Friction
+### Milestone 2: Reduce Prerequisite Friction ✅
 **Goal**: Users don't need to leave the repo to install prerequisites
 
-**Approach Decision Needed**:
+**Approach Decision**:
 - Option A: Bundle prerequisite checks/installs into setup script
 - Option B: Add OS-specific install commands with `<details>` tags in README
 
 **Tasks**:
-- [ ] Decide on approach (A or B)
-- [ ] Implement chosen approach
-- [ ] Test prerequisite flow on clean system (if possible)
+- [x] Decide on approach (A or B)
+- [x] Implement chosen approach
+- [x] Test prerequisite flow on clean system (if possible)
 
 **Success Criteria**: Users can install all prerequisites without navigating to external pages
 
@@ -206,6 +206,18 @@ Restructure documentation following Smart Brevity principles:
 - Added context to Next Steps: "Jupyter Notebook UI at" before URL
 - Added description to notebook file: "(the guided attack path walkthrough)"
 - Marked feedback item #3 as addressed
+
+### 2025-12-10: Milestone 2 Complete
+- Chose Option B: OS-specific install commands with `<details>` tags
+- Added collapsible install sections for macOS, Linux (Ubuntu/Debian), and Windows (WSL2)
+- Verified all commands against official documentation (December 2025):
+  - Docker Desktop: `brew install --cask docker-desktop` (macOS 14+)
+  - Kind: v0.30.0 binaries and brew
+  - kubectl: official k8s.io binaries and brew
+  - KubeHound: v1.6.7 universal wget command and brew
+- Consolidated Windows guidance (removed duplicate WSL2 section)
+- Verified setup script checks same 4 tools with valid fallback URLs
+- Marked feedback item #2 as addressed
 
 ---
 

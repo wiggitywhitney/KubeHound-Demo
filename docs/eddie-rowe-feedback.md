@@ -42,7 +42,7 @@
 - For example: `brew install kubehound`
 - Could use `<details>` tags for each OS to save space.
 
-- [ ] Addressed
+- [x] Addressed
 
 ---
 

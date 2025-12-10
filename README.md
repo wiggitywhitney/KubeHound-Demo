@@ -21,29 +21,102 @@ Then proceed to install the prerequisites below.
 
 Install these tools before running the setup script:
 
-| Tool | Purpose | Installation |
-|------|---------|--------------|
-| **Docker** | Container runtime | [Install Docker](https://docs.docker.com/get-docker/) |
-| **Kind** | Local Kubernetes clusters | [Install Kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) |
-| **kubectl** | Kubernetes CLI | [Install kubectl](https://kubernetes.io/docs/tasks/tools/) |
-| **KubeHound CLI** | Attack path analysis | [Install KubeHound](https://kubehound.io/user-guide/getting-started/) |
+| Tool | Purpose |
+|------|---------|
+| **Docker** | Container runtime |
+| **Kind** | Local Kubernetes clusters |
+| **kubectl** | Kubernetes CLI |
+| **KubeHound CLI** | Attack path analysis |
 
-#### Windows Users: Bash Environment Required
+<details>
+<summary><strong>macOS (Homebrew)</strong></summary>
 
-This demo uses bash scripts. Windows Command Prompt and PowerShell are not compatible. Choose one of these bash environments:
+```bash
+# Docker Desktop (requires macOS 14+)
+brew install --cask docker-desktop
+# Then launch Docker Desktop from Applications and complete setup
 
-**Option A: WSL2 (Recommended)**
-- Full Linux environment with native Docker Desktop integration
-- Best compatibility with Kubernetes tooling
-- Install: [WSL2 Setup Guide](https://learn.microsoft.com/en-us/windows/wsl/install)
-- After installing WSL2, install Docker Desktop and enable WSL2 integration in Docker Desktop settings
+# Kind, kubectl, and KubeHound
+brew install kind kubectl kubehound
+```
 
-**Option B: Git Bash**
-- Lightweight bash environment included with [Git for Windows](https://git-scm.com/download/win)
-- Works for running these scripts
-- May require additional Docker configuration
+</details>
 
-**Important**: Install the prerequisites (Docker, Kind, kubectl, KubeHound) inside your chosen bash environment.
+<details>
+<summary><strong>Linux (Ubuntu/Debian)</strong></summary>
+
+```bash
+# Docker Engine - Add Docker's official repository
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] \
+  https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# Add your user to docker group (log out and back in after)
+sudo usermod -aG docker $USER
+
+# Kind (v0.30.0)
+[ $(uname -m) = x86_64 ] && curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.30.0/kind-linux-amd64
+[ $(uname -m) = aarch64 ] && curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.30.0/kind-linux-arm64
+chmod +x ./kind
+sudo mv ./kind /usr/local/bin/kind
+
+# kubectl
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+rm kubectl
+
+# KubeHound
+wget https://github.com/DataDog/KubeHound/releases/latest/download/kubehound-$(uname -o | sed 's/GNU\///g')-$(uname -m) -O kubehound
+chmod +x kubehound
+sudo mv kubehound /usr/local/bin/
+```
+
+</details>
+
+<details>
+<summary><strong>Windows (WSL2)</strong></summary>
+
+First, ensure WSL2 is installed with Ubuntu:
+```powershell
+# Run in PowerShell as Administrator
+wsl --install
+```
+
+Install Docker Desktop for Windows with WSL2 backend:
+1. Download from [Docker Desktop for Windows](https://docs.docker.com/desktop/install/windows-install/)
+2. During installation, enable "Use WSL 2 based engine"
+3. After installation, go to Settings → Resources → WSL Integration and enable your distro
+
+Then install remaining tools inside your WSL2 Ubuntu terminal:
+```bash
+# Kind (v0.30.0)
+curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.30.0/kind-linux-amd64
+chmod +x ./kind
+sudo mv ./kind /usr/local/bin/kind
+
+# kubectl
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+rm kubectl
+
+# KubeHound
+wget https://github.com/DataDog/KubeHound/releases/latest/download/kubehound-Linux-x86_64 -O kubehound
+chmod +x kubehound
+sudo mv kubehound /usr/local/bin/
+```
+
+</details>
+
+> **Windows users**: This demo requires bash scripts. Use WSL2 (see install instructions above) or [Git Bash](https://git-scm.com/download/win).
 
 ### Setup
 
