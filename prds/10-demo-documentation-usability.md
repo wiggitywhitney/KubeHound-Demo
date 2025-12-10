@@ -92,14 +92,14 @@ Restructure documentation following Smart Brevity principles:
 
 ---
 
-### Milestone 3: Setup Script Output Improvements
+### Milestone 3: Setup Script Output Improvements ✅
 **Goal**: Clearer, more consolidated next steps output
 
 **Tasks**:
-- [ ] Remove separate "KubeHound UI" section from output
-- [ ] Consolidate URL and password into Next Steps
-- [ ] Update next steps to include password inline
-- [ ] Test script output for clarity
+- [x] Remove separate "KubeHound UI" section from output
+- [x] Consolidate URL and password into Next Steps
+- [x] Update next steps to include password inline
+- [x] Test script output for clarity
 
 **Success Criteria**: Next steps are clear and self-contained
 
@@ -195,6 +195,17 @@ Restructure documentation following Smart Brevity principles:
 - Relocated misconfiguration example images into theory sections
 - Removed "Skip to Getting Started" link (no longer needed)
 - All text preserved, only structure changed
+
+### 2025-12-10: Milestone 3 Complete
+- Removed separate "KubeHound UI" section from script output
+- Consolidated URL and password into Next Steps (password now inline in step 2)
+- Rewrote "What You Got" section for beginner clarity:
+  - KubeHound running locally listed first
+  - "Intentional misconfigurations" instead of jargon "attack scenario"
+  - "Pre-built attack graph ready to explore" - action-oriented
+- Added context to Next Steps: "Jupyter Notebook UI at" before URL
+- Added description to notebook file: "(the guided attack path walkthrough)"
+- Marked feedback item #3 as addressed
 
 ---
 

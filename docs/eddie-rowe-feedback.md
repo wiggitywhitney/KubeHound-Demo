@@ -70,7 +70,7 @@
    5. Follow Jupyter notebook instructions
 ```
 
-- [ ] Addressed
+- [x] Addressed
 
 ---
 
