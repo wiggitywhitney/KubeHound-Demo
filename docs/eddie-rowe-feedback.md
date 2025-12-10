@@ -29,7 +29,7 @@
 
 **Additional**: Slash the theory - remove the "Example: Over-privileged Service Account" and related images. Link to the official KubeHound docs for theory. Or to other docs you have in a docs/ folder.
 
-- [ ] Addressed
+- [x] Addressed
 
 ---
 
@@ -80,7 +80,7 @@
 
 **Recommendation**: Once they're in the Notebook you can explain how to run it there and remove the "Understanding the Notebook Interface" and other Notebook-centric sections from the README to remove any redundant information.
 
-- [ ] Addressed
+- [x] Addressed
 
 ---
 

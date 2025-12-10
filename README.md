@@ -191,37 +191,19 @@ You'll see the Jupyter file browser showing directories.
 
 This is the demo notebook designed specifically for Kind clusters.
 
-### Understanding the Notebook Interface
+### What You'll See in the Notebook
 
-**Cell numbering:**
-- `[1]`, `[2]`, `[3]` - Cell has been executed (number shows execution order)
-- `[*]` - Cell is currently running (or hasn't been executed yet)
-- `[ ]` - Cell hasn't been executed
-
-**Running cells:**
-- Click a cell to select it
-- Press **Shift + Enter** to execute the cell
-- Results appear below the cell
-
-**Important:** Run cells sequentially from top to bottom. Some cells depend on previous ones.
+The notebook interface has code cells that you run one at a time. Each query produces results in multiple formats:
 
 ![Jupyter cell with code and console output](docs/images/Jupyter_Cells_Console.png)
 
-*A code cell showing the query, execution indicator `[3]`, and results in the Console tab.*
+*A code cell with a query and its results. The notebook includes a "First Time Using Jupyter?" guide at the top.*
 
-### Result Tabs
-
-After executing a query cell, you'll see tabs above the results:
-
-- **Console** - Shows data in table format (good for seeing raw details)
-- **Graph** - Shows visual network diagram of attack paths (nodes and edges)
-- **Query Metadata** - Shows query execution details
-
-Click between tabs to view results differently.
+After running a query, click between tabs to view results differently:
 
 ![Result tabs showing Console, Graph, and Query Metadata](docs/images/Jupyter_Cells_Tabs.png)
 
-*Click the **Graph** tab to see visual attack paths instead of raw data.*
+*Results appear in tabs: Console (table data), Graph (visual diagram), Query Metadata (stats).*
 
 ![Graph visualization of attack paths](docs/images/Jupyter_Cells_Visualization.png)
 
@@ -327,13 +309,11 @@ This query finds attack paths starting from exposed services (excluding system s
 
 ### Experimenting with Queries
 
-You can modify queries or add new cells:
+The notebook is designed for experimentation - modify existing queries or add new cells to explore further. Start with small changes to learn the syntax.
 
-1. **To add a new cell:** Click the `+` button in the toolbar
-2. **To modify a query:** Click into the cell, edit the code, press Shift+Enter
-3. **To restart:** Kernel → Restart & Clear Output
-
-**Tip:** Start with the existing queries and make small changes to learn the syntax. The [Gremlin documentation](https://tinkerpop.apache.org/gremlin.html) and [KubeHound query examples](https://github.com/DataDog/KubeHound/tree/main/docs) are helpful references.
+**References:**
+- [Gremlin documentation](https://tinkerpop.apache.org/gremlin.html)
+- [KubeHound query examples](https://github.com/DataDog/KubeHound/tree/main/docs)
 
 ## Understanding KubeHound Commands
 

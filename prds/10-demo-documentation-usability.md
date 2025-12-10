@@ -62,7 +62,7 @@ Restructure documentation following Smart Brevity principles:
 
 ## Milestones
 
-### Milestone 1: README Smart Brevity Restructure
+### Milestone 1: README Smart Brevity Restructure ✅
 **Goal**: Reorganize README to put action before theory
 
 **Tasks**:
@@ -105,16 +105,33 @@ Restructure documentation following Smart Brevity principles:
 
 ---
 
-### Milestone 4: README/Notebook Content Deduplication
+### Milestone 4: README/Notebook Content Deduplication ✅
 **Goal**: Notebook interface instructions live in the notebook, not README
 
-**Tasks**:
-- [ ] Identify notebook-centric sections in README
-- [ ] Move/adapt "Understanding the Notebook Interface" content to notebook
-- [ ] Remove redundant sections from README
-- [ ] Ensure notebook is self-explanatory for interface usage
+**Approach Decision** (2025-12-10):
+Keep preview images in README (orientation), move operational instructions to notebook (just-in-time help).
 
-**Success Criteria**: No duplicate content between README and notebook
+**Rationale**: Target user is a Kubernetes expert who may be new to Jupyter notebooks and security. They need:
+- README images showing what they'll see (mental model before opening unfamiliar UI)
+- Operational instructions in the notebook where they'll actually use them
+- The Graph tab image specifically sells the value proposition (based on Cris's feedback)
+
+**What stays in README**:
+- Preview images (Jupyter_Cells_Console.png, Jupyter_Cells_Tabs.png, Jupyter_Cells_Visualization.png)
+- Brief context about what tabs show ("Console shows table format, Graph shows visual attack paths")
+
+**What moves to notebook**:
+- Cell numbering explanation (`[1]`, `[*]`, `[ ]`)
+- "Running cells" instructions (Shift+Enter, run sequentially)
+- Detailed "how to operate" content
+
+**Tasks**:
+- [x] Identify notebook-centric sections in README
+- [x] Move operational instructions to notebook (cell numbering, running cells, sequential execution)
+- [x] Keep preview images and brief descriptions in README
+- [x] Ensure notebook is self-explanatory for interface usage
+
+**Success Criteria**: README provides visual orientation; notebook provides just-in-time operational instructions
 
 ---
 
@@ -172,6 +189,7 @@ Restructure documentation following Smart Brevity principles:
 | Removing too much context | Medium - users may not understand "why" | Keep brief "Why KubeHound?" section, just move to bottom |
 | Breaking existing links | Low - internal restructuring | Search for any internal README links before restructuring |
 | Over-simplifying prerequisites | Low - might miss edge cases | Test on different OS if possible, keep links to official docs as fallback |
+| PRD 7 branch conflict | Low - image attributions in theory sections | PRD 7 adds source attributions to theory section images; these don't conflict with Milestone 4 changes since we're keeping preview images in a different README section |
 
 ---
 
@@ -218,6 +236,23 @@ Restructure documentation following Smart Brevity principles:
 - Consolidated Windows guidance (removed duplicate WSL2 section)
 - Verified setup script checks same 4 tools with valid fallback URLs
 - Marked feedback item #2 as addressed
+
+### 2025-12-10: Milestone 4 Design Decision
+- Refined approach based on target user profile (Kubernetes expert, new to Jupyter/security)
+- Decision: Keep preview images in README, move operational instructions to notebook
+- Rationale: README provides orientation (what you'll see), notebook provides just-in-time help (how to use it)
+- Incorporated Cris's feedback about Graph tab image adding value
+- Noted PRD 7 branch has image attributions in theory sections (no conflict with this approach)
+
+### 2025-12-10: Milestone 4 Complete
+- Enhanced notebook cell-0 "First Time Using Jupyter?" with cell indicator explanation (`[1]`, `[*]`, `[ ]`)
+- Simplified README "Understanding the Notebook Interface" → "What You'll See in the Notebook"
+  - Kept all 3 preview images with brief captions
+  - Removed operational instructions (now in notebook)
+  - Added reference to notebook's built-in guide
+- Simplified "Experimenting with Queries" section to brief encouragement + reference links
+- Marked feedback item #1 (README restructuring) as addressed
+- Marked feedback item #4 (README/Notebook deduplication) as addressed
 
 ---
 
