@@ -262,6 +262,12 @@ Keep preview images in README (orientation), move operational instructions to no
 - Marked feedback item #5 as addressed
 - All 5 feedback items in `docs/eddie-rowe-feedback.md` now marked complete
 
+### 2025-12-10: Review Refinements
+- Added explicit value prop to README intro: "This answers a question vulnerability scanners can't: which misconfigurations should you fix first?"
+- Removed redundant notebook walkthrough (steps 1-9 with "Result:" annotations) from README (-53 lines)
+- README now points to self-guided notebook instead of duplicating its content
+- These changes complete the deduplication goal from feedback item #4
+
 ---
 
 ## References
