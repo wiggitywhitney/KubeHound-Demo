@@ -90,7 +90,7 @@
 
 **Recommendation**: A final text block that summarized what the user did and what the next steps could be now that the user has these paths in hand would go far.
 
-- [ ] Addressed
+- [x] Addressed
 
 ---
 

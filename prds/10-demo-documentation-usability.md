@@ -37,9 +37,9 @@ Restructure documentation following Smart Brevity principles:
 - [x] README restructured with Quick Start at top, theory at bottom
 - [x] Prerequisites either bundled in setup script OR inline with OS-specific details
 - [x] Setup script output consolidated with clearer next steps
-- [ ] Notebook interface instructions moved from README to notebook
-- [ ] Notebook has conclusion summarizing what user accomplished and next steps
-- [ ] All items in `docs/eddie-rowe-feedback.md` marked as addressed
+- [x] Notebook interface instructions moved from README to notebook
+- [x] Notebook has conclusion summarizing what user accomplished and next steps
+- [x] All items in `docs/eddie-rowe-feedback.md` marked as addressed
 - [ ] Eddie's feedback document deleted after all items confirmed addressed
 
 ---
@@ -135,14 +135,14 @@ Keep preview images in README (orientation), move operational instructions to no
 
 ---
 
-### Milestone 5: Notebook Conclusion
+### Milestone 5: Notebook Conclusion ✅
 **Goal**: Users understand what they accomplished and what to do next
 
 **Tasks**:
-- [ ] Add conclusion markdown cell to notebook
-- [ ] Summarize what user accomplished (attack path discovery, etc.)
-- [ ] Explain the value KubeHound provided
-- [ ] Suggest next steps (explore other paths, apply to own cluster, etc.)
+- [x] Add conclusion markdown cell to notebook
+- [x] Summarize what user accomplished (attack path discovery, etc.)
+- [x] Explain the value KubeHound provided
+- [x] Suggest next steps (explore other paths, apply to own cluster, etc.)
 
 **Success Criteria**: Users finish notebook knowing what they learned and what's next
 
@@ -253,6 +253,14 @@ Keep preview images in README (orientation), move operational instructions to no
 - Simplified "Experimenting with Queries" section to brief encouragement + reference links
 - Marked feedback item #1 (README restructuring) as addressed
 - Marked feedback item #4 (README/Notebook deduplication) as addressed
+
+### 2025-12-10: Milestone 5 Complete
+- Added conclusion cell (cell-21) to notebook with "What You Accomplished" section
+- Key value proposition: KubeHound answers "which misconfigurations should I fix first?" - something vulnerability scanners can't do
+- Summarized learnings: attack paths as chains, graph queries vs misconfiguration lists, prioritization by impact
+- Added Next Steps with links to DSL reference, attack reference, installation guide, and main docs
+- Marked feedback item #5 as addressed
+- All 5 feedback items in `docs/eddie-rowe-feedback.md` now marked complete
 
 ---
 
