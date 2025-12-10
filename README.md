@@ -1,8 +1,8 @@
 # KubeHound Test Environment
 
-A local Kubernetes environment for learning and exploring [KubeHound](https://kubehound.io/), a tool that identifies attack paths in Kubernetes clusters by building a graph of relationships between resources.
+A local Kubernetes environment for learning and exploring [KubeHound](https://kubehound.io/), a tool that identifies attack paths in Kubernetes clusters by building a graph of relationships between resources. This answers a question vulnerability scanners can't: **which misconfigurations should you fix first?**
 
-This repository provides automation to deploy KubeHound's official test cluster (1 attack scenario: ENDPOINT_EXPLOIT) and explore discovered attack paths through an interactive Jupyter notebook interface.
+This repository provides automation to deploy a test cluster with intentional misconfigurations and explore the discovered attack paths through an interactive Jupyter notebook.
 
 ## Quick Start
 
@@ -209,58 +209,9 @@ After running a query, click between tabs to view results differently:
 
 *The Graph tab shows attack paths as connected nodes - this is where the visual insights are!*
 
-### The KindCluster_Demo Notebook Structure
+### The KindCluster_Demo Notebook
 
-The notebook walks you through attack path discovery with a progressive filtering approach, demonstrating how to narrow down from hundreds of attack paths to the most critical, actionable findings:
-
-**1. Initial Setup**
-Configures graph visualization settings (smooth edges, arrows).
-
-**2. What are we looking at?**
-Shows all Kubernetes resources as individual dots, with each color representing a different resource type (pods, containers, identities, nodes, volumes).
-
-**3. Critical attack paths**
-Finds attack chains that lead to cluster compromise - when an attacker gains control of a Node and can access all containers, secrets, and data.
-
-**Result:** 388 attack paths found - overwhelming!
-
-**4. Too much information!**
-Narrows down to containers since they often have misconfigurations like excessive permissions, container escape vulnerabilities, and access to sensitive volumes.
-
-**Result:** Still too many results.
-
-**5. Still too many results**
-Focuses on endpoints (exposed services) - the realistic entry points for external attackers. Supply chain attacks exist but are sophisticated and less common.
-
-**Result:** More manageable - shows attack paths from externally accessible services.
-
-**6. Identify the vulnerable services**
-Steps back from complex graphs to get a simple list of which services (by name and port) have critical attack paths.
-
-**Result:** Table showing vulnerable service endpoints and ports.
-
-**7. Filter out internal infrastructure**
-Removes internal services like `kube-dns` (Kubernetes' internal DNS service) to focus on externally-accessible services attackers would actually target.
-
-**Result:** Clean attack paths from interesting services only.
-
-**8. Trace the complete attack path**
-Shows the complete step-by-step attack chain: which endpoint an attacker starts from, what they compromise along the way (containers, identities, permissions), and how they reach Node access.
-
-**Query example:**
-```gremlin
-kh.endpoints().not(has("serviceEndpoint","kube-dns"))
-  .repeat(outE().inV().simplePath())
-  .until(hasLabel("Node").or().loops().is(5))
-  .hasLabel("Node")
-  .path().by(elementMap())
-  .limit(100)
-```
-
-**Result:** Complete attack chains from external entry points to cluster compromise.
-
-**9. Congratulations!**
-You've successfully filtered down from hundreds of attack paths to the most critical, actionable findings.
+The notebook walks you through attack path discovery, progressively filtering from hundreds of paths down to the most critical findings. It's self-guided with explanations in each cell.
 
 ### Understanding Attack Path Graphs
 
