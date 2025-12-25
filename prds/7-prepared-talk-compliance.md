@@ -1,6 +1,6 @@
 # PRD #7: Prepared Talk Standards Compliance Review
 
-**Status**: Draft
+**Status**: In Progress (Milestones 1-5 complete for Google Slides)
 **Priority**: Low (Target: before 2024-12-23)
 **GitHub Issue**: [#7](https://github.com/wiggitywhitney/KubeHound-Demo/issues/7)
 **Created**: 2025-11-26
@@ -40,13 +40,13 @@ Fix any compliance issues found, then record presentation as final validation ar
 
 ## Success Criteria
 
-- [ ] All content aligns with Datadog Identity (`internal-docs/datadog-identity.md`)
-- [ ] Demo provides value for ALL attendees (customers, non-customers, competitors' users)
-- [ ] No product pitches, extensive demos, or infomercial content
-- [ ] All images properly credited with source URLs
-- [ ] All statistics/data properly sourced
-- [ ] No buzzwords, management-speak, empty superlatives, or competitor bashing
-- [ ] Google Slides deck includes speaker notes and uses official Datadog template
+- [x] All content aligns with Datadog Identity (`internal-docs/datadog-identity.md`)
+- [x] Demo provides value for ALL attendees (customers, non-customers, competitors' users)
+- [x] No product pitches, extensive demos, or infomercial content
+- [x] All images properly credited with source URLs
+- [x] All statistics/data properly sourced
+- [x] No buzzwords, management-speak, empty superlatives, or competitor bashing
+- [x] Google Slides deck includes speaker notes and uses official Datadog template
 - [ ] Presentation recorded and ready for speaker reference
 - [ ] Materials ready for Prepared Talks Catalog submission
 
@@ -66,6 +66,68 @@ Fix any compliance issues found, then record presentation as final validation ar
 - Major feature additions or demo changes (handled in other PRDs)
 - Actual submission process to EPCAT catalog (process TBD)
 - Translation or internationalization (handled by Datadog teams for specific events)
+
+---
+
+## Review Process: Collaborative Slide-by-Slide Workflow
+
+**IMPORTANT**: Read this section before executing the milestones below.
+
+### Prerequisites: Read Internal Guidelines First
+
+Before starting the slide-by-slide review, Claude must read and understand all three internal guideline documents:
+
+1. **Read `internal-docs/writing-prepared-talk.md`** - Content creation guidelines
+   - Prepared talk goals (value for ALL attendees, modern tech, help attendees succeed)
+   - What to avoid (product pitches, extensive demos, idioms/jokes, buzzwords)
+   - Speaker enablement requirements (cover slide with instructions, script in notes, image/data credits)
+   - "The One Thing" - focus on one primary takeaway
+
+2. **Read `internal-docs/prepared-talks-guidelines.md`** - Review and refresh process
+   - Branding/messaging alignment checks
+   - Freshness and relevance criteria
+   - Image attribution requirements
+   - Demo/screenshot currency
+
+3. **Read `internal-docs/datadog-identity.md`** - Brand voice and personality
+   - Tone guidelines (enthusiastic but humble, treats users as peers)
+   - Language to avoid (buzzwords, empty superlatives, competitor bashing)
+   - Authentic voice characteristics
+
+**Why this matters**: The guidelines contain specific requirements (e.g., cover slide format, placeholder conventions, attribution rules) that inform feedback during slide review. Without reading them first, Claude may miss compliance issues or give incorrect guidance.
+
+### Slide-by-Slide Review Process
+
+Milestones 1-5 (Content Audit through Speaker Enablement) are executed together in a single collaborative pass, not as separate sequential phases.
+
+**How it works:**
+
+1. **For each slide**, human pastes:
+   - Current speaker notes text
+   - Screenshot of the slide visual
+
+2. **Claude and human discuss:**
+   - PRD compliance (tone, buzzwords, attribution, accessibility)
+   - Speaker notes polish (clarity, flow, timing)
+   - Any issues from the Milestone 1-5 checklists that apply to this slide
+
+3. **Human makes edits** directly in Google Slides
+
+4. **Move to next slide** once satisfied
+
+**Key principles:**
+- **Discussion-based**: Claude provides feedback and suggestions; human decides what to change
+- **No unilateral changes**: Claude does not edit files without explicit approval
+- **Google Slides is source of truth**: SLIDE_NARRATIVE.md updated once at end, not during review
+- **All compliance checks combined**: Rather than separate audit/fix cycles, issues are identified and resolved per-slide
+
+**Why this approach:**
+- More efficient than batch audit → batch fix cycles
+- Human maintains creative control over speaker voice
+- Issues resolved in context rather than as abstract checklist items
+- Natural stopping points (per-slide) for multi-session work
+
+**Milestone checklists below**: Use these as reference during slide-by-slide review, not as sequential phases.
 
 ---
 
@@ -348,7 +410,7 @@ All materials to be reviewed are in the repository root:
 - Google Slides deck - External (link TBD when deck finalized)
 
 ### Google Slides Location
-Deck location: [To be added when deck is finalized]
+Deck location: https://docs.google.com/presentation/d/16KHfx-AcHmi7j6CATfOvCsb7a_W-oR5jc0tR9G65tM8/edit?usp=sharing
 
 ### EPCAT Submission
 Process for adding to Prepared Talks Catalog (per `internal-docs/prepared-talks-guidelines.md`):
@@ -406,6 +468,50 @@ Process for adding to Prepared Talks Catalog (per `internal-docs/prepared-talks-
 - Identified all materials for review with explicit file paths
 - Set recording as final milestone to avoid rework
 - Added explicit file path references throughout for future Claude instances
+
+### 2025-12-23: Story Arc Review & Process Decisions
+- Reviewed overall narrative structure with Claude - validated learning-journey approach
+- Streamlined intro (slides 1-5) to remove repetition of value proposition
+- Added MITRE ATT&CK section (slides 19-21) to explain attack primitives framework
+- Established collaborative review process: human edits in Google Slides, pastes notes + screenshots for discussion
+- Decision: SLIDE_NARRATIVE.md updated at end, not during review process
+- Added Google Slides deck link to PRD
+- Ready to begin slide-by-slide compliance review
+
+### 2025-12-24: Complete Slide-by-Slide Compliance Review
+- **Completed full review of all 49 slides** in Google Slides deck
+- Reviewed each slide against internal guidelines (writing-prepared-talk.md, prepared-talks-guidelines.md, datadog-identity.md)
+- Added BULLETS + SCRIPT format to all slides for speaker enablement
+- Added click cues for all animated slides (17, 34, 45, 46)
+- Verified image attributions (kubehound.io, attack.mitre.org) in speaker notes
+- Verified statistic sources (kubehound.io for performance data)
+- Verified MITRE ATT&CK trademark noted where applicable
+- Added cover slide (Slide 1) with speaker customization instructions
+- Fixed typo: "Kubehoud" → "KubeHound" in slide 46 title
+- Improved closing (Slide 48) to reinforce key takeaway: "Think in graphs, not lists"
+- Added bonus slide (Slide 49) with QR code for demo repo
+- **Updated SLIDE_NARRATIVE.md** with complete final script (all 49 slides)
+- Story arc validated: newcomer can go from zero to understanding the value
+- Strong transitions and callbacks throughout (especially "graphs not lists" theme)
+- **Milestones 1-5 complete for Google Slides deck**
+- Remaining: README.md and Jupyter notebook reviews, final validation, recording
+
+---
+
+## Decision Log
+
+| Date | Decision | Rationale | Impact |
+|------|----------|-----------|--------|
+| 2025-11-26 | PRD created | Initial structure for compliance review | - |
+| 2025-12-23 | Keep learning-journey story arc | Current structure was written while learning KubeHound, naturally builds concepts in order audience needs them. Hooks that front-load context don't land without setup. | No major restructure needed; validates existing approach |
+| 2025-12-23 | Add MITRE ATT&CK section | KubeHound's attack primitives map to MITRE ATT&CK framework - adds credibility and shared vocabulary. Placed after Attack Primitives Library intro (new slides 19-21). | Added 3 slides to deck; strengthens "why trust these categories" |
+| 2025-12-23 | Streamlined intro (slides 1-5) | Original had value proposition repeated 3 times across slides 2, 4, 5. Consolidated to single explanation in slide 5 after context is established. | Tighter intro, less repetition |
+| 2025-12-23 | Slide-by-slide collaborative review | Human makes edits in Google Slides, pastes speaker notes + screenshots for discussion with Claude. Discussion-based, not Claude making unilateral changes. | Review process defined |
+| 2025-12-23 | Don't sync SLIDE_NARRATIVE.md during review | Google Slides is source of truth during editing. Maintaining parallel doc creates overhead. Update SLIDE_NARRATIVE.md once at end when satisfied. | Simpler workflow during review |
+| 2025-12-23 | Don't use Google Drive API for Slides | Even with gdrive MCP, Slides format wouldn't give useful speaker notes. Paste workflow (notes + screenshots) provides exactly what's needed for review. | No tooling changes needed |
+| 2025-12-23 | Add instructions cover slide | Per `writing-prepared-talk.md`: prepared talks need a cover slide listing all speaker customizations (name, title, units, etc.) | New slide 0 with modification instructions |
+| 2025-12-23 | Use placeholders for speaker-specific content | Speaker notes should use `[SPEAKER NAME]`, `[SPEAKER TITLE]` etc. so any speaker can deliver | Update slide 1 and any other speaker-specific slides |
+| 2025-12-23 | Claude must read internal guidelines before review | Guidelines contain specific requirements (cover slide format, attribution rules, placeholder conventions) that inform compliance feedback | Added prerequisites section to Review Process |
 
 ---
 
