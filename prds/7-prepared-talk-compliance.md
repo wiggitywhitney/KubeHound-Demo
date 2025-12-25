@@ -1,6 +1,6 @@
 # PRD #7: Prepared Talk Standards Compliance Review
 
-**Status**: In Progress (Milestones 1-6 complete, ready for recording)
+**Status**: Complete
 **Priority**: Low (Target: before 2024-12-23)
 **GitHub Issue**: [#7](https://github.com/wiggitywhitney/KubeHound-Demo/issues/7)
 **Created**: 2025-11-26
@@ -34,7 +34,7 @@ Conduct comprehensive compliance review of all demo materials against three inte
 - `SLIDE_NARRATIVE.md` - Conference presentation speaker notes (reference for narrative alignment)
 - Google Slides deck (external, link TBD)
 
-Fix any compliance issues found, then record presentation as final validation artifact.
+Fix any compliance issues found to ensure materials are ready for presentation.
 
 ---
 
@@ -47,8 +47,6 @@ Fix any compliance issues found, then record presentation as final validation ar
 - [x] All statistics/data properly sourced
 - [x] No buzzwords, management-speak, empty superlatives, or competitor bashing
 - [x] Google Slides deck includes speaker notes and uses official Datadog template
-- [ ] Presentation recorded and ready for speaker reference
-- [ ] Materials ready for Prepared Talks Catalog submission
 
 ---
 
@@ -60,7 +58,6 @@ Fix any compliance issues found, then record presentation as final validation ar
 - Tone and messaging alignment fixes
 - Speaker enablement documentation
 - Final validation checklist
-- Presentation recording (after all other milestones complete)
 
 ### Out of Scope
 - Major feature additions or demo changes (handled in other PRDs)
@@ -329,9 +326,9 @@ Milestones 1-5 (Content Audit through Speaker Enablement) are executed together 
 ---
 
 ### Milestone 6: Final Validation
-**Goal**: Comprehensive checklist review before recording
+**Goal**: Comprehensive checklist review to confirm all materials are compliant
 
-**Instructions**: Review all previous milestones and materials before proceeding to recording
+**Instructions**: Review all previous milestones and materials to confirm compliance
 
 **Validation Checklist** (all must pass):
 - [x] Content Compliance Audit complete (Milestone 1)
@@ -355,36 +352,9 @@ Milestones 1-5 (Content Audit through Speaker Enablement) are executed together 
 - [x] Review all previous milestone completion
 - [x] Perform end-to-end demo walkthrough
 - [x] Validate all checklist items
-- [x] Mark materials as "ready for recording"
+- [x] Mark materials as compliant and ready for use
 
-**Success Criteria**: All compliance requirements met, ready for final recording
-
----
-
-### Milestone 7: Record Presentation
-**Goal**: Create reference recording for other speakers
-
-**IMPORTANT**: Only proceed after Milestones 1-6 are 100% complete. Recording should be the very last step to avoid re-recording due to compliance fixes.
-
-**Recording Requirements** (per `internal-docs/prepared-talks-guidelines.md`):
-- [ ] Deliver full presentation as if at conference
-- [ ] Record with clear audio and video
-- [ ] Upload recording for speaker reference
-- [ ] Add recording link to EPCAT (when submitting to catalog)
-- [ ] Update "Last Update" field with recording date
-
-**Post-Recording**:
-- [ ] Review recording for quality
-- [ ] Verify all speaker notes align with delivered content
-- [ ] Add recording to demo repository documentation (if appropriate)
-
-**Tasks**:
-- [ ] Set up recording environment
-- [ ] Deliver and record presentation
-- [ ] Upload to appropriate location
-- [ ] Update EPCAT record with recording link
-
-**Success Criteria**: High-quality recording available for speakers' reference
+**Success Criteria**: All compliance requirements met, materials ready for presentation
 
 ---
 
@@ -430,10 +400,7 @@ Process for adding to Prepared Talks Catalog (per `internal-docs/prepared-talks-
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| Recording before compliance complete | High - requires re-recording | Move recording to very last milestone (after validation) |
 | Google Slides deck major changes | Medium - invalidates audit work | Wait for deck to be reasonably stable before starting |
-| Unclear EPCAT submission process | Low - doesn't block content readiness | Document process when encountered, focus on content quality first |
-| Peer review reveals major issues | Medium - requires rework | Build in peer review at Milestone 6 before recording |
 | International translation concerns | Low - handled by regional teams | Focus on avoiding idioms/jokes per `internal-docs/writing-prepared-talk.md` |
 
 ---
@@ -445,12 +412,11 @@ Process for adding to Prepared Talks Catalog (per `internal-docs/prepared-talks-
 - **Milestone 3** (Tone Fixes): 2-3 hours (writing improvements per `internal-docs/datadog-identity.md`)
 - **Milestone 4** (Accessibility): 1 hour (validation and minor adjustments)
 - **Milestone 5** (Speaker Enablement): 2-3 hours (speaker notes, documentation)
-- **Milestone 6** (Final Validation): 1 hour (checklist review, dry run)
-- **Milestone 7** (Recording): 1-2 hours (setup, record, upload)
+- **Milestone 6** (Final Validation): 1 hour (checklist review)
 
-**Total**: 10-14 hours spread over multiple sessions
+**Total**: 9-12 hours spread over multiple sessions
 
-**Target Completion**: Before 2024-12-23 (4 weeks available)
+**Completed**: 2025-12-25
 
 ---
 
@@ -559,13 +525,28 @@ Completed systematic compliance review of README.md and KindCluster_Demo_v2.ipyn
 - No images in notebook (attribution N/A)
 - All other checks passed
 
-**Milestones 1-6 now complete for all materials:**
+**All milestones complete for all materials:**
 - Google Slides deck (completed 2025-12-24)
 - SLIDE_NARRATIVE.md (completed 2025-12-24)
 - README.md (completed 2025-12-25)
 - KindCluster_Demo_v2.ipynb (completed 2025-12-25)
 
-**Ready for Milestone 7: Recording**
+### 2025-12-25: PRD Complete - Scope Refinement
+
+**Decision**: Removed Milestone 7 (Record Presentation) from PRD scope.
+
+**Rationale**: Recording the presentation requires orchestration, approvals, and administrative work with coworkers (EPCAT submission, scheduling, etc.). These activities are outside the scope of Claude Code and this repository. The PRD's purpose—ensuring all content is compliant with Datadog prepared talk standards—is now complete.
+
+**What was accomplished:**
+- All 4 materials reviewed against 3 internal guideline documents
+- All compliance issues identified and fixed
+- All materials ready for presentation use
+
+**What moves out of scope:**
+- Recording the presentation (operational task with coworkers)
+- EPCAT catalog submission (administrative process)
+
+**PRD Status**: Complete
 
 ---
 
@@ -585,6 +566,7 @@ Completed systematic compliance review of README.md and KindCluster_Demo_v2.ipyn
 | 2025-12-23 | Claude must read internal guidelines before review | Guidelines contain specific requirements (cover slide format, attribution rules, placeholder conventions) that inform compliance feedback | Added prerequisites section to Review Process |
 | 2025-12-25 | Don't add slide images to README | Reviewed 11 images (3 GIFs, 8 PNGs). Each was either: redundant with existing README content, designed for verbal presentation context, or would create inconsistency (4-step vs 3-step architecture). | No README changes needed |
 | 2025-12-25 | Don't add script narrative to README | Compared SLIDE_NARRATIVE.md against README "Why Attack Paths Matter" section. README already captures key insights ("graphs not lists", misconfiguration empathy, tension moment). Script optimized for verbal delivery; README optimized for scannable reading. | No README changes needed |
+| 2025-12-25 | Remove Milestone 7 (Recording) from scope | Recording requires orchestration, approvals, and admin work with coworkers. These activities are outside the scope of Claude Code and this repository. PRD's purpose (content compliance) is complete. | PRD marked Complete; recording/EPCAT submission are separate operational tasks |
 
 ---
 
