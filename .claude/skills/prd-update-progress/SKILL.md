@@ -2,6 +2,7 @@
 name: prd-update-progress
 description: Update PRD progress based on git commits and code changes, enhanced by conversation context
 category: project-management
+disable-model-invocation: true
 ---
 
 # PRD Update Progress Slash Command
@@ -17,9 +18,10 @@ You are helping update an existing Product Requirements Document (PRD) based on 
 3. **Map Changes to PRD Items** - Intelligently connect work to requirements
 4. **Propose Updates** - Suggest checkbox completions and requirement changes
 5. **User Confirmation** - Verify proposals and handle edge cases
-6. **Update PRD** - Apply changes and add work log entry
+6. **Update PRD** - Apply changes to checkboxes and status
 7. **Flag Divergences** - Alert when actual work differs from planned work
 8. **Commit Progress Updates** - Preserve progress checkpoint
+9. **Continue to Next Task** - Prompt user to run /prd-next
 
 ## Step 1: Smart PRD Identification
 
@@ -180,26 +182,6 @@ Present a comprehensive breakdown:
 **CLEARLY list what still needs to be done.**
 **DO NOT claim "everything is done" unless ALL items are truly complete.**
 
-### Work Log Updates
-Propose adding a work log entry summarizing completed work:
-```markdown
-### [Date]: Implementation Progress Update
-**Duration**: [X hours estimated based on commit timestamps]
-**Commits**: [X commits] 
-**Primary Focus**: [Main area of work based on file changes]
-
-**Completed PRD Items**:
-- [x] [Requirement] - Evidence: [specific files/changes]
-- [x] [Second requirement] - Evidence: [specific files/changes]
-
-**Additional Work Done**:
-- [Unexpected work that emerged during implementation]
-- [Refactoring or improvements not originally planned]
-
-**Next Session Priorities**:
-- [Items that should be worked on next based on current state]
-```
-
 ## Step 5: Implementation vs Plan Analysis
 
 ### Divergence Detection
@@ -242,10 +224,9 @@ Wait for user confirmation before making changes, and handle:
 
 When applying updates:
 1. **Update only confirmed items** - Don't make assumptions
-2. **Add detailed work log entry** with evidence links
-3. **Update status sections** to reflect current phase
-4. **Preserve unchecked items** that still need work
-5. **Update completion percentages** realistically
+2. **Update status sections** to reflect current phase
+3. **Preserve unchecked items** that still need work
+4. **Update completion percentages** realistically
 
 ## Step 7.5: Code Example Validation
 
@@ -298,7 +279,6 @@ git commit -m "feat(prd-X): implement [brief description of completed work]
 
 - [Brief list of key implementation achievements]
 - Updated PRD checkboxes for completed items
-- Added work log entry with progress summary
 
 Progress: X% complete - [next major milestone]"
 ```
@@ -310,3 +290,31 @@ Progress: X% complete - [next major milestone]"
 - **Evidence-based**: Only commit when there's actual implementation progress
 
 **Note**: Do NOT push commits unless explicitly requested by the user. Commits preserve local progress checkpoints without affecting remote branches.
+
+## Step 9: Next Steps Based on PRD Status
+
+After completing the PRD update and committing changes, guide the user based on completion status:
+
+### If PRD has remaining tasks
+
+---
+
+**PRD progress updated and committed.**
+
+To continue working on this PRD:
+1. Clear/reset the conversation context
+2. Run `/prd-next` to get the next task
+
+---
+
+### If PRD is 100% complete
+
+---
+
+**PRD #X is complete!**
+
+To finalize:
+1. Clear/reset the conversation context
+2. Run `/prd-done` to move the PRD to the done folder and close the GitHub issue
+
+---

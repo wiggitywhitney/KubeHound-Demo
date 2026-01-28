@@ -2,6 +2,7 @@
 name: prd-close
 description: Close a PRD that is already implemented or no longer needed
 category: project-management
+disable-model-invocation: true
 ---
 
 # Close PRD
@@ -33,6 +34,8 @@ Close a PRD that is already implemented (in previous work or external projects) 
 # With PRD number and reason
 /prd-close 20 "Already implemented by dot-ai-controller"
 ```
+
+**Note**: If any `gh` command fails with "command not found", inform the user that GitHub CLI is required and provide the installation link: https://cli.github.com/
 
 ## Workflow Steps
 
@@ -80,7 +83,7 @@ Proceed with closure? (yes/no)
 
 ### Step 3: Update PRD File
 
-Update the PRD metadata and add completion work log:
+Update the PRD metadata:
 
 **Metadata Updates:**
 ```markdown
@@ -89,45 +92,21 @@ Update the PRD metadata and add completion work log:
 **Completed**: [Current Date] [or] **Closed**: [Current Date]
 ```
 
-**Add Work Log Entry:**
-```markdown
-### [Date]: PRD Closure - [Reason Category]
-**Duration**: N/A (administrative closure)
-**Status**: [Complete/Closed]
-
-**Closure Summary**:
-[Explain why PRD is being closed]
-
-**Implementation Evidence**: [If applicable]
-[Link to external project, previous PR, or existing functionality]
-
-**Key Points**:
-- [What was requested in original PRD]
-- [How/where it was implemented, or why no longer needed]
-- [Any gaps or differences from original requirements]
-
-[If "Already Implemented"]
-**Functionality Delivered**:
-- [Feature 1] - Implemented in [location/project]
-- [Feature 2] - Implemented in [location/project]
-
-[If "No Longer Needed"]
-**Reason for Closure**:
-- [Why requirements changed]
-- [What superseded this PRD]
-```
-
 ### Step 4: Move PRD to Archive
 
-Move the PRD file to the done directory:
+Move the PRD file to the done directory and update roadmap:
 
 ```bash
-# Create done directory if it doesn't exist
-mkdir -p prds/done
-
-# Move PRD file
 git mv prds/[number]-[name].md prds/done/
 ```
+
+**Note**: If the move fails because `prds/done/` doesn't exist, create it with `mkdir -p prds/done` and retry.
+
+**Update ROADMAP.md (if it exists):**
+- [ ] Check if `docs/ROADMAP.md` exists
+- [ ] Remove the closed PRD from the roadmap (search for "PRD #[number]")
+- [ ] Remove the entire line that references this PRD
+- [ ] Closed PRDs should not appear in future roadmap as they're no longer being worked on
 
 ### Step 5: Update GitHub Issue
 
@@ -213,14 +192,13 @@ git commit -m "docs(prd-[number]): close PRD #[number] - [brief reason] [skip ci
 
 - Moved PRD to prds/done/ directory
 - Updated PRD status to [Complete/Closed]
-- Added work log documenting [closure reason]
 - Updated GitHub issue description with new path
 - [Implementation details or reason]
 
 Closes #[number]"
 
-# Push to remote
-git push origin main
+# Pull latest and push to remote
+git pull --rebase origin main && git push origin main
 ```
 
 **Important**:
@@ -290,7 +268,7 @@ Requirements have evolved and this PRD is out of scope.
 
 ## Success Criteria
 
-✅ **PRD file updated** with completion/closure metadata and work log
+✅ **PRD file updated** with completion/closure metadata
 ✅ **PRD archived** to `prds/done/` directory
 ✅ **GitHub issue updated** with new PRD path
 ✅ **GitHub issue closed** with comprehensive closure comment
@@ -301,6 +279,6 @@ Requirements have evolved and this PRD is out of scope.
 
 - **No PR required**: This workflow commits directly to main for documentation-only changes
 - **Skip CI**: Always include `[skip ci]` to avoid unnecessary CI runs
-- **Comprehensive documentation**: Ensure work log and issue comment clearly explain closure
+- **Comprehensive documentation**: Ensure issue comment clearly explains closure reason
 - **Implementation references**: Link to external projects, repos, or PRs where functionality exists
 - **Gap acknowledgment**: Be honest about what's implemented vs. what's missing

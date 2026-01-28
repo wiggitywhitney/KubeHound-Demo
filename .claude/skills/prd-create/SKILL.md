@@ -2,6 +2,7 @@
 name: prd-create
 description: Create documentation-first PRDs that guide development through user-facing content
 category: project-management
+disable-model-invocation: true
 ---
 
 # PRD Creation Slash Command
@@ -11,7 +12,7 @@ category: project-management
 You are helping create a Product Requirements Document (PRD) for a new feature. This process involves two main components:
 
 1. **GitHub Issue**: Short, immutable concept description that links to the detailed PRD
-2. **PRD File**: Project management document with milestone tracking, progress logs, and implementation plan
+2. **PRD File**: Project management document with milestone tracking and implementation plan
 
 ## Process
 
@@ -34,12 +35,16 @@ Work through the PRD template focusing on project management, milestone tracking
 
 **Key Principle**: Focus on 5-10 major milestones rather than exhaustive task lists. Each milestone should represent meaningful progress that can be clearly validated.
 
+**Consider Including** (when applicable to the project/feature):
+- **Tests** - If the project has tests, include a milestone for test coverage of new functionality
+- **Documentation** - If the feature is user-facing, include a milestone for docs following existing project patterns
+
 **Good Milestones Examples:**
 - [ ] Core functionality implemented and working
-- [ ] Documentation complete and tested
+- [ ] Tests passing for new functionality (if project has test suite)
+- [ ] Documentation complete following existing patterns (if user-facing feature)
 - [ ] Integration with existing systems working
 - [ ] Feature ready for user testing
-- [ ] Feature launched and available
 
 **Avoid Micro-Tasks:**
 - ❌ Update README.md file
@@ -106,6 +111,8 @@ Work through the PRD template focusing on project management, milestone tracking
 - **Focus on major milestones**: Create 5-10 meaningful milestones rather than exhaustive micro-tasks
 - **Think cross-functionally**: Consider impact on different teams, systems, and stakeholders
 
+**Note**: If any `gh` command fails with "command not found", inform the user that GitHub CLI is required and provide the installation link: https://cli.github.com/
+
 ## Workflow
 
 1. **Concept Discussion**: Get the basic idea and validate the need
@@ -118,7 +125,7 @@ Work through the PRD template focusing on project management, milestone tracking
 
 **CRITICAL**: Steps 2-4 must happen in this exact order to avoid the chicken-and-egg problem of needing the issue ID for the filename.
 
-### Step 5: Update ROADMAP.md (If It Exists)
+## Update ROADMAP.md (If It Exists)
 
 After creating the PRD, check if `docs/ROADMAP.md` exists. If it does, add the new feature to the appropriate timeframe section based on PRD priority:
 - **High Priority** → Short-term section
@@ -152,9 +159,15 @@ Please enter 1 or 2:
 
 ### Option 1: Start Working Now
 
-If user chooses option 1, execute: **prd-start [issue-id]**
+If user chooses option 1, first commit and push the PRD (same as Option 2), then instruct them:
 
-This will help identify the first task and set up the development workflow.
+---
+
+**PRD committed and pushed.**
+
+To start working on this PRD, run `/prd-start [issue-id]`
+
+---
 
 ### Option 2: Commit and Push for Later
 
@@ -175,8 +188,8 @@ git commit -m "docs(prd-[issue-id]): create PRD #[issue-id] - [feature-name] [sk
 - Added to ROADMAP.md ([timeframe] section)
 - Ready for implementation"
 
-# Push to main
-git push origin main
+# Pull latest and push to main
+git pull --rebase origin main && git push origin main
 ```
 
 **Confirmation Message:**

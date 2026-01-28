@@ -2,11 +2,14 @@
 name: prd-done
 description: Complete PRD implementation workflow - create branch, push changes, create PR, merge, and close issue
 category: project-management
+disable-model-invocation: true
 ---
 
 # Complete PRD Implementation
 
 Complete the PRD implementation workflow including branch management, pull request creation, and issue closure.
+
+**Note**: If any `gh` command fails with "command not found", inform the user that GitHub CLI is required and provide the installation link: https://cli.github.com/
 
 ## Workflow Steps
 
@@ -44,7 +47,7 @@ Complete the PRD implementation workflow including branch management, pull reque
 - [ ] **Use skip CI commit message**: Include CI skip pattern in commit message to avoid unnecessary CI runs
   - Common patterns: `[skip ci]`, `[ci skip]`, `***NO_CI***`, `[skip actions]`
   - Check project's CI configuration for the correct pattern
-- [ ] **Push to remote**: `git push origin main` to sync changes
+- [ ] **Push to remote**: `git pull --rebase origin main && git push origin main` to sync changes
 
 **For Code Implementation Completions:**
 - [ ] **Create feature branch**: `git checkout -b feature/prd-[issue-id]-[feature-name]`
@@ -291,11 +294,12 @@ Closes #[issue-id]
     - CLI commands: `gh pr view [pr-number]`, `gh pr checks [pr-number]`, `gh api repos/owner/repo/pulls/[pr-number]/comments`
     - **Web interface inspection**: Fetch the PR URL directly to capture all comments, including inline code suggestions that CLI tools may miss
     - Look for comments from automated tools (usernames ending in 'ai', 'bot', or known review tools)
-- [ ] **Present code review findings**: ALWAYS summarize automated review feedback for the user (unless there are no findings)
-  - **Categorize findings**: Critical, Important, Optional based on impact
+- [ ] **Present ALL code review findings**: ALWAYS present every review comment to the user, regardless of severity
+  - **Show ALL comments**: Present every suggestion, nitpick, and recommendation - do not filter or omit any
+  - **Categorize findings**: Critical, Important, Optional/Nitpick based on impact
   - **Provide specific examples**: Quote actual suggestions and their locations
-  - **Explain assessment**: Why each category was assigned and which items should be addressed
-  - **User decision**: Let user decide which optional improvements to implement before merge
+  - **Explain assessment**: Why each category was assigned
+  - **User decision**: Let user decide which improvements to implement before merge (critical items must be addressed, others are user's choice)
 - [ ] **Assess feedback priority**: Categorize review feedback
   - **Critical**: Security issues, breaking changes, test failures - MUST address before merge
   - **Important**: Code quality, maintainability, performance - SHOULD address for production readiness
