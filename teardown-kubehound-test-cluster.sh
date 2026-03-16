@@ -1,4 +1,6 @@
 #!/bin/bash
+# ABOUTME: Tears down the KubeHound demo environment completely
+# ABOUTME: Deletes Kind cluster, backend containers, kubeconfig, and dump data
 
 #######################################################################
 # teardown-kubehound-test-cluster.sh - Cleanup KubeHound Test Cluster
