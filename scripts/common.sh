@@ -1,4 +1,5 @@
 #!/bin/bash
+# ABOUTME: Shared logging helpers and utility functions for setup/teardown scripts
 # scripts/common.sh - Shared logging and utility functions
 
 RED='\033[0;31m'

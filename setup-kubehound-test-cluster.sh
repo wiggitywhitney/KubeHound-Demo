@@ -1,4 +1,6 @@
 #!/bin/bash
+# ABOUTME: Sets up a Kind cluster with intentional misconfigurations for KubeHound demo
+# ABOUTME: Creates cluster, deploys attack scenarios, starts backend, dumps and ingests data
 
 #######################################################################
 # setup-kubehound-test-cluster.sh - KubeHound Test Cluster Setup
@@ -54,6 +56,26 @@ check_prerequisites() {
     # Check KubeHound CLI
     if ! command -v kubehound &> /dev/null; then
         missing_tools+=("kubehound")
+    fi
+
+    # Verify KubeHound minimum version (tested with v1.6.4+)
+    if command -v kubehound &> /dev/null; then
+        local kh_version
+        kh_version=$(kubehound version 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' || echo "")
+        if [[ -n "$kh_version" ]]; then
+            local kh_major kh_minor kh_patch
+            kh_major=$(echo "$kh_version" | sed 's/v//' | cut -d. -f1)
+            kh_minor=$(echo "$kh_version" | cut -d. -f2)
+            kh_patch=$(echo "$kh_version" | cut -d. -f3)
+            # Minimum version: v1.6.4 (added MITRE ATT&CK TTP mapping)
+            if [[ "$kh_major" -lt 1 ]] || [[ "$kh_major" -eq 1 && "$kh_minor" -lt 6 ]] || \
+               [[ "$kh_major" -eq 1 && "$kh_minor" -eq 6 && "$kh_patch" -lt 4 ]]; then
+                log_warning "KubeHound $kh_version detected — this demo was tested with v1.6.4+"
+                log_info "Some features may not work. Upgrade: brew upgrade kubehound"
+            else
+                log_info "KubeHound $kh_version detected"
+            fi
+        fi
     fi
 
     # If any tools are missing, show installation guidance

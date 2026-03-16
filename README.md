@@ -26,7 +26,7 @@ Install these tools before running the setup script:
 | **Docker** | Container runtime |
 | **Kind** | Local Kubernetes clusters |
 | **kubectl** | Kubernetes CLI |
-| **KubeHound CLI** | Attack path analysis |
+| **KubeHound CLI** | Attack path analysis (v1.6.4+) |
 
 <details>
 <summary><strong>macOS (Homebrew)</strong></summary>
@@ -136,7 +136,7 @@ Run the setup script to create everything:
 
 Setup takes about 2-3 minutes. When complete, you'll see:
 
-```
+```text
 ✅ KubeHound Test Cluster Ready!
 
 🌐 KubeHound UI: http://localhost:8888
@@ -498,10 +498,17 @@ For more details, see the [KubeHound documentation](https://kubehound.io/).
 
 ## Repository Structure
 
-```
+```text
 KubeHound-Demo/
 ├── setup-kubehound-test-cluster.sh    # One-command setup script
 ├── teardown-kubehound-test-cluster.sh  # Complete cleanup script
+├── KindCluster_Demo_v2.ipynb          # Jupyter notebook for guided demo
+├── attacks/
+│   └── ENDPOINT_EXPLOIT.yaml          # Vulnerable pod + service manifest
+├── cluster-config/
+│   └── kind-cluster.yaml              # Kind cluster configuration
+├── scripts/
+│   └── common.sh                      # Shared logging and utility functions
 ├── docs/
 │   └── images/                        # Screenshots for README
 └── README.md                          # This file
