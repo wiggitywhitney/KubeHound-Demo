@@ -32,3 +32,9 @@ internal-docs/
 
 # Slide narrative reference (working document, not public content)
 SLIDE_NARRATIVE.md
+
+# macOS metadata
+.DS_Store
+
+# KubeCon submission (private)
+KUBECON_SUBMISSION.md
